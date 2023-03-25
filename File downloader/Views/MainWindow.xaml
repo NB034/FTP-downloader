@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:File_downloader"
         xmlns:sys="clr-namespace:System;assembly=Mscorlib"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="File downloader" Height="600" Width="1000">
 
@@ -15,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <TabControl Margin="5" Style="{StaticResource TabControlStyle}">
-            
+
             <!-- Download tab -->
             <TabItem Header="{StaticResource DownloadTabName}">
                 <Grid>
@@ -23,7 +24,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    
+
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -93,7 +94,7 @@
                         <!-- Panel above the list-->
                         <Border Style="{StaticResource BorderStyle}" CornerRadius="3,3,0,0">
                             <StackPanel Orientation="Horizontal">
-                                
+
                                 <Button >
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
@@ -133,9 +134,13 @@
                         <!-- Panel above the list-->
 
                         <Border Style="{StaticResource BorderStyle}" CornerRadius="0,0,3,3" Grid.Row="1" BorderThickness="1,0,1,1">
-                            <ListBox BorderBrush="Transparent">
-                                
-                            </ListBox>
+                            <Grid>
+                                <ListBox BorderBrush="Transparent">
+
+                                </ListBox>
+
+                                <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>
@@ -143,7 +148,28 @@
 
             <!-- View tab -->
             <TabItem Header="{StaticResource ViewTabName}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="200" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+                        <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" 
+                                Margin="5" Padding="2"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+                        <DataGrid Grid.Row="1" Margin="5" BorderBrush="{StaticResource MainBorderBrush}">
+                            <DataGrid.Columns>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
+                    </Grid>
+                </Grid>
             </TabItem>
 
         </TabControl>

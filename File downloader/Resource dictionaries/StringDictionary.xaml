@@ -11,6 +11,7 @@
     <sys:String x:Key="AddTag">Add</sys:String>
     <sys:String x:Key="Tags">Tags:</sys:String>
     <sys:String x:Key="SearchRemoteFile">Search</sys:String>
+    <sys:String x:Key="SearchLocalFile">Search</sys:String>
     <sys:String x:Key="PauseAll">Pause all</sys:String>
     <sys:String x:Key="ResumeAll">Resume all</sys:String>
     <sys:String x:Key="CancelAll">Cancel all</sys:String>
