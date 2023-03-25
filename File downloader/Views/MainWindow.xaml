@@ -1,0 +1,156 @@
+﻿<Window x:Class="File_downloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:File_downloader"
+        xmlns:sys="clr-namespace:System;assembly=Mscorlib"
+        mc:Ignorable="d"
+        Title="File downloader" Height="600" Width="1000">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TabControl Margin="5" Style="{StaticResource TabControlStyle}">
+            
+            <!-- Download tab -->
+            <TabItem Header="{StaticResource DownloadTabName}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Resource URL -->
+                        <Label Content="{StaticResource ResourceUrl}" Margin="5"/>
+                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+                        <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,0,3,0">
+                            <Button.Content>
+                                <StackPanel>
+                                    <TextBlock Text="{StaticResource SearchRemoteFile}"/>
+                                    <Border/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <!-- Local directory -->
+                        <Label Grid.Row="1" Content="{StaticResource DownloadTo}" Margin="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+                        <Button Grid.Row="1" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
+                            Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
+
+                        <!-- Tags -->
+                        <Label Grid.Row="2" Content="{StaticResource Tags}" Margin="5"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,5">
+                            <ListBox BorderBrush="Transparent">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Style="{StaticResource TextBlockStyle}" Margin="5"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Border Style="{StaticResource BorderStyle}" Margin="3">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="50" Style="{StaticResource AddTagTextBoxStyle}"/>
+                                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
+                                           Background="{StaticResource MainBorderBrush}"/>
+                                    <Label Content="0/5"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <!-- Tags -->
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Panel above the list-->
+                        <Border Style="{StaticResource BorderStyle}" CornerRadius="3,3,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                
+                                <Button >
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{StaticResource PauseAll}"/>
+                                            <Border/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <Button >
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{StaticResource ResumeAll}"/>
+                                            <Border/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <Button >
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{StaticResource CancelAll}"/>
+                                            <Border/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <StackPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                                        <Setter Property="Margin" Value="3"/>
+                                        <Setter Property="FontSize" Value="10"/>
+                                        <Setter Property="Padding" Value="2"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                            </StackPanel>
+                        </Border>
+                        <!-- Panel above the list-->
+
+                        <Border Style="{StaticResource BorderStyle}" CornerRadius="0,0,3,3" Grid.Row="1" BorderThickness="1,0,1,1">
+                            <ListBox BorderBrush="Transparent">
+                                
+                            </ListBox>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- View tab -->
+            <TabItem Header="{StaticResource ViewTabName}">
+
+            </TabItem>
+
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Margin="5" Height="30">
+            <Border Height="30" Width="30"/>
+            <TextBlock/>
+        </StackPanel>
+    </Grid>
+</Window>
