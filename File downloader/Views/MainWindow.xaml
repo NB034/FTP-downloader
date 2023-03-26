@@ -44,9 +44,9 @@
                         <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
                         <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,0,3,0">
                             <Button.Content>
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{StaticResource SearchRemoteFile}"/>
-                                    <Border/>
+                                    <Border Background="{StaticResource EmptyCircle}" Width="12" Height="12" Margin="3,0,3,0"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -143,7 +143,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{StaticResource PauseAll}"/>
-                                            <Border/>
+                                            <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="2,0,2,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -152,7 +152,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{StaticResource ResumeAll}"/>
-                                            <Border/>
+                                            <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="2,0,2,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -161,7 +161,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{StaticResource CancelAll}"/>
-                                            <Border/>
+                                            <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="2,0,2,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -207,7 +207,11 @@
                     <Grid Grid.Row="1">
                         <DataGrid Grid.Row="1" Margin="5" BorderBrush="{StaticResource MainBorderBrush}">
                             <DataGrid.Columns>
-
+                                <DataGridTextColumn Header="File name"/>
+                                <DataGridTextColumn Header="Local path" Width="*"/>
+                                <DataGridTextColumn Header="Remote path" Width="*"/>
+                                <DataGridTextColumn Header="Download date"/>
+                                <DataGridTextColumn Header="File size" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -218,6 +222,7 @@
 
         </TabControl>
 
+        <!-- Notification panel -->
         <StackPanel Grid.Row="1" Margin="5" Height="30">
             <Border Height="30" Width="30"/>
             <TextBlock/>
