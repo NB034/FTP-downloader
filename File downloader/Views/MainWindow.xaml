@@ -30,6 +30,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
@@ -56,9 +57,52 @@
                         <Button Grid.Row="1" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
                             Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
 
+                        <!-- Credential -->
+                        <Label Grid.Row="2" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
+
+                        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <CheckBox Grid.Column="0" BorderBrush="{StaticResource MainBorderBrush}" VerticalAlignment="Center"
+                                      Margin="5,0,5,0" x:Name="CredentialCheckBox"/>
+
+                            <Border Grid.Column="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Content="{StaticResource Username}" Margin="5,0,5,0"
+                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                                         Background="Transparent" 
+                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+
+                                    <Label Grid.Column="2" Content="{StaticResource Password}" Margin="5,0,5,0"
+                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                                    <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                                         Background="Transparent"
+                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <!-- Credential -->
+
                         <!-- Tags -->
-                        <Label Grid.Row="2" Content="{StaticResource Tags}" Margin="5"/>
-                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,5">
+                        <Label Grid.Row="3" Content="{StaticResource Tags}" Margin="5"/>
+                        <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,5">
                             <ListBox BorderBrush="Transparent">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>

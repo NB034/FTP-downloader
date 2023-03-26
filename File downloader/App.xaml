@@ -8,9 +8,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resource dictionaries/BrushesDictionary.xaml"/>
+                <ResourceDictionary Source="/Resource dictionaries/AssetsDictionary.xaml"/>
                 <ResourceDictionary Source="/Resource dictionaries/StringDictionary.xaml"/>
                 <ResourceDictionary Source="/Resource dictionaries/StyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resource dictionaries/ConvertersDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    
 </Application>

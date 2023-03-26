@@ -10,6 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\CheckMarkIcon.png" />
+    <None Remove="Assets\CrossIcon.png" />
+    <None Remove="Assets\CrossInCircleIcon.png" />
+    <None Remove="Assets\PauseIcon.png" />
+    <None Remove="Assets\ResumeIcon.png" />
+    <None Remove="Assets\UncheckedIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\AppIcon.ico" />
   </ItemGroup>
 
@@ -20,6 +29,27 @@
   <ItemGroup>
     <PackageReference Include="FluentFTP" Version="46.0.2" />
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\CheckMarkIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\CrossIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\CrossInCircleIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\PauseIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\ResumeIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\UncheckedIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

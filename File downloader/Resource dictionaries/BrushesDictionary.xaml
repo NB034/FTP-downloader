@@ -4,5 +4,6 @@
     <SolidColorBrush x:Key="MainBorderBrush" Color="Black"/>
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="Transparent"/>
     <SolidColorBrush x:Key="AdditionalBackgroundBrush" Color="LightBlue"/>
+    <SolidColorBrush x:Key="UnavaibleElementBrush" Color="LightGray"/>
 
 </ResourceDictionary>
