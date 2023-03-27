@@ -31,6 +31,9 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
@@ -39,28 +42,10 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Resource URL -->
-                        <Label Content="{StaticResource ResourceUrl}" Margin="5"/>
-                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,0,3,0">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{StaticResource SearchRemoteFile}"/>
-                                    <Border Background="{StaticResource EmptyCircle}" Width="12" Height="12" Margin="3,0,3,0"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-
-                        <!-- Local directory -->
-                        <Label Grid.Row="1" Content="{StaticResource DownloadTo}" Margin="5"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
-                            Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
-
                         <!-- Credential -->
-                        <Label Grid.Row="2" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
+                        <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
 
-                        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,5">
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
@@ -99,6 +84,24 @@
                             </Border>
                         </Grid>
                         <!-- Credential -->
+
+                        <!-- Resource URL -->
+                        <Label Grid.Row="1" Content="{StaticResource ResourceUrl}" Margin="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+                        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="{StaticResource EmptyCircle}" Width="12" Height="12" Margin="3,0,3,0"/>
+                                    <TextBlock Text="{StaticResource SearchRemoteFile}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <!-- Local directory -->
+                        <Label Grid.Row="2" Content="{StaticResource DownloadTo}" Margin="5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+                        <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
+                            Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
 
                         <!-- Tags -->
                         <Label Grid.Row="3" Content="{StaticResource Tags}" Margin="5"/>
@@ -142,8 +145,8 @@
                                 <Button >
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{StaticResource PauseAll}"/>
                                             <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="2,0,2,0"/>
+                                            <TextBlock Text="{StaticResource PauseAll}"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -151,8 +154,8 @@
                                 <Button >
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{StaticResource ResumeAll}"/>
                                             <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="2,0,2,0"/>
+                                            <TextBlock Text="{StaticResource ResumeAll}"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -160,8 +163,8 @@
                                 <Button >
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{StaticResource CancelAll}"/>
                                             <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="2,0,2,0"/>
+                                            <TextBlock Text="{StaticResource CancelAll}"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
