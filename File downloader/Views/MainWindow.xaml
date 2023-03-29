@@ -9,12 +9,25 @@
         mc:Ignorable="d"
         Title="File downloader" Height="600" Width="1000">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
+        <!-- Notification panel -->
+        <ItemsControl DockPanel.Dock="Bottom" Margin="5" Height="30">
+            <ItemsControl.ItemsPanel >
+                <ItemsPanelTemplate>
+                    <Grid/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Border/>
+                        <TextBlock/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
         <TabControl Margin="5" Style="{StaticResource TabControlStyle}">
 
             <!-- Download tab -->
@@ -27,7 +40,6 @@
 
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -88,14 +100,8 @@
                         <!-- Resource URL -->
                         <Label Grid.Row="1" Content="{StaticResource ResourceUrl}" Margin="5"/>
                         <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Border Background="{StaticResource EmptyCircle}" Width="12" Height="12" Margin="3,0,3,0"/>
-                                    <TextBlock Text="{StaticResource SearchRemoteFile}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
+                        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
+                                Content="{StaticResource SearchRemoteFile}"/>
 
                         <!-- Local directory -->
                         <Label Grid.Row="2" Content="{StaticResource DownloadTo}" Margin="5"/>
@@ -103,9 +109,16 @@
                         <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
                             Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
 
+                        <!-- Save as -->
+                        <Label Grid.Row="3" Content="{StaticResource SaveAs}" Margin="5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+                        <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5">
+                            <TextBlock TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
                         <!-- Tags -->
-                        <Label Grid.Row="3" Content="{StaticResource Tags}" Margin="5"/>
-                        <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,5">
+                        <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
+                        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,5">
                             <ListBox BorderBrush="Transparent">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -130,6 +143,9 @@
                             </Border>
                         </StackPanel>
                         <!-- Tags -->
+
+                        <!-- Start button -->
+                        <Button Grid.Row="5" Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}"/>
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="5">
@@ -224,11 +240,5 @@
             </TabItem>
 
         </TabControl>
-
-        <!-- Notification panel -->
-        <StackPanel Grid.Row="1" Margin="5" Height="30">
-            <Border Height="30" Width="30"/>
-            <TextBlock/>
-        </StackPanel>
-    </Grid>
+    </DockPanel>
 </Window>
