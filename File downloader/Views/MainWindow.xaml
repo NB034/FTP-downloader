@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:File_downloader"
+        xmlns:vm="clr-namespace:File_downloader.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=Mscorlib"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="File downloader" Height="600" Width="1000">
+        Title="File downloader" Height="600" Width="1000"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}">
 
     <DockPanel>
         <!-- Notification panel -->
-        <ItemsControl DockPanel.Dock="Bottom" Margin="5" Height="30">
+        <ItemsControl DockPanel.Dock="Bottom" Margin="5" Height="30" ItemsSource="{Binding Notifications}">
             <ItemsControl.ItemsPanel >
                 <ItemsPanelTemplate>
                     <Grid/>
@@ -20,10 +22,22 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Border/>
-                        <TextBlock/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Column="0" Source="{Binding ImageUri}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Message}"/>
+                        <StackPanel Grid.Column="2">
+                            <Button Content="{StaticResource CloseNotification}" 
+                                    Command="{Binding RelativeSource={ RelativeSource Mode=TemplatedParent}, Path=CloseNotificationCommand}"/>
+                            <Button Content="{StaticResource CloseNotification}" 
+                                    Command="{Binding RelativeSource={ RelativeSource Mode=TemplatedParent}, Path=CloseAllNotificationsCommand}"/>
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -51,6 +65,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
@@ -145,7 +160,8 @@
                         <!-- Tags -->
 
                         <!-- Start button -->
-                        <Button Grid.Row="5" Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}"/>
+                        <Button Grid.Row="5" Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}" 
+                                Margin="5" Padding="3"/>
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="5">
@@ -162,7 +178,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="2,0,2,0"/>
-                                            <TextBlock Text="{StaticResource PauseAll}"/>
+                                            <TextBlock Text="{StaticResource PauseAll}" Margin="2,0,4,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -171,7 +187,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="2,0,2,0"/>
-                                            <TextBlock Text="{StaticResource ResumeAll}"/>
+                                            <TextBlock Text="{StaticResource ResumeAll}"  Margin="2,0,4,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -180,14 +196,14 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="2,0,2,0"/>
-                                            <TextBlock Text="{StaticResource CancelAll}"/>
+                                            <TextBlock Text="{StaticResource CancelAll}"  Margin="2,0,4,0"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
 
                                 <StackPanel.Resources>
                                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                                        <Setter Property="Margin" Value="3"/>
+                                        <Setter Property="Margin" Value="5"/>
                                         <Setter Property="FontSize" Value="10"/>
                                         <Setter Property="Padding" Value="2"/>
                                     </Style>

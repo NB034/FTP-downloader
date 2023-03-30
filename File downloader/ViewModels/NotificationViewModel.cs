@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace File_downloader.ViewModels
 {
-    class Notification
+    class NotificationViewModel
     {
         public string ImageUri { get; set; } = "";
         public string Message { get; set; } = "";
