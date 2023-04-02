@@ -43,10 +43,13 @@ namespace File_downloader.ViewModels
 
         public static int MaxTags => 5;
         public static int MaxTagLength => 5;
+        public static int MaxDownloads => 10;
 
         // Properties
         private bool _useCredentials = false;
         private bool _resourceVerified = false;
+        private bool _directoryVerified = false;
+        private bool _fileNameVerified = false;
 
         private string _userName = String.Empty;
         private string _password = String.Empty;
@@ -65,6 +68,18 @@ namespace File_downloader.ViewModels
         {
             get => _resourceVerified;
             set => SetProperty(ref _resourceVerified, value, nameof(ResourceVerified));
+        }
+
+        public bool DirectoryVerified
+        {
+            get => _directoryVerified;
+            set => SetProperty(ref _directoryVerified, value, nameof(DirectoryVerified));
+        }
+
+        public bool FileNameVerified
+        {
+            get => _fileNameVerified;
+            set => SetProperty(ref _fileNameVerified, value, nameof(FileNameVerified));
         }
 
         public string UserName
@@ -165,49 +180,49 @@ namespace File_downloader.ViewModels
 
         }
 
-        private bool CanStartDownload() =>
+        //private bool CanStartDownload() =>
 
         private void Resume()
         {
 
         }
 
-        private bool CanResume() =>
+        //private bool CanResume() =>
 
         private void Pause()
         {
 
         }
 
-        private bool CanPause() =>
+        //private bool CanPause() =>
 
         private void Cancel()
         {
 
         }
 
-        private bool CanCancel() =>
+        //private bool CanCancel() =>
 
         private void ResumeAll()
         {
 
         }
 
-        private bool CanResumeAll() =>
+        //private bool CanResumeAll() =>
 
         private void PauseAll()
         {
 
         }
 
-        private bool CanPauseAll() =>
+        //private bool CanPauseAll() =>
 
         private void CancelAll()
         {
 
         }
 
-        private bool CanCancelAll() =>
+        //private bool CanCancelAll() =>
     }
 
     // View tab

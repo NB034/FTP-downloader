@@ -3,5 +3,6 @@
                     xmlns:c="clr-namespace:File_downloader.Converters">
 
     <c:CredentialMultipurposeConverter x:Key="CredentialMultipurposeConverter"/>
+    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
 </ResourceDictionary>

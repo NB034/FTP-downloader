@@ -22,5 +22,6 @@
     <sys:String x:Key="SaveAs">Save as:</sys:String>
     <sys:String x:Key="CloseNotification">Close</sys:String>
     <sys:String x:Key="CloseAllNotification">Close</sys:String>
+    <sys:String x:Key="MaxDownloadsReached">The maximum number of downloads has been reached</sys:String>
     
 </ResourceDictionary>

@@ -52,6 +52,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
+                    <!-- Part with fields -->
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -72,7 +73,7 @@
                         <!-- Credential -->
                         <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
 
-                        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,5">
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
@@ -150,7 +151,7 @@
 
                             <Border Style="{StaticResource BorderStyle}" Margin="3">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox Width="50" Style="{StaticResource AddTagTextBoxStyle}"/>
+                                    <TextBox Width="50" Style="{StaticResource AddTagTextBoxStyle}" MaxLength="{Binding MaxTagLength}"/>
                                     <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
                                            Background="{StaticResource MainBorderBrush}"/>
                                     <Label Content="0/5"/>
@@ -160,8 +161,23 @@
                         <!-- Tags -->
 
                         <!-- Start button -->
-                        <Button Grid.Row="5" Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}" 
-                                Margin="5" Padding="3"/>
+                        <StackPanel Grid.Row="5" Grid.ColumnSpan="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}" 
+                                Margin="5" Padding="4,3,4,3"/>
+                        </StackPanel>
+
+                        <!-- Checkmarks border -->
+                        <Border Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" Style="{StaticResource BorderStyle}"
+                                Width="30" Margin="5"/>
+
+                        <!-- Download limit border -->
+                        <!--<Border Grid.ColumnSpan="4" Grid.RowSpan="6"  Style="{StaticResource BorderStyle}"
+                                Background="{StaticResource UnavaibleElementBrush}"
+                                Visibility="{Binding DirectoryVerified, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock FontSize="40" Text="{StaticResource MaxDownloadsReached}" TextWrapping="Wrap"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"
+                                       TextAlignment="Center" FontStyle="Italic"/>
+                        </Border>-->
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="5">
