@@ -4,5 +4,6 @@
 
     <c:CredentialMultipurposeConverter x:Key="CredentialMultipurposeConverter"/>
     <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <c:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter"/>
 
 </ResourceDictionary>

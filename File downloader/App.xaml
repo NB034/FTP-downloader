@@ -7,11 +7,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ResourceAccess/BrushesDictionary.xaml"/>
-                <ResourceDictionary Source="/ResourceAccess/AssetsDictionary.xaml"/>
-                <ResourceDictionary Source="/ResourceAccess/StringDictionary.xaml"/>
-                <ResourceDictionary Source="/ResourceAccess/StyleDictionary.xaml"/>
-                <ResourceDictionary Source="/ResourceAccess/ConvertersDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourcesAccess/BrushesDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourcesAccess/AssetsDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourcesAccess/StringDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourcesAccess/StyleDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourcesAccess/ConvertersDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

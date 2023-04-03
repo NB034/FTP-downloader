@@ -5,5 +5,7 @@
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="Transparent"/>
     <SolidColorBrush x:Key="AdditionalBackgroundBrush" Color="LightBlue"/>
     <SolidColorBrush x:Key="UnavaibleElementBrush" Color="LightGray"/>
+    <SolidColorBrush x:Key="BlockBrush" Color="#CCD3D3D3"/>
+    <SolidColorBrush x:Key="TagBackGroundBrush" Color="WhiteSmoke"/>
 
 </ResourceDictionary>

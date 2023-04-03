@@ -41,12 +41,12 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
-        <TabControl Margin="5" Style="{StaticResource TabControlStyle}">
+
+        <TabControl Margin="10" Style="{StaticResource TabControlStyle}">
 
             <!-- Download tab -->
             <TabItem Header="{StaticResource DownloadTabName}">
-                <Grid>
+                <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
@@ -134,36 +134,63 @@
 
                         <!-- Tags -->
                         <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
-                        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,5">
-                            <ListBox BorderBrush="Transparent">
-                                <ListBox.ItemsPanel>
+                        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,5,0,5">
+
+                            <ItemsControl BorderBrush="Transparent" ItemsSource="{Binding Tags}" VerticalContentAlignment="Center">
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel IsItemsHost="True"/>
                                     </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
+                                </ItemsControl.ItemsPanel>
 
-                                <ListBox.ItemTemplate>
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Style="{StaticResource TextBlockStyle}" Margin="5"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                        <Border Margin="0,0,15,0">
+                                            <TextBlock Text="{Binding}" TextAlignment="Center" Margin="0,4,0,4"
+                                                       Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, 
+                                                                Path=DataContext.TagTextBoxWidth}"/>
 
-                            <Border Style="{StaticResource BorderStyle}" Margin="3">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox Width="50" Style="{StaticResource AddTagTextBoxStyle}" MaxLength="{Binding MaxTagLength}"/>
-                                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
-                                           Background="{StaticResource MainBorderBrush}"/>
-                                    <Label Content="0/5"/>
-                                </StackPanel>
-                            </Border>
+                                            <Border.Resources>
+                                                <Style TargetType="Border" BasedOn="{StaticResource BorderStyle}">
+                                                    <Setter Property="Border.Background" Value="{StaticResource TagBackGroundBrush}"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                                            <Setter Property="Border.Background" Value="{StaticResource AdditionalBackgroundBrush}" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Resources>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Add panel -->
+                            <StackPanel Orientation="Horizontal"
+                                        Visibility="{Binding TagsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+
+                                <TextBox Style="{StaticResource TextBoxStyle}" Width="{Binding TagTextBoxWidth}"
+                                     MaxLength="{Binding MaxTagLength}"/>
+
+                                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
+                                    <Run Text="{Binding Tags.Count, Mode=OneWay}"/>
+                                    <Run Text="/"/>
+                                    <Run Text="{Binding MaxTagLength, Mode=OneWay}"/>
+                                </TextBlock>
+                                
+                            </StackPanel>
+
                         </StackPanel>
                         <!-- Tags -->
 
-                        <!-- Start button -->
-                        <StackPanel Grid.Row="5" Grid.ColumnSpan="1" Orientation="Horizontal">
-                            <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource StartDownload}" 
-                                Margin="5" Padding="4,3,4,3"/>
+                        <!-- Start panel -->
+                        <StackPanel Grid.Row="5" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="5,15,5,10">
+                            <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource InitializeDownload}" 
+                                 Padding="4,3,4,3"/>
+
+                            <CheckBox Content="{StaticResource StartTheDownloadImmediately}" 
+                                      FontSize="10" VerticalAlignment="Center" Margin="15,0,0,0" VerticalContentAlignment="Center"
+                                      BorderBrush="{StaticResource MainBorderBrush}"/>
                         </StackPanel>
 
                         <!-- Checkmarks border -->
@@ -243,7 +270,7 @@
 
             <!-- View tab -->
             <TabItem Header="{StaticResource ViewTabName}">
-                <Grid>
+                <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>

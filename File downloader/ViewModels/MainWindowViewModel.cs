@@ -1,5 +1,5 @@
 ﻿using File_downloader.Command;
-using File_downloader.ResourceAccess;
+using File_downloader.ResourcesAccess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,15 +38,23 @@ namespace File_downloader.ViewModels
     {
         public void InitializeDownloadTab()
         {
-
+            Tags = new ObservableCollection<string>
+            {
+                "game", "off", "mus"
+            };
+            Downloads = new ObservableCollection<DownloadViewModel>();
         }
 
-        public static int MaxTags => 5;
-        public static int MaxTagLength => 5;
-        public static int MaxDownloads => 10;
+        public int MaxTags => 5;
+        public int MaxTagLength => 5;
+        public int MaxDownloads => 10;
+        public int TagTextBoxWidth => MaxTagLength * 12;
 
         // Properties
         private bool _useCredentials = false;
+        private bool _startImmediately = true;
+        private bool _tagsLimitReached = false;
+        private bool _downloadsLimitReached = false;
         private bool _resourceVerified = false;
         private bool _directoryVerified = false;
         private bool _fileNameVerified = false;
@@ -62,6 +70,24 @@ namespace File_downloader.ViewModels
         {
             get => _useCredentials;
             set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials));
+        }
+
+        public bool StartImmediately
+        {
+            get => _startImmediately;
+            set => SetProperty(ref _startImmediately, value, nameof(StartImmediately));
+        }
+
+        public bool TagsLimitReached
+        {
+            get => _tagsLimitReached;
+            set => SetProperty(ref _tagsLimitReached, value, nameof(TagsLimitReached));
+        }
+
+        public bool DownloadsLimitReached
+        {
+            get => _downloadsLimitReached;
+            set => SetProperty(ref _downloadsLimitReached, value, nameof(DownloadsLimitReached));
         }
 
         public bool ResourceVerified

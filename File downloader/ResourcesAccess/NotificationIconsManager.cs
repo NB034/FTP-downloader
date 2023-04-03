@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace File_downloader.ResourceAccess
+namespace File_downloader.ResourcesAccess
 
 {
     static class NotificationIconsManager

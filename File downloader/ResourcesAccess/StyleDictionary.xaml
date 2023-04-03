@@ -55,22 +55,11 @@
         <Setter Property="BorderBrush" Value="{StaticResource MainBorderBrush}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderThickness" Value="1.25"/>
+        <Setter Property="Padding" Value="5,0,5,0"/>
 
         <Style.Resources>
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="3"/>
-            </Style>
-        </Style.Resources>
-    </Style>
-
-
-
-    <Style TargetType="TextBlock" x:Key="TextBlockStyle">
-        <Style.Resources>
-            <Style TargetType="Border">
-                <Setter Property="CornerRadius" Value="3"/>
-                <Setter Property="BorderBrush" Value="{StaticResource MainBorderBrush}"/>
-                <Setter Property="BorderThickness" Value="1"/>
             </Style>
         </Style.Resources>
     </Style>
@@ -85,7 +74,7 @@
 
 
 
-    <Style TargetType="TextBox" x:Key="AddTagTextBoxStyle">
+    <!--<Style TargetType="TextBox" x:Key="AddTagTextBoxStyle">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
 
@@ -104,6 +93,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>
