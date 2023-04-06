@@ -9,7 +9,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="File downloader" Height="600" Width="1000"
-        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}">
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+        MinWidth="500" MinHeight="460">
 
     <DockPanel>
         <!-- Notification panel -->
@@ -72,7 +73,7 @@
 
                         <!-- Credential -->
                         <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
-
+                        
                         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -134,7 +135,7 @@
 
                         <!-- Tags -->
                         <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
-                        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,5,0,5">
+                        <WrapPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
 
                             <ItemsControl BorderBrush="Transparent" ItemsSource="{Binding Tags}" VerticalContentAlignment="Center">
                                 <ItemsControl.ItemsPanel>
@@ -145,10 +146,8 @@
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Margin="0,0,15,0">
-                                            <TextBlock Text="{Binding}" TextAlignment="Center" Margin="0,4,0,4"
-                                                       Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, 
-                                                                Path=DataContext.TagTextBoxWidth}"/>
+                                        <Border Margin="5,5,15,5">
+                                            <TextBlock Text="{Binding}" TextAlignment="Center" Padding="5,4,5,4"/>
 
                                             <Border.Resources>
                                                 <Style TargetType="Border" BasedOn="{StaticResource BorderStyle}">
@@ -166,21 +165,21 @@
                             </ItemsControl>
 
                             <!-- Add panel -->
-                            <StackPanel Orientation="Horizontal"
+                            <StackPanel Orientation="Horizontal" Margin="5"
                                         Visibility="{Binding TagsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
 
                                 <TextBox Style="{StaticResource TextBoxStyle}" Width="{Binding TagTextBoxWidth}"
-                                     MaxLength="{Binding MaxTagLength}"/>
+                                     MaxLength="{Binding MaxTagLength}" Padding="4"/>
 
                                 <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
                                     <Run Text="{Binding Tags.Count, Mode=OneWay}"/>
                                     <Run Text="/"/>
-                                    <Run Text="{Binding MaxTagLength, Mode=OneWay}"/>
+                                    <Run Text="{Binding MaxTags, Mode=OneWay}"/>
                                 </TextBlock>
                                 
                             </StackPanel>
 
-                        </StackPanel>
+                        </WrapPanel>
                         <!-- Tags -->
 
                         <!-- Start panel -->

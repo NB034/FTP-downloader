@@ -14,7 +14,7 @@ namespace File_downloader.ViewModels
         private string _from = "";
         private string _to = "";
         private int _size = 0;
-        private int _downloaded = 0;
+        private int _downloadedBytes = 0;
         private bool _onPause = false;
 
         public string From
@@ -35,10 +35,10 @@ namespace File_downloader.ViewModels
             set => SetProperty(ref _size, value, nameof(Size));
         }
 
-        public int Downloaded
+        public int DownloadedBytes
         {
-            get => _downloaded;
-            set => SetProperty(ref _downloaded, value, nameof(Downloaded));
+            get => _downloadedBytes;
+            set => SetProperty(ref _downloadedBytes, value, nameof(DownloadedBytes));
         }
 
         public bool OnPause

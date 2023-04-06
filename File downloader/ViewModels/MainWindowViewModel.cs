@@ -40,13 +40,39 @@ namespace File_downloader.ViewModels
         {
             Tags = new ObservableCollection<string>
             {
-                "game", "off", "mus"
+                "game", "office", "music", "picture", "book"
             };
-            Downloads = new ObservableCollection<DownloadViewModel>();
+            Downloads = new ObservableCollection<DownloadViewModel>
+            {
+                new DownloadViewModel
+                {
+                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                     DownloadedBytes = 2048,
+                     OnPause = false,
+                     Size = 204800
+                },
+                new DownloadViewModel
+                {
+                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                     DownloadedBytes = 2048,
+                     OnPause = false,
+                     Size = 204800
+                },
+                new DownloadViewModel
+                {
+                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                     DownloadedBytes = 2048,
+                     OnPause = false,
+                     Size = 204800
+                }
+            };
         }
 
         public int MaxTags => 5;
-        public int MaxTagLength => 5;
+        public int MaxTagLength => 8;
         public int MaxDownloads => 10;
         public int TagTextBoxWidth => MaxTagLength * 12;
 
