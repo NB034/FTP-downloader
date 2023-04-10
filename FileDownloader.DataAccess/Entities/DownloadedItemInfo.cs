@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileDownloader.DataAccess.DataTypes
+namespace FileDownloader.DataAccess.Entities
 {
-    internal class DownloadedFileInfo : BaseFileInfo
+    internal class DownloadedItemInfo
     {
+        public string remotePath = "";
         public string localPath = "";
         public string downloadDate = "";
     }

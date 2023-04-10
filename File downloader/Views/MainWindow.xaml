@@ -73,7 +73,7 @@
 
                         <!-- Credential -->
                         <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
-                        
+
                         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -176,7 +176,7 @@
                                     <Run Text="/"/>
                                     <Run Text="{Binding MaxTags, Mode=OneWay}"/>
                                 </TextBlock>
-                                
+
                             </StackPanel>
 
                         </WrapPanel>
@@ -256,8 +256,43 @@
 
                         <Border Style="{StaticResource BorderStyle}" CornerRadius="0,0,3,3" Grid.Row="1" BorderThickness="1,0,1,1">
                             <Grid>
-                                <ListBox BorderBrush="Transparent">
+                                <ListBox BorderBrush="Transparent" ItemsSource="{Binding Downloads}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource BorderStyle}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
 
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Pause}"
+                                                                Width="20" Height="20"/>
+                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Resume}"
+                                                                Width="20" Height="20"/>
+                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Cancel}"
+                                                                Width="20" Height="20"/>
+                                                    </StackPanel>
+
+                                                    <Label Grid.Row="1" Content="{StaticResource ResourceUrl}"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding From}"/>
+
+                                                    <Label Grid.Row="2" Content="{StaticResource DownloadTo}"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding To}"/>
+
+
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
 
                                 <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
