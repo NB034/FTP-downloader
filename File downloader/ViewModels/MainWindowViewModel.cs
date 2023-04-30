@@ -1,5 +1,5 @@
 ﻿using File_downloader.Command;
-using File_downloader.ResourcesAccess;
+using File_downloader.Resources.ResourcesAccess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +33,8 @@ namespace File_downloader.ViewModels
         }
     }
 
+
+
     // Download tab
     partial class MainWindowViewModel
     {
@@ -46,27 +48,30 @@ namespace File_downloader.ViewModels
             {
                 new DownloadViewModel
                 {
-                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                     DownloadedBytes = 2048,
+                    Name = "111",
+                     From = "Me",
+                     To = "Anyone",
+                     DownloadedMegaBytes = 10000.99,
                      OnPause = false,
                      Size = 204800
                 },
                 new DownloadViewModel
                 {
+                    Name = "2222",
                      From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                      To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                     DownloadedBytes = 2048,
+                     DownloadedMegaBytes = 20410.5,
                      OnPause = false,
-                     Size = 204800
+                     Size = 20480.8
                 },
                 new DownloadViewModel
                 {
-                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                     DownloadedBytes = 2048,
+                    Name = "3333333",
+                     From = "Hi",
+                     To = "Bye",
+                     DownloadedMegaBytes = 204809.55,
                      OnPause = false,
-                     Size = 204800
+                     Size = 20480011
                 }
             };
         }
@@ -277,23 +282,59 @@ namespace File_downloader.ViewModels
         //private bool CanCancelAll() =>
     }
 
+
+
     // View tab
     partial class MainWindowViewModel
     {
         public void InitializeViewTab()
         {
-
+            JournalEntries = new ObservableCollection<JournalEntryViewModel> { 
+                new JournalEntryViewModel{
+             DownloadDate = "02.09.2003",
+              FileName = "Some game",
+               FileSize = 100,
+                LocalPath = "IIIIIIIIIIII",
+                 RemotePath = "OOOOOOOOOO",
+                  Result = NotificationIconsManager.PositiveIcon
+            } ,
+                new JournalEntryViewModel{
+             DownloadDate = "02.09.2003",
+              FileName = "Some game",
+               FileSize = 100,
+                LocalPath = "IIIIIIIIIIII",
+                 RemotePath = "OOOOOOOOOO",
+                  Result = NotificationIconsManager.PositiveIcon
+            },
+                new JournalEntryViewModel{
+             DownloadDate = "02.09.2003",
+              FileName = "Some game",
+               FileSize = 100,
+                LocalPath = "IIIIIIIIIIII",
+                 RemotePath = "OOOOOOOOOO",
+                  Result = NotificationIconsManager.PositiveIcon
+            }
+            };
         }
 
-
+        public ObservableCollection<JournalEntryViewModel> JournalEntries { get; set; }
     }
+
+
 
     // Notification panel
     partial class MainWindowViewModel
     {
         private void InitializeNotificationPanel()
         {
-            Notifications = new ObservableCollection<NotificationViewModel>();
+            Notifications = new ObservableCollection<NotificationViewModel>
+            {
+                new NotificationViewModel
+                {
+                    Message = "Program loaded!",
+                    Image = NotificationIconsManager.PositiveIcon
+                }
+            };
             _closeNotificatonCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
             _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
         }
@@ -320,7 +361,7 @@ namespace File_downloader.ViewModels
         {
             Notifications.Add(new NotificationViewModel
             {
-                ImageUri = NotificationIconsManager.PositiveIconUri,
+                Image = NotificationIconsManager.PositiveIcon,
                 Message = message,
             });
         }
@@ -329,7 +370,7 @@ namespace File_downloader.ViewModels
         {
             Notifications.Add(new NotificationViewModel
             {
-                ImageUri = NotificationIconsManager.NeutralIconUri,
+                Image = NotificationIconsManager.NeutralIcon,
                 Message = message,
             });
         }
@@ -338,7 +379,7 @@ namespace File_downloader.ViewModels
         {
             Notifications.Add(new NotificationViewModel
             {
-                ImageUri = NotificationIconsManager.NegativeIconUri,
+                Image = NotificationIconsManager.NegativeIcon,
                 Message = exception.Message,
             });
         }

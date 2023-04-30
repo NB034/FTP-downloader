@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=Mscorlib">
 
     <sys:String x:Key="DownloadTabName">Download</sys:String>
-    <sys:String x:Key="ViewTabName">View</sys:String>
+    <sys:String x:Key="ViewTabName">Journal</sys:String>
     <sys:String x:Key="ResourceUrl">Resource URL:</sys:String>
     <sys:String x:Key="DownloadTo">Download to:</sys:String>
     <sys:String x:Key="ChooseDrectory">. . .</sys:String>
@@ -21,8 +21,13 @@
     <sys:String x:Key="InitializeDownload">Initialize download</sys:String>
     <sys:String x:Key="SaveAs">Save as:</sys:String>
     <sys:String x:Key="CloseNotification">Close</sys:String>
-    <sys:String x:Key="CloseAllNotification">Close</sys:String>
+    <sys:String x:Key="CloseAllNotification">Close all</sys:String>
     <sys:String x:Key="MaxDownloadsReached">The maximum number of downloads has been reached</sys:String>
     <sys:String x:Key="StartTheDownloadImmediately">Start the download immediately</sys:String>
+    <sys:String x:Key="FileSize">Size:</sys:String>
+    <sys:String x:Key="FileSizeUnit">MB</sys:String>
+    <sys:String x:Key="FileName">File name:</sys:String>
+    <sys:String x:Key="RemoveEntry">Remove entry</sys:String>
+    <sys:String x:Key="RemoveAllEntries">Remove all entries</sys:String>
 
 </ResourceDictionary>

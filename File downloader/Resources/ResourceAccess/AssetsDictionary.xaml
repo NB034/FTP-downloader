@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ImageBrush x:Key="CheckMarkCircle" ImageSource="/Resources/Assets/Ionicons-CheckmarkCircleOutlineiOS.png"/>
+    <ImageBrush x:Key="CrossCircle" ImageSource="/Resources/Assets/Ionicons-CloseCircleOutlineiOS.png"/>
+    <ImageBrush x:Key="EmptyCircle" ImageSource="/Resources/Assets/Ionicons-RadioButtonOffiOS.png"/>
+
+    <ImageBrush x:Key="Pause" ImageSource="/Resources/Assets/Ionicons-PauseiOS.png"/>
+    <ImageBrush x:Key="Resume" ImageSource="/Resources/Assets/Ionicons-PlayiOS.png"/>
+    <ImageBrush x:Key="Cancel" ImageSource="/Resources/Assets/Ionicons-CloseiOS.png"/>
+
+</ResourceDictionary>

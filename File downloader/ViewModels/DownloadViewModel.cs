@@ -11,11 +11,18 @@ namespace File_downloader.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private string _name = "";
         private string _from = "";
         private string _to = "";
-        private int _size = 0;
-        private int _downloadedBytes = 0;
+        private double _size = 0;
+        private double _downloadedMegaBytes = 0;
         private bool _onPause = false;
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value, nameof(Name));
+        }
 
         public string From
         {
@@ -29,16 +36,16 @@ namespace File_downloader.ViewModels
             set => SetProperty(ref _to, value, nameof(To));
         }
 
-        public int Size
+        public double Size
         {
             get => _size;
             set => SetProperty(ref _size, value, nameof(Size));
         }
 
-        public int DownloadedBytes
+        public double DownloadedMegaBytes
         {
-            get => _downloadedBytes;
-            set => SetProperty(ref _downloadedBytes, value, nameof(DownloadedBytes));
+            get => _downloadedMegaBytes;
+            set => SetProperty(ref _downloadedMegaBytes, value, nameof(DownloadedMegaBytes));
         }
 
         public bool OnPause
@@ -46,6 +53,8 @@ namespace File_downloader.ViewModels
             get => _onPause;
             set => SetProperty(ref _onPause, value, nameof(OnPause));
         }
+
+        public double Percent => DownloadedMegaBytes * 100.0 / Size;
 
         private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
         {

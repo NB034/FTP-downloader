@@ -8,13 +8,14 @@
         xmlns:sys="clr-namespace:System;assembly=Mscorlib"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="File downloader" Height="600" Width="1000"
+        Title="File downloader" Height="735" Width="1000"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-        MinWidth="500" MinHeight="460">
+        MinWidth="500" MinHeight="443"
+        WindowStartupLocation="CenterScreen">
 
     <DockPanel>
         <!-- Notification panel -->
-        <ItemsControl DockPanel.Dock="Bottom" Margin="5" Height="30" ItemsSource="{Binding Notifications}">
+        <ItemsControl DockPanel.Dock="Bottom" Margin="5,1,5,5" Height="60" ItemsSource="{Binding Notifications}">
             <ItemsControl.ItemsPanel >
                 <ItemsPanelTemplate>
                     <Grid/>
@@ -23,22 +24,24 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource BorderStyle}" Margin="5,0,5,5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Image Grid.Column="0" Source="{Binding ImageUri}"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Message}"/>
-                        <StackPanel Grid.Column="2">
-                            <Button Content="{StaticResource CloseNotification}" 
+                            <Border Grid.Column="0" Background="{Binding Image}" Width="30" Height="30" Margin="8,0,8,0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Message}" VerticalAlignment="Center" Margin="5"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <Button Content="{StaticResource CloseNotification}" Style="{StaticResource ButtonStyle}" Padding="2,1,2,1" FontSize="10" Margin="5,3,5,3"
                                     Command="{Binding RelativeSource={ RelativeSource Mode=TemplatedParent}, Path=CloseNotificationCommand}"/>
-                            <Button Content="{StaticResource CloseNotification}" 
+                                <Button Content="{StaticResource CloseAllNotification}" Style="{StaticResource ButtonStyle}" Padding="2,1,2,1" FontSize="10" Margin="5,3,5,3"
                                     Command="{Binding RelativeSource={ RelativeSource Mode=TemplatedParent}, Path=CloseAllNotificationsCommand}"/>
-                        </StackPanel>
-                    </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -254,12 +257,14 @@
                         </Border>
                         <!-- Panel above the list-->
 
+                        <!-- Download list -->
                         <Border Style="{StaticResource BorderStyle}" CornerRadius="0,0,3,3" Grid.Row="1" BorderThickness="1,0,1,1">
                             <Grid>
-                                <ListBox BorderBrush="Transparent" ItemsSource="{Binding Downloads}">
+                                <ListBox BorderBrush="Transparent" ItemsSource="{Binding Downloads}" HorizontalContentAlignment="Stretch"
+                                         VirtualizingPanel.ScrollUnit="Pixel">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Style="{StaticResource BorderStyle}">
+                                            <Border Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource TagBackGroundBrush}">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto"/>
@@ -271,23 +276,54 @@
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Pause}"
-                                                                Width="20" Height="20"/>
-                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Resume}"
-                                                                Width="20" Height="20"/>
-                                                        <Button Style="{StaticResource ButtonStyle}" Background="{StaticResource Cancel}"
-                                                                Width="20" Height="20"/>
+                                                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="2,2,0,0">
+
+                                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                                            <Button.Content>
+                                                                <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="3"/>
+                                                            </Button.Content>
+                                                        </Button>
+
+                                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                                            <Button.Content>
+                                                                <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="3"/>
+                                                            </Button.Content>
+                                                        </Button>
+
+                                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                                            <Button.Content>
+                                                                <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="3"/>
+                                                            </Button.Content>
+                                                        </Button>
+
                                                     </StackPanel>
 
-                                                    <Label Grid.Row="1" Content="{StaticResource ResourceUrl}"/>
-                                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding From}"/>
+                                                    <Label Grid.Row="1" Grid.Column="0" Content="{StaticResource FileName}" FontSize="10" Padding="5,2,5,2"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="10" Text="{Binding Name}" Padding="5,2,5,2"/>
 
-                                                    <Label Grid.Row="2" Content="{StaticResource DownloadTo}"/>
-                                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding To}"/>
+                                                    <Label Grid.Row="1" Grid.Column="2" Content="{StaticResource FileSize}" FontSize="10" Padding="5,2,5,2"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" FontSize="10" Padding="5,2,5,2">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding Path="Size"/>
+                                                                <Binding Source="{StaticResource FileSizeUnit}"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
 
+                                                    <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource ResourceUrl}" FontSize="10" Padding="5,2,5,2"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" FontSize="10" Text="{Binding From}" Padding="5,2,5,2"/>
+
+                                                    <Label Grid.Row="2" Grid.Column="2" Content="{StaticResource DownloadTo}" FontSize="10" Padding="5,2,5,2"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" FontSize="10" Text="{Binding To}" Padding="5,2,5,2"/>
+
+                                                    <Border Grid.Row="3" Grid.ColumnSpan="4" Height="10" Margin="5,2,5,5" Style="{StaticResource BorderStyle}">
+                                                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Percent, Mode=OneWay}"/>
+                                                    </Border>
 
                                                 </Grid>
                                             </Border>
@@ -295,9 +331,11 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
+                                <!-- <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/> -->
                             </Grid>
                         </Border>
+                        <!-- Download list -->
+
                     </Grid>
                 </Grid>
             </TabItem>
@@ -308,27 +346,43 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal">
                         <TextBox Width="200" Style="{StaticResource TextBoxStyle}" Margin="5"/>
                         <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" 
-                                Margin="5" Padding="2"/>
+                                Margin="5" Padding="3,2,3,2"/>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
-                        <DataGrid Grid.Row="1" Margin="5" BorderBrush="{StaticResource MainBorderBrush}">
+                        <DataGrid Grid.Row="1" Margin="5,5,5,0" BorderBrush="{StaticResource MainBorderBrush}" AutoGenerateColumns="False"
+                                  ItemsSource="{Binding JournalEntries}" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="File name"/>
-                                <DataGridTextColumn Header="Local path" Width="*"/>
-                                <DataGridTextColumn Header="Remote path" Width="*"/>
-                                <DataGridTextColumn Header="Download date"/>
-                                <DataGridTextColumn Header="File size" Width="Auto"/>
+                                <DataGridTextColumn Header="File name" Width="*" Binding="{Binding FileName}"/>
+                                <DataGridTextColumn Header="Local path" Width="*" Binding="{Binding LocalPath}"/>
+                                <DataGridTextColumn Header="Remote path" Width="*" Binding="{Binding RemotePath}"/>
+                                <DataGridTextColumn Header="Download date" Width="*" Binding="{Binding DownloadDate}"/>
+                                <DataGridTextColumn Header="File size" Width="*" Binding="{Binding FileSize}"/>
+                                <DataGridTemplateColumn Header="Result" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding Result}" Width="20" Height="20"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
 
                         <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
                     </Grid>
+
+                    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1,0,1,1" Margin="5,0,5,5" CornerRadius="0,0,3,3">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="{StaticResource RemoveEntry}" Style="{StaticResource ButtonStyle}" Margin="6" Padding="5,3,5,3" FontSize="11"/>
+                            <Button Content="{StaticResource RemoveAllEntries}" Style="{StaticResource ButtonStyle}" Margin="6" Padding="5,3,5,3" FontSize="11"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </TabItem>
 
