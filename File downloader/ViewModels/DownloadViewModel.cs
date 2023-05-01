@@ -17,6 +17,10 @@ namespace File_downloader.ViewModels
         private double _size = 0;
         private double _downloadedMegaBytes = 0;
         private bool _onPause = false;
+        private bool _cancelling = false;
+        private bool _useCreadentials = false;
+        private string _username = "";
+        private string _password = "";
 
         public string Name
         {
@@ -52,6 +56,30 @@ namespace File_downloader.ViewModels
         {
             get => _onPause;
             set => SetProperty(ref _onPause, value, nameof(OnPause));
+        }
+
+        public bool Cancelling
+        {
+            get => _cancelling;
+            set => SetProperty(ref _cancelling, value, nameof(Cancelling));
+        }
+
+        private bool UseCredentials
+        {
+            get => _useCreadentials;
+            set => SetProperty(ref _useCreadentials, value, nameof(UseCredentials));
+        }
+
+        private string Username
+        {
+            get => _username;
+            set => SetProperty(ref _username, value, nameof(Username));
+        }
+
+        private string Password
+        {
+            get => _password;
+            set => SetProperty(ref _password, value, nameof(Password));
         }
 
         public double Percent => DownloadedMegaBytes * 100.0 / Size;

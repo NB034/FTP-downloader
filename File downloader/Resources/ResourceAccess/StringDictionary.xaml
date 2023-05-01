@@ -29,5 +29,6 @@
     <sys:String x:Key="FileName">File name:</sys:String>
     <sys:String x:Key="RemoveEntry">Remove entry</sys:String>
     <sys:String x:Key="RemoveAllEntries">Remove all entries</sys:String>
+    <sys:String x:Key="ResetFilter">Reset</sys:String>
 
 </ResourceDictionary>

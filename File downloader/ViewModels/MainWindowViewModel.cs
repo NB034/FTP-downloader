@@ -17,7 +17,6 @@ namespace File_downloader.ViewModels
 
         public MainWindowViewModel()
         {
-            InitializeNotificationPanel();
             InitializeDownloadTab();
             InitializeViewTab();
         }
@@ -44,36 +43,7 @@ namespace File_downloader.ViewModels
             {
                 "game", "office", "music", "picture", "book"
             };
-            Downloads = new ObservableCollection<DownloadViewModel>
-            {
-                new DownloadViewModel
-                {
-                    Name = "111",
-                     From = "Me",
-                     To = "Anyone",
-                     DownloadedMegaBytes = 10000.99,
-                     OnPause = false,
-                     Size = 204800
-                },
-                new DownloadViewModel
-                {
-                    Name = "2222",
-                     From = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                     To = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                     DownloadedMegaBytes = 20410.5,
-                     OnPause = false,
-                     Size = 20480.8
-                },
-                new DownloadViewModel
-                {
-                    Name = "3333333",
-                     From = "Hi",
-                     To = "Bye",
-                     DownloadedMegaBytes = 204809.55,
-                     OnPause = false,
-                     Size = 20480011
-                }
-            };
+            Downloads = new ObservableCollection<DownloadViewModel>();
         }
 
         public int MaxTags => 5;
@@ -280,108 +250,5 @@ namespace File_downloader.ViewModels
         }
 
         //private bool CanCancelAll() =>
-    }
-
-
-
-    // View tab
-    partial class MainWindowViewModel
-    {
-        public void InitializeViewTab()
-        {
-            JournalEntries = new ObservableCollection<JournalEntryViewModel> { 
-                new JournalEntryViewModel{
-             DownloadDate = "02.09.2003",
-              FileName = "Some game",
-               FileSize = 100,
-                LocalPath = "IIIIIIIIIIII",
-                 RemotePath = "OOOOOOOOOO",
-                  Result = NotificationIconsManager.PositiveIcon
-            } ,
-                new JournalEntryViewModel{
-             DownloadDate = "02.09.2003",
-              FileName = "Some game",
-               FileSize = 100,
-                LocalPath = "IIIIIIIIIIII",
-                 RemotePath = "OOOOOOOOOO",
-                  Result = NotificationIconsManager.PositiveIcon
-            },
-                new JournalEntryViewModel{
-             DownloadDate = "02.09.2003",
-              FileName = "Some game",
-               FileSize = 100,
-                LocalPath = "IIIIIIIIIIII",
-                 RemotePath = "OOOOOOOOOO",
-                  Result = NotificationIconsManager.PositiveIcon
-            }
-            };
-        }
-
-        public ObservableCollection<JournalEntryViewModel> JournalEntries { get; set; }
-    }
-
-
-
-    // Notification panel
-    partial class MainWindowViewModel
-    {
-        private void InitializeNotificationPanel()
-        {
-            Notifications = new ObservableCollection<NotificationViewModel>
-            {
-                new NotificationViewModel
-                {
-                    Message = "Program loaded!",
-                    Image = NotificationIconsManager.PositiveIcon
-                }
-            };
-            _closeNotificatonCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
-            _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
-        }
-
-        private AutoEventCommandBase _closeNotificatonCommand;
-        private AutoEventCommandBase _closeAllNotificatonsCommand;
-
-        public AutoEventCommandBase CloseNotificatonCommand => _closeNotificatonCommand;
-        public AutoEventCommandBase CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
-        public ObservableCollection<NotificationViewModel> Notifications { get; set; }
-
-        private void RemoveNotification(object o)
-        {
-            var notification = (NotificationViewModel)o;
-            Notifications.Remove(notification);
-        }
-
-        private void ClearNotifications()
-        {
-            Notifications.Clear();
-        }
-
-        public void AddPositiveNotification(string message)
-        {
-            Notifications.Add(new NotificationViewModel
-            {
-                Image = NotificationIconsManager.PositiveIcon,
-                Message = message,
-            });
-        }
-
-        public void AddNeutralNotification(string message)
-        {
-            Notifications.Add(new NotificationViewModel
-            {
-                Image = NotificationIconsManager.NeutralIcon,
-                Message = message,
-            });
-        }
-
-        public void AddNegativeNotification(Exception exception)
-        {
-            Notifications.Add(new NotificationViewModel
-            {
-                Image = NotificationIconsManager.NegativeIcon,
-                Message = exception.Message,
-            });
-        }
     }
 }

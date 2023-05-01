@@ -351,19 +351,43 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBox Width="200" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                        <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" 
-                                Margin="5" Padding="3,2,3,2"/>
+                        <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"/>
+                        <Button Content="{StaticResource ResetFilter}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"/>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
                         <DataGrid Grid.Row="1" Margin="5,5,5,0" BorderBrush="{StaticResource MainBorderBrush}" AutoGenerateColumns="False"
                                   ItemsSource="{Binding JournalEntries}" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single">
                             <DataGrid.Columns>
+                                
                                 <DataGridTextColumn Header="File name" Width="*" Binding="{Binding FileName}"/>
                                 <DataGridTextColumn Header="Local path" Width="*" Binding="{Binding LocalPath}"/>
                                 <DataGridTextColumn Header="Remote path" Width="*" Binding="{Binding RemotePath}"/>
                                 <DataGridTextColumn Header="Download date" Width="*" Binding="{Binding DownloadDate}"/>
                                 <DataGridTextColumn Header="File size" Width="*" Binding="{Binding FileSize}"/>
+
+                                <DataGridTemplateColumn Header="Tags" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ItemsControl ItemsSource="{Binding Tags}" Margin="5">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Style="{StaticResource BorderStyle}" Margin="2">
+                                                            <TextBlock Text="{Binding}" Padding="3,2,3,2"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
                                 <DataGridTemplateColumn Header="Result" Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
