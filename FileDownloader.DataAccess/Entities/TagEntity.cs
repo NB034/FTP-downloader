@@ -7,6 +7,5 @@ namespace FileDownloader.DataAccess.Entities
         public string Name { get; set; } = string.Empty;
 
         public virtual ICollection<JournalEntryEntity> EntryEntities { get; set; }
-        public virtual ICollection<UnfinishedDownloadEntity> UnfinishedDownloadEntities { get; set;}
     }
 }

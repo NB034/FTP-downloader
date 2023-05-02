@@ -12,7 +12,6 @@ namespace FileDownloader.DataAccess.Contexts
 
         public virtual DbSet<JournalEntryEntity> EntryEntities { get; set; }
         public virtual DbSet<TagEntity> TagEntities { get; set; }
-        public virtual DbSet<UnfinishedDownloadEntity> UnfinishedDownloadEntities { get; set; }
 
 
 

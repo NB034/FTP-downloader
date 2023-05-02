@@ -13,9 +13,18 @@ namespace File_downloader.ViewModels
 
         public NotificationPanelViewModel()
         {
-            Notifications = new ObservableCollection<NotificationViewModel>();
+            //Notifications = new ObservableCollection<NotificationViewModel>();
             _closeNotificatonCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
             _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
+
+            Notifications = new ObservableCollection<NotificationViewModel>
+            {
+                new NotificationViewModel
+                {
+                     Image = IconsManager.PositiveIcon,
+                      Message = "Program loaded!"
+                }
+            };
         }
 
         public AutoEventCommandBase CloseNotificatonCommand => _closeNotificatonCommand;

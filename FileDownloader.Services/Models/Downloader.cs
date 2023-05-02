@@ -4,7 +4,7 @@ using System.Net;
 
 namespace FileDownloader.Services.Models
 {
-    public class FileDownloader
+    public class Downloader
     {
         public event Action<DownloadModel> DownloadStarted;
         public event Action<DownloadModel> DownloadCompleted;

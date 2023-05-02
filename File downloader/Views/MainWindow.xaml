@@ -15,7 +15,7 @@
 
     <DockPanel>
         <!-- Notification panel -->
-        <ItemsControl DockPanel.Dock="Bottom" Margin="5,1,5,5" Height="60" ItemsSource="{Binding Notifications}">
+        <ItemsControl DockPanel.Dock="Bottom" Margin="5,1,5,5" Height="60" ItemsSource="{Binding NotificationPanel.Notifications}">
             <ItemsControl.ItemsPanel >
                 <ItemsPanelTemplate>
                     <Grid/>
@@ -49,7 +49,7 @@
         <TabControl Margin="10" Style="{StaticResource TabControlStyle}">
 
             <!-- Download tab -->
-            <TabItem Header="{StaticResource DownloadTabName}">
+            <TabItem Header="{StaticResource DownloadTabName}" DataContext="{Binding DownloadTab}">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -199,17 +199,9 @@
                         <Border Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" Style="{StaticResource BorderStyle}"
                                 Width="30" Margin="5"/>
 
-                        <!-- Download limit border -->
-                        <!--<Border Grid.ColumnSpan="4" Grid.RowSpan="6"  Style="{StaticResource BorderStyle}"
-                                Background="{StaticResource UnavaibleElementBrush}"
-                                Visibility="{Binding DirectoryVerified, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <TextBlock FontSize="40" Text="{StaticResource MaxDownloadsReached}" TextWrapping="Wrap"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"
-                                       TextAlignment="Center" FontStyle="Italic"/>
-                        </Border>-->
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="5">
+                    <Grid Grid.Row="1" Margin="5" DataContext="{Binding DownloadList}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
@@ -330,8 +322,6 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-
-                                <!-- <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/> -->
                             </Grid>
                         </Border>
                         <!-- Download list -->
@@ -341,7 +331,7 @@
             </TabItem>
 
             <!-- View tab -->
-            <TabItem Header="{StaticResource ViewTabName}">
+            <TabItem Header="{StaticResource ViewTabName}" DataContext="{Binding JournalTab}">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -359,7 +349,7 @@
                         <DataGrid Grid.Row="1" Margin="5,5,5,0" BorderBrush="{StaticResource MainBorderBrush}" AutoGenerateColumns="False"
                                   ItemsSource="{Binding JournalEntries}" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single">
                             <DataGrid.Columns>
-                                
+
                                 <DataGridTextColumn Header="File name" Width="*" Binding="{Binding FileName}"/>
                                 <DataGridTextColumn Header="Local path" Width="*" Binding="{Binding LocalPath}"/>
                                 <DataGridTextColumn Header="Remote path" Width="*" Binding="{Binding RemotePath}"/>
@@ -387,7 +377,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                
+
                                 <DataGridTemplateColumn Header="Result" Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>

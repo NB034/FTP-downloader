@@ -15,6 +15,7 @@ namespace FileDownloader.Services.Mappers
         public event Action EntriesLoaded;
         public event Action EntryDeleted;
         public event Action EntryCreated;
+        public event Action AllEntriesDeleted;
         public event Action<Exception> ExceptionThrowned;
 
         public Journal()
@@ -95,6 +96,13 @@ namespace FileDownloader.Services.Mappers
             {
                 ExceptionThrowned?.Invoke(ex);
             }
+        }
+
+        public async Task DeleteAllEntries()
+        {
+            await _context.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE [{nameof(_context.EntryEntities)}]");
+            await _context.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE [{nameof(_context.TagEntities)}]");
+            AllEntriesDeleted?.Invoke();
         }
 
         private void DeleteTagIfNotUsed(TagEntity tag)
