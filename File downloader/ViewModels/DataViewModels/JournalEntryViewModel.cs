@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
 
-namespace File_downloader.ViewModels
+namespace File_downloader.ViewModels.DataViewModels
 {
     internal class JournalEntryViewModel
     {

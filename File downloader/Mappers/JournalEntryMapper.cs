@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using File_downloader.ViewModels;
-using FileDownloader.Services.Models;
+using File_downloader.ViewModels.DataViewModels;
+using FileDownloader.Services.Models.JournalModels;
 using System.IO;
 
 namespace File_downloader.Mappers

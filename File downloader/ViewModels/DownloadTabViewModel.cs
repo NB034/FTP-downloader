@@ -1,7 +1,8 @@
 ﻿using File_downloader.Command;
 using File_downloader.Resources.ResourcesAccess;
 using FileDownloader.Services.Mappers;
-using FileDownloader.Services.Models;
+using FileDownloader.Services.Models.DownloaderModels;
+using FileDownloader.Services.Models.JournalModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace File_downloader.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DownloadTabViewModel(Downloader downloader, NotificationPanelViewModel notificationPanel, Journal journal)
+        public DownloadTabViewModel(IDownloader downloader, NotificationPanelViewModel notificationPanel, IJournal journal)
         {
             //Tags = new ObservableCollection<string>();
 
@@ -41,7 +42,7 @@ namespace File_downloader.ViewModels
         public int TagTextBoxWidth => MaxTagLength * 12;
 
         // Properties
-        private Downloader _downloader;
+        private IDownloader _downloader;
         private DownloadListViewModel _downloadList;
         private NotificationPanelViewModel _notificationPanel;
 
@@ -66,7 +67,7 @@ namespace File_downloader.ViewModels
 
 
 
-        public Downloader Downloader => _downloader;
+        public IDownloader Downloader => _downloader;
         public DownloadListViewModel DownloadList => _downloadList;
         public NotificationPanelViewModel NotificationPanel => _notificationPanel;
 

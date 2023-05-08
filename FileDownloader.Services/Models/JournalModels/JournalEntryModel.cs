@@ -1,5 +1,4 @@
-﻿
-namespace FileDownloader.Services.Models
+﻿namespace FileDownloader.Services.Models.JournalModels
 {
     public class JournalEntryModel
     {

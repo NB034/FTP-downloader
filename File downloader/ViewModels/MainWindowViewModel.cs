@@ -1,22 +1,13 @@
 ﻿using File_downloader.Command;
-using File_downloader.Resources.ResourcesAccess;
-using FileDownloader.Services.Mappers;
-using FileDownloader.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FileDownloader.Services.Models.DownloaderModels;
+using FileDownloader.Services.Models.JournalModels;
 
 namespace File_downloader.ViewModels
 {
-    // Common
     partial class MainWindowViewModel
     {
-        private readonly Journal _journal;
-        private readonly Downloader _downloader;
+        private readonly IJournal _journal;
+        private readonly IDownloader _downloader;
 
         private readonly NotificationPanelViewModel _notificationPanel;
         private readonly DownloadTabViewModel _downloadTab;

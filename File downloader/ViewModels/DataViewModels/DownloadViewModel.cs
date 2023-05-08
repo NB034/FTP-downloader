@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace File_downloader.ViewModels
+namespace File_downloader.ViewModels.DataViewModels
 {
     class DownloadViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private string _name = "";
         private string _from = "";

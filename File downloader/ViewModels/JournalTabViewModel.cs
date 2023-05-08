@@ -1,7 +1,9 @@
 ﻿using File_downloader.Command;
 using File_downloader.Mappers;
 using File_downloader.Resources.ResourcesAccess;
+using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Mappers;
+using FileDownloader.Services.Models.JournalModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +21,7 @@ namespace File_downloader.ViewModels
         private readonly AutoEventCommandBase _resetCommand;
         private readonly AutoEventCommandBase _removeEntryCommand;
         private readonly AutoEventCommandBase _removeAllEntriesCommand;
-        private readonly Journal _journal;
+        private readonly IJournal _journal;
         private readonly NotificationPanelViewModel _notificationPanel;
         private string _searchLine = "";
         private JournalEntryViewModel _entry = null;
@@ -27,7 +29,7 @@ namespace File_downloader.ViewModels
         private JournalEntryMapper _mapper;
 
 
-        public JournalTabViewModel(Journal journal, NotificationPanelViewModel notificationPanel)
+        public JournalTabViewModel(IJournal journal, NotificationPanelViewModel notificationPanel)
         {
             _mapper = new JournalEntryMapper();
             _journal = journal;
@@ -86,7 +88,7 @@ namespace File_downloader.ViewModels
         public AutoEventCommandBase ResetCommand => _resetCommand;
         public AutoEventCommandBase RemoveEntryCommand => _removeEntryCommand;
         public AutoEventCommandBase RemoveAllEntriesCommand => _removeAllEntriesCommand;
-        public Journal Journal => _journal;
+        public IJournal Journal => _journal;
         public string SearchLine { get => _searchLine; set => SetProperty(ref _searchLine, value, nameof(SearchLine)); }
         public JournalEntryViewModel Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value, nameof(IsLoading)); }

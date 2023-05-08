@@ -1,6 +1,8 @@
 ﻿using File_downloader.Command;
+using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Mappers;
-using FileDownloader.Services.Models;
+using FileDownloader.Services.Models.DownloaderModels;
+using FileDownloader.Services.Models.JournalModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,8 +15,8 @@ namespace File_downloader.ViewModels
     internal class DownloadListViewModel
     {
         private readonly NotificationPanelViewModel _notificationPanel;
-        private readonly Downloader _downloader;
-        private readonly Journal _journal;
+        private readonly IDownloader _downloader;
+        private readonly IJournal _journal;
 
         private readonly AutoEventCommandBase _resumeCommand;
         private readonly AutoEventCommandBase _pauseCommand;
@@ -23,7 +25,7 @@ namespace File_downloader.ViewModels
         private readonly AutoEventCommandBase _pauseAllCommand;
         private readonly AutoEventCommandBase _cancelAllCommand;
 
-        public DownloadListViewModel(NotificationPanelViewModel notificationPanel, Downloader downloader, Journal journal)
+        public DownloadListViewModel(NotificationPanelViewModel notificationPanel, IDownloader downloader, IJournal journal)
         {
             _notificationPanel = notificationPanel;
             _downloader = downloader;
@@ -77,8 +79,8 @@ namespace File_downloader.ViewModels
         }
 
         public NotificationPanelViewModel NotificationPanel => _notificationPanel;
-        public Downloader Downloader => _downloader;
-        public Journal Journal => _journal;
+        public IDownloader Downloader => _downloader;
+        public IJournal Journal => _journal;
 
 
         public ObservableCollection<DownloadViewModel> Downloads { get; set; }

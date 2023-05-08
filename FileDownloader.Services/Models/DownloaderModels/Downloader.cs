@@ -2,9 +2,9 @@
 using FluentFTP;
 using System.Net;
 
-namespace FileDownloader.Services.Models
+namespace FileDownloader.Services.Models.DownloaderModels
 {
-    public class Downloader
+    public class Downloader : IDownloader
     {
         public event Action<DownloadModel> DownloadStarted;
         public event Action<DownloadModel> DownloadCompleted;
@@ -41,7 +41,7 @@ namespace FileDownloader.Services.Models
 
                 while (bytes.Length > 0 || download.OnPause)
                 {
-                    if(download.Cancelling)
+                    if (download.Cancelling)
                     {
                         if (File.Exists(name)) File.Delete(name);
                         break;

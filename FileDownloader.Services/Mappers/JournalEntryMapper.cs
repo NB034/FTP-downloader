@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FileDownloader.DataAccess.Contexts;
 using FileDownloader.DataAccess.Entities;
-using FileDownloader.Services.Models;
+using FileDownloader.Services.Models.JournalModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

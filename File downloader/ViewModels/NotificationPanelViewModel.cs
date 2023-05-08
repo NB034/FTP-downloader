@@ -1,5 +1,7 @@
 ﻿using File_downloader.Command;
+using File_downloader.Resources.ResourceAccess;
 using File_downloader.Resources.ResourcesAccess;
+using File_downloader.ViewModels.DataViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -25,6 +27,8 @@ namespace File_downloader.ViewModels
                       Message = "Program loaded!"
                 }
             };
+
+            Notifications.CollectionChanged += CheckForOverflow;
         }
 
         public AutoEventCommandBase CloseNotificatonCommand => _closeNotificatonCommand;
@@ -50,8 +54,6 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.PositiveIcon,
                 Message = message,
             });
-
-            CheckPanelOverflow();
         }
 
         public void AddNeutralNotification(string message)
@@ -61,8 +63,6 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.NeutralIcon,
                 Message = message,
             });
-
-            CheckPanelOverflow();
         }
 
         public void AddNegativeNotification(Exception exception)
@@ -72,11 +72,18 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.NegativeIcon,
                 Message = exception.Message,
             });
-
-            CheckPanelOverflow();
         }
 
-        private void CheckPanelOverflow()
+        public void AddNotification(NotificationTypesEnum type, string message)
+        {
+            Notifications.Add(new NotificationViewModel
+            {
+                Image = IconsManager.GetIcon(type),
+                Message = message
+            });
+        }
+
+        private void CheckForOverflow(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (Notifications.Count > MaxNotifications)
             {

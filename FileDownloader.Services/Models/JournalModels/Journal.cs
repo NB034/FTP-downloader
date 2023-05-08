@@ -1,12 +1,12 @@
 ﻿using FileDownloader.DataAccess.Contexts;
 using FileDownloader.DataAccess.Entities;
-using FileDownloader.Services.Models;
+using FileDownloader.Services.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace FileDownloader.Services.Mappers
+namespace FileDownloader.Services.Models.JournalModels
 {
-    public class Journal
+    public class Journal : IJournal
     {
         private string _pathToSettings = "..//Settings//appsettings.json";
         private FileDownloaderDbContext _context;

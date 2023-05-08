@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace File_downloader.ViewModels
+namespace File_downloader.ViewModels.DataViewModels
 {
     class NotificationViewModel
     {
