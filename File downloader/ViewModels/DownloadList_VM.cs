@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace File_downloader.ViewModels
 {
-    internal class DownloadListViewModel
+    internal class DownloadList_VM
     {
-        private readonly NotificationPanelViewModel _notificationPanel;
+        private readonly NotificationPanel_VM _notificationPanel;
         private readonly IDownloader _downloader;
         private readonly IJournal _journal;
 
@@ -25,17 +25,16 @@ namespace File_downloader.ViewModels
         private readonly AutoEventCommandBase _pauseAllCommand;
         private readonly AutoEventCommandBase _cancelAllCommand;
 
-        public DownloadListViewModel(NotificationPanelViewModel notificationPanel, IDownloader downloader, IJournal journal)
+        public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader)
         {
             _notificationPanel = notificationPanel;
             _downloader = downloader;
-            _journal = journal;
 
             //Downloads = new ObservableCollection<DownloadViewModel>();
 
-            Downloads = new ObservableCollection<DownloadViewModel>
+            Downloads = new ObservableCollection<Download_VM>
             {
-                new DownloadViewModel
+                new Download_VM
                 {
                      DownloadedMegaBytes = 40000,
                       From = "Some site",
@@ -43,7 +42,7 @@ namespace File_downloader.ViewModels
                         Size = 200000,
                          To = "My computer"
                 },
-                new DownloadViewModel
+                new Download_VM
                 {
                      DownloadedMegaBytes = 40000,
                       From = "Some site",
@@ -51,7 +50,7 @@ namespace File_downloader.ViewModels
                         Size = 40001,
                          To = "My computer"
                 },
-                new DownloadViewModel
+                new Download_VM
                 {
                      DownloadedMegaBytes = 1,
                       From = "Some site",
@@ -59,7 +58,7 @@ namespace File_downloader.ViewModels
                         Size = 2,
                          To = "My computer"
                 },
-                new DownloadViewModel
+                new Download_VM
                 {
                      DownloadedMegaBytes = 125346,
                       From = "Some site",
@@ -78,12 +77,12 @@ namespace File_downloader.ViewModels
            // _resumeCommand = new AutoEventCommandBase(o => Resume(o),);
         }
 
-        public NotificationPanelViewModel NotificationPanel => _notificationPanel;
+        public NotificationPanel_VM NotificationPanel => _notificationPanel;
         public IDownloader Downloader => _downloader;
         public IJournal Journal => _journal;
 
 
-        public ObservableCollection<DownloadViewModel> Downloads { get; set; }
+        public ObservableCollection<Download_VM> Downloads { get; set; }
         public AutoEventCommandBase ResumeCommand => _resumeCommand;
         public AutoEventCommandBase PauseCommand => _pauseCommand;
         public AutoEventCommandBase CancelCommand => _cancelCommand;

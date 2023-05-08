@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace File_downloader.ViewModels.DataViewModels
 {
-    class NotificationViewModel
+    class Notification_VM
     {
         public ImageBrush Image { get; set; }
         public string Message { get; set; } = "";

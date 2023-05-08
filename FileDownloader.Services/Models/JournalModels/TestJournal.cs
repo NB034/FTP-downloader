@@ -1,6 +1,6 @@
 ﻿namespace FileDownloader.Services.Models.JournalModels
 {
-    internal class TestJournal : IJournal
+    public class TestJournal : IJournal
     {
         private List<JournalEntryModel> _journalEntries;
 

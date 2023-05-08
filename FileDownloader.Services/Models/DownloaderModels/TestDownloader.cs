@@ -1,6 +1,6 @@
 ﻿namespace FileDownloader.Services.Models.DownloaderModels
 {
-    internal class TestDownloader : IDownloader
+    public class TestDownloader : IDownloader
     {
         public event Action<DownloadModel> DownloadCancelled;
         public event Action<DownloadModel> DownloadCompleted;

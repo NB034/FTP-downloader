@@ -3,6 +3,7 @@ using File_downloader.Mappers;
 using File_downloader.Resources.ResourcesAccess;
 using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Mappers;
+using FileDownloader.Services.Models.DownloaderModels;
 using FileDownloader.Services.Models.JournalModels;
 using System;
 using System.Collections.Generic;
@@ -15,21 +16,22 @@ using System.Windows;
 
 namespace File_downloader.ViewModels
 {
-    internal class JournalTabViewModel : INotifyPropertyChanged
+    internal class JournalTab_VM : INotifyPropertyChanged
     {
         private readonly AutoEventCommandBase _searchCommand;
         private readonly AutoEventCommandBase _resetCommand;
         private readonly AutoEventCommandBase _removeEntryCommand;
         private readonly AutoEventCommandBase _removeAllEntriesCommand;
+
         private readonly IJournal _journal;
-        private readonly NotificationPanelViewModel _notificationPanel;
+        private readonly NotificationPanel_VM _notificationPanel;
         private string _searchLine = "";
-        private JournalEntryViewModel _entry = null;
         private bool _isLoading = false;
+        private JournalEntry_VM _entry = null;
         private JournalEntryMapper _mapper;
 
 
-        public JournalTabViewModel(IJournal journal, NotificationPanelViewModel notificationPanel)
+        public JournalTab_VM(IJournal journal, IDownloader downloader, NotificationPanel_VM notificationPanel)
         {
             _mapper = new JournalEntryMapper();
             _journal = journal;
@@ -40,9 +42,9 @@ namespace File_downloader.ViewModels
 
             //JournalEntries = new ObservableCollection<JournalEntryViewModel>();
 
-            JournalEntries = new ObservableCollection<JournalEntryViewModel>
+            JournalEntries = new ObservableCollection<JournalEntry_VM>
             {
-                new JournalEntryViewModel
+                new JournalEntry_VM
                 {
                      DownloadDate = "02.05.2023",
                       FileName = "Some game",
@@ -52,7 +54,7 @@ namespace File_downloader.ViewModels
                           Result = IconsManager.PositiveIcon,
                            Tags = new List<string>{"game", "shooter", "old version", "favourite", "some tag idk"}
                 },
-                new JournalEntryViewModel
+                new JournalEntry_VM
                 {
                      DownloadDate = "02.05.2023",
                       FileName = "Some game",
@@ -62,7 +64,7 @@ namespace File_downloader.ViewModels
                           Result = IconsManager.NegativeIcon,
                            Tags = new List<string>{"game", "shooter", "old version", "favourite", "some tag idk"}
                 },
-                new JournalEntryViewModel
+                new JournalEntry_VM
                 {
                      DownloadDate = "02.05.2023",
                       FileName = "Some game",
@@ -83,14 +85,14 @@ namespace File_downloader.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<JournalEntryViewModel> JournalEntries { get; set; }
+        public ObservableCollection<JournalEntry_VM> JournalEntries { get; set; }
         public AutoEventCommandBase SearchCommand => _searchCommand;
         public AutoEventCommandBase ResetCommand => _resetCommand;
         public AutoEventCommandBase RemoveEntryCommand => _removeEntryCommand;
         public AutoEventCommandBase RemoveAllEntriesCommand => _removeAllEntriesCommand;
         public IJournal Journal => _journal;
         public string SearchLine { get => _searchLine; set => SetProperty(ref _searchLine, value, nameof(SearchLine)); }
-        public JournalEntryViewModel Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }
+        public JournalEntry_VM Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value, nameof(IsLoading)); }
 
 

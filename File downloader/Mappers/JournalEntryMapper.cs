@@ -16,12 +16,12 @@ namespace File_downloader.Mappers
             _modelToVmMapper = InitializeModelToVmMapper();
         }
 
-        public JournalEntryViewModel ModelToVm(JournalEntryModel model) => _modelToVmMapper.Map<JournalEntryViewModel>(model);
-        public JournalEntryModel VmToModel(JournalEntryViewModel vm) => _vmToModelMapper.Map<JournalEntryModel>(vm);
+        public JournalEntry_VM ModelToVm(JournalEntryModel model) => _modelToVmMapper.Map<JournalEntry_VM>(model);
+        public JournalEntryModel VmToModel(JournalEntry_VM vm) => _vmToModelMapper.Map<JournalEntryModel>(vm);
 
         private Mapper InitializeVmToModelMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntryViewModel, JournalEntryModel>()
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntry_VM, JournalEntryModel>()
             .ForMember(nameof(JournalEntryModel.LocalPath), opt => opt.MapFrom(vm => Path.Combine(vm.LocalPath, vm.FileName))));
 
             return new Mapper(config);
@@ -29,9 +29,9 @@ namespace File_downloader.Mappers
 
         private Mapper InitializeModelToVmMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntryModel, JournalEntryViewModel>()
-            .ForMember(nameof(JournalEntryViewModel.LocalPath), opt => opt.MapFrom(mod => Path.GetPathRoot(mod.LocalPath)))
-            .ForMember(nameof(JournalEntryViewModel.FileName), opt => opt.MapFrom(mod => Path.GetFileName(mod.LocalPath))));
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntryModel, JournalEntry_VM>()
+            .ForMember(nameof(JournalEntry_VM.LocalPath), opt => opt.MapFrom(mod => Path.GetPathRoot(mod.LocalPath)))
+            .ForMember(nameof(JournalEntry_VM.FileName), opt => opt.MapFrom(mod => Path.GetFileName(mod.LocalPath))));
 
             return new Mapper(config);
         }

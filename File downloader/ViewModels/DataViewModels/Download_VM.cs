@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace File_downloader.ViewModels.DataViewModels
 {
-    class DownloadViewModel : INotifyPropertyChanged
+    class Download_VM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

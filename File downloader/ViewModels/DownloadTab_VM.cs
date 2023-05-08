@@ -1,24 +1,18 @@
 ﻿using File_downloader.Command;
 using File_downloader.Resources.ResourcesAccess;
-using FileDownloader.Services.Mappers;
 using FileDownloader.Services.Models.DownloaderModels;
-using FileDownloader.Services.Models.JournalModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace File_downloader.ViewModels
 {
-    internal class DownloadTabViewModel : INotifyPropertyChanged
+    internal class DownloadTab_VM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DownloadTabViewModel(IDownloader downloader, NotificationPanelViewModel notificationPanel, IJournal journal)
+        public DownloadTab_VM(NotificationPanel_VM notificationPanel, DownloadList_VM downloadList)
         {
             //Tags = new ObservableCollection<string>();
 
@@ -31,9 +25,8 @@ namespace File_downloader.ViewModels
                 "archive"
             };
 
-            _downloader = downloader;
             _notificationPanel = notificationPanel;
-            _downloadList = new DownloadListViewModel(notificationPanel, downloader, journal);
+            _downloadList = downloadList;
         }
 
         public int MaxTags => 5;
@@ -43,8 +36,8 @@ namespace File_downloader.ViewModels
 
         // Properties
         private IDownloader _downloader;
-        private DownloadListViewModel _downloadList;
-        private NotificationPanelViewModel _notificationPanel;
+        private DownloadList_VM _downloadList;
+        private NotificationPanel_VM _notificationPanel;
 
         private bool _useCredentials = false;
         private bool _startImmediately = true;
@@ -68,8 +61,8 @@ namespace File_downloader.ViewModels
 
 
         public IDownloader Downloader => _downloader;
-        public DownloadListViewModel DownloadList => _downloadList;
-        public NotificationPanelViewModel NotificationPanel => _notificationPanel;
+        public DownloadList_VM DownloadList => _downloadList;
+        public NotificationPanel_VM NotificationPanel => _notificationPanel;
 
         public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
         public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }

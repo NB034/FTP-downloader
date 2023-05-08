@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace File_downloader.ViewModels.DataViewModels
 {
-    internal class JournalEntryViewModel
+    internal class JournalEntry_VM
     {
         public int Id { get; set; }
         public string FileName { get; set; }

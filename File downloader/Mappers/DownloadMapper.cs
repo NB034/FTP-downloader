@@ -15,19 +15,19 @@ namespace File_downloader.Mappers
             _modelToVmMapper = InitializeModelToVmMapper();
         }
 
-        public DownloadViewModel ModelToVm(DownloadModel model) => _modelToVmMapper.Map<DownloadViewModel>(model);
-        public DownloadModel VmToModel(DownloadViewModel vm) => _vmToModelMapper.Map<DownloadModel>(vm);
+        public Download_VM ModelToVm(DownloadModel model) => _modelToVmMapper.Map<Download_VM>(model);
+        public DownloadModel VmToModel(Download_VM vm) => _vmToModelMapper.Map<DownloadModel>(vm);
 
         private Mapper InitializeVmToModelMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<DownloadViewModel, DownloadModel>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, DownloadModel>());
 
             return new Mapper(config);
         }
 
         private Mapper InitializeModelToVmMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<DownloadViewModel, DownloadModel>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, DownloadModel>());
 
             return new Mapper(config);
         }
