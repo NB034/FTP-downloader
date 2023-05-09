@@ -8,6 +8,7 @@
         event Action<DownloadModel, Exception> DownloadFailed;
         event Action<DownloadModel> DownloadStarted;
 
+        bool CheckRemoteItem(DownloadModel downloadModel);
         void StartNewDownload(DownloadModel download);
     }
 }

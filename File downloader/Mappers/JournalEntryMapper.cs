@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using File_downloader.Resources.ResourcesAccess;
 using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Models.JournalModels;
 using System.IO;
@@ -31,7 +32,8 @@ namespace File_downloader.Mappers
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntryModel, JournalEntry_VM>()
             .ForMember(nameof(JournalEntry_VM.LocalPath), opt => opt.MapFrom(mod => Path.GetPathRoot(mod.LocalPath)))
-            .ForMember(nameof(JournalEntry_VM.FileName), opt => opt.MapFrom(mod => Path.GetFileName(mod.LocalPath))));
+            .ForMember(nameof(JournalEntry_VM.FileName), opt => opt.MapFrom(mod => Path.GetFileName(mod.LocalPath)))
+            .ForMember(nameof(JournalEntry_VM.Result), opt => opt.MapFrom(mod => mod.WasSuccessful ? IconsManager.PositiveIcon : IconsManager.NegativeIcon)));
 
             return new Mapper(config);
         }

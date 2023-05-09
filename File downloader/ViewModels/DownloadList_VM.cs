@@ -16,7 +16,6 @@ namespace File_downloader.ViewModels
     {
         private readonly NotificationPanel_VM _notificationPanel;
         private readonly IDownloader _downloader;
-        private readonly IJournal _journal;
 
         private readonly AutoEventCommandBase _resumeCommand;
         private readonly AutoEventCommandBase _pauseCommand;
@@ -40,7 +39,9 @@ namespace File_downloader.ViewModels
                       From = "Some site",
                        Name = "Something",
                         Size = 200000,
-                         To = "My computer"
+                         To = "My computer",
+                          OnPause = true,
+                           Cancelling = false
                 },
                 new Download_VM
                 {
@@ -48,7 +49,9 @@ namespace File_downloader.ViewModels
                       From = "Some site",
                        Name = "Something",
                         Size = 40001,
-                         To = "My computer"
+                         To = "My computer",
+                         OnPause = true,
+                           Cancelling = false
                 },
                 new Download_VM
                 {
@@ -56,7 +59,9 @@ namespace File_downloader.ViewModels
                       From = "Some site",
                        Name = "Something",
                         Size = 2,
-                         To = "My computer"
+                         To = "My computer",
+                         OnPause = true,
+                           Cancelling = false
                 },
                 new Download_VM
                 {
@@ -64,7 +69,9 @@ namespace File_downloader.ViewModels
                       From = "Some site",
                        Name = "Something",
                         Size = 1257543235,
-                         To = "My computer"
+                         To = "My computer",
+                         OnPause = true,
+                           Cancelling = false
                 }
             };
 
@@ -74,13 +81,16 @@ namespace File_downloader.ViewModels
             downloader.DownloadedBytesNumberChanged += OnDownloadProgress;
             downloader.DownloadStarted += OnDownloadStarted;
 
-           // _resumeCommand = new AutoEventCommandBase(o => Resume(o),);
+            _resumeCommand = new AutoEventCommandBase(o => Resume(o), o => CanResume(o));
+            _pauseCommand = new AutoEventCommandBase(o => Pause(o), o => CanPause(o));
+            _cancelCommand = new AutoEventCommandBase(o => Cancel(o), o => CanCancel(o));
+            _resumeAllCommand = new AutoEventCommandBase(_ => ResumeAll(), _ => CanResumeAll());
+            _pauseAllCommand = new AutoEventCommandBase(_ => PauseAll(), _ => CanPauseAll());
+            _cancelAllCommand = new AutoEventCommandBase(_ => CancelAll(), _ => CanCancelAll());
         }
 
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
         public IDownloader Downloader => _downloader;
-        public IJournal Journal => _journal;
-
 
         public ObservableCollection<Download_VM> Downloads { get; set; }
         public AutoEventCommandBase ResumeCommand => _resumeCommand;
@@ -94,69 +104,74 @@ namespace File_downloader.ViewModels
 
 
 
+        public void StartNewDownload(Download_VM download)
+        {
+            //_downloader.StartNewDownload();
+        }
+
         private void OnDownloadStarted(DownloadModel obj)
         {
-            throw new NotImplementedException();
+            _notificationPanel.AddPositiveNotification("Download has atarted!");
         }
 
         private void OnDownloadProgress(DownloadModel obj)
         {
-            throw new NotImplementedException();
+
         }
 
         private void OnDownloadCompleted(DownloadModel obj)
         {
-            throw new NotImplementedException();
+
         }
 
         private void OnDownloadCancelled(DownloadModel obj)
         {
-            throw new NotImplementedException();
+
         }
 
         private void OnDownloadFailed(DownloadModel arg1, Exception arg2)
         {
-            throw new NotImplementedException();
-        }
-
-
-
-
-
-        //private bool CanResume() =>
-        private void Resume(object o)
-        {
 
         }
 
-        //private bool CanPause() =>
-        private void Pause(object o)
-        {
 
-        }
 
-        //private bool CanCancel() =>
-        private void Cancel(object o)
-        {
 
-        }
 
-        //private bool CanResumeAll() =>
+        private bool CanResume(object o) => (o as DownloadModel).OnPause;
+        private void Resume(object o) => (o as DownloadModel).OnPause = false;
+
+        private bool CanPause(object o) => !(o as DownloadModel).OnPause;
+        private void Pause(object o) => (o as DownloadModel).OnPause = true;
+
+        private bool CanCancel(object o) => true;
+        private void Cancel(object o) => (o as DownloadModel).Cancelling = true;
+
+        private bool CanResumeAll() => Downloads.Any(d => d.OnPause);
         private void ResumeAll()
         {
-
+            foreach (var download in Downloads)
+            {
+                if (download.OnPause) download.OnPause = false;
+            }
         }
 
-        //private bool CanPauseAll() =>
+        private bool CanPauseAll() => Downloads.Any(d => !d.OnPause);
         private void PauseAll()
         {
-
+            foreach (var download in Downloads)
+            {
+                if (!download.OnPause) download.OnPause = true;
+            }
         }
 
-        //private bool CanCancelAll() =>
+        private bool CanCancelAll() => Downloads.Any();
         private void CancelAll()
         {
-
+            foreach (var download in Downloads)
+            {
+                if (!download.Cancelling) download.Cancelling = true;
+            }
         }
     }
 }

@@ -8,6 +8,11 @@
         public event Action<DownloadModel, Exception> DownloadFailed;
         public event Action<DownloadModel> DownloadStarted;
 
+        public bool CheckRemoteItem(DownloadModel downloadModel)
+        {
+            return true;
+        }
+
         public void StartNewDownload(DownloadModel download)
         {
             Task.Run(() =>

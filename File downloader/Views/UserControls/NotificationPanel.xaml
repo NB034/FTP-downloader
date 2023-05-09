@@ -18,8 +18,8 @@
 
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                
-                <Border Style="{StaticResource BorderStyle}" Margin="5,0,5,5">
+
+                <Border Style="{StaticResource BorderStyle}" Background="{StaticResource MainBackgroundBrush}" Margin="5,0,5,5">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

@@ -12,6 +12,11 @@ namespace FileDownloader.Services.Models.DownloaderModels
         public event Action<DownloadModel> DownloadCancelled;
         public event Action<DownloadModel> DownloadedBytesNumberChanged;
 
+        public bool CheckRemoteItem(DownloadModel downloadModel)
+        {
+            return true;
+        }
+
         public void StartNewDownload(DownloadModel download)
         {
             Task.Run(() => StartNewDownloadAsync(download));
@@ -44,7 +49,8 @@ namespace FileDownloader.Services.Models.DownloaderModels
                     if (download.Cancelling)
                     {
                         if (File.Exists(name)) File.Delete(name);
-                        break;
+                        DownloadCancelled?.Invoke(download);
+                        return;
                     }
 
                     if (download.OnPause) continue;
