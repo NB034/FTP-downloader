@@ -35,7 +35,6 @@ namespace File_downloader.ViewModels
         public int TagTextBoxWidth => MaxTagLength * 12;
 
         // Properties
-        private IDownloader _downloader;
         private DownloadList_VM _downloadList;
         private NotificationPanel_VM _notificationPanel;
 
@@ -60,7 +59,6 @@ namespace File_downloader.ViewModels
 
 
 
-        public IDownloader Downloader => _downloader;
         public DownloadList_VM DownloadList => _downloadList;
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
 

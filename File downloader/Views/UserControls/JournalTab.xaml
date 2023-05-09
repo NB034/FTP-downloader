@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="File_downloader.Views.UserControls.JournalTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:File_downloader.Views.UserControls"
+             xmlns:vm="clr-namespace:File_downloader.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:JournalTab_VM}">
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBox Width="200" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+            <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"/>
+            <Button Content="{StaticResource ResetFilter}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <DataGrid Grid.Row="1" Margin="5,5,5,0" BorderBrush="{StaticResource MainBorderBrush}" AutoGenerateColumns="False"
+                                  ItemsSource="{Binding JournalEntries}" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single">
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="File name" Width="*" Binding="{Binding FileName}"/>
+                    <DataGridTextColumn Header="Local path" Width="*" Binding="{Binding LocalPath}"/>
+                    <DataGridTextColumn Header="Remote path" Width="*" Binding="{Binding RemotePath}"/>
+                    <DataGridTextColumn Header="Download date" Width="*" Binding="{Binding DownloadDate}"/>
+                    <DataGridTextColumn Header="File size" Width="*" Binding="{Binding FileSize}"/>
+
+                    <DataGridTemplateColumn Header="Tags" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding Tags}" Margin="5">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource BorderStyle}" Margin="2">
+                                                <TextBlock Text="{Binding}" Padding="3,2,3,2"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Result" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Result}" Width="20" Height="20"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="False" Visibility="Hidden"/>
+        </Grid>
+
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1,0,1,1" Margin="5,0,5,5" CornerRadius="0,0,3,3">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{StaticResource RemoveEntry}" Style="{StaticResource ButtonStyle}" Margin="6" Padding="5,3,5,3" FontSize="11"/>
+                <Button Content="{StaticResource RemoveAllEntries}" Style="{StaticResource ButtonStyle}" Margin="6" Padding="5,3,5,3" FontSize="11"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

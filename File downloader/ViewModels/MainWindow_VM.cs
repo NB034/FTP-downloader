@@ -1,6 +1,4 @@
 ﻿using File_downloader.Command;
-using FileDownloader.Services.Models.DownloaderModels;
-using FileDownloader.Services.Models.JournalModels;
 
 namespace File_downloader.ViewModels
 {
@@ -38,12 +36,12 @@ namespace File_downloader.ViewModels
 
         private void OnStarting()
         {
-            
+            _notificationPanel.AddPositiveNotification("Program loaded!");
         }
 
         private void OnClosing()
         {
-            
+            _notificationPanel.AddNeutralNotification("All unfinished downloads cancelled!");
         }
     }
 }

@@ -11,8 +11,6 @@ namespace File_downloader
         public MainWindow()
         {
             InitializeComponent();
-            
-            DataContext = new MainWindow_VM();
         }
     }
 }

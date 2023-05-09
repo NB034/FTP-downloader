@@ -10,31 +10,28 @@ namespace File_downloader.ViewModels
 {
     internal class NotificationPanel_VM
     {
-        private readonly AutoEventCommandBase _closeNotificatonCommand;
+        private readonly AutoEventCommandBase _closeNotificationCommand;
         private readonly AutoEventCommandBase _closeAllNotificatonsCommand;
 
         public NotificationPanel_VM()
         {
-            //Notifications = new ObservableCollection<NotificationViewModel>();
-            _closeNotificatonCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
+            Notifications = new ObservableCollection<Notification_VM>();
+            _closeNotificationCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
             _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
-
-            Notifications = new ObservableCollection<Notification_VM>
-            {
-                new Notification_VM
-                {
-                     Image = IconsManager.PositiveIcon,
-                      Message = "Program loaded!"
-                }
-            };
-
-            Notifications.CollectionChanged += CheckForOverflow;
         }
 
-        public AutoEventCommandBase CloseNotificatonCommand => _closeNotificatonCommand;
+
+
+
+
+        public AutoEventCommandBase CloseNotificationCommand => _closeNotificationCommand;
         public AutoEventCommandBase CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
         public ObservableCollection<Notification_VM> Notifications { get; set; }
-        public int MaxNotifications { get; set; } = 100;
+        public int MaxNotifications { get; set; } = 50;
+
+
+
+
 
         private void RemoveNotification(object o)
         {
@@ -54,6 +51,7 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.PositiveIcon,
                 Message = message,
             });
+            CheckForOverflow();
         }
 
         public void AddNeutralNotification(string message)
@@ -63,6 +61,7 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.NeutralIcon,
                 Message = message,
             });
+            CheckForOverflow();
         }
 
         public void AddNegativeNotification(Exception exception)
@@ -72,6 +71,7 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.NegativeIcon,
                 Message = exception.Message,
             });
+            CheckForOverflow();
         }
 
         public void AddNotification(NotificationTypesEnum type, string message)
@@ -81,9 +81,10 @@ namespace File_downloader.ViewModels
                 Image = IconsManager.GetIcon(type),
                 Message = message
             });
+            CheckForOverflow();
         }
 
-        private void CheckForOverflow(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void CheckForOverflow()
         {
             if (Notifications.Count > MaxNotifications)
             {

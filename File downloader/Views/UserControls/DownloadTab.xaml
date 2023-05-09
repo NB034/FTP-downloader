@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="File_downloader.Views.UserControls.DownloadTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:File_downloader.Views.UserControls"
+             xmlns:vm="clr-namespace:File_downloader.ViewModels"
+             xmlns:Controls="clr-namespace:File_downloader.Views.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:DownloadTab_VM}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- Part with fields -->
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Credential -->
+            <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
+
+            <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0" BorderBrush="{StaticResource MainBorderBrush}" VerticalAlignment="Center"
+                                      Margin="5,0,5,0" x:Name="CredentialCheckBox"/>
+
+                <Border Grid.Column="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Content="{StaticResource Username}" Margin="5,0,5,0"
+                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                                         Background="Transparent" 
+                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+
+                        <Label Grid.Column="2" Content="{StaticResource Password}" Margin="5,0,5,0"
+                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                        <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                                         Background="Transparent"
+                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
+                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!-- Credential -->
+
+            <!-- Resource URL -->
+            <Label Grid.Row="1" Content="{StaticResource ResourceUrl}" Margin="5"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
+                                Content="{StaticResource SearchRemoteFile}"/>
+
+            <!-- Local directory -->
+            <Label Grid.Row="2" Content="{StaticResource DownloadTo}" Margin="5"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+            <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
+                            Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
+
+            <!-- Save as -->
+            <Label Grid.Row="3" Content="{StaticResource SaveAs}" Margin="5"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+            <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5">
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+
+            <!-- Tags -->
+            <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
+            <WrapPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+
+                <ItemsControl BorderBrush="Transparent" ItemsSource="{Binding Tags}" VerticalContentAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="5,5,15,5">
+                                <TextBlock Text="{Binding}" TextAlignment="Center" Padding="5,4,5,4"/>
+
+                                <Border.Resources>
+                                    <Style TargetType="Border" BasedOn="{StaticResource BorderStyle}">
+                                        <Setter Property="Border.Background" Value="{StaticResource TagBackGroundBrush}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="Border.IsMouseOver" Value="True">
+                                                <Setter Property="Border.Background" Value="{StaticResource AdditionalBackgroundBrush}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Resources>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Add panel -->
+                <StackPanel Orientation="Horizontal" Margin="5"
+                                        Visibility="{Binding TagsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+
+                    <TextBox Style="{StaticResource TextBoxStyle}" Width="{Binding TagTextBoxWidth}"
+                                     MaxLength="{Binding MaxTagLength}" Padding="4"/>
+
+                    <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
+                                    <Run Text="{Binding Tags.Count, Mode=OneWay}"/>
+                                    <Run Text="/"/>
+                                    <Run Text="{Binding MaxTags, Mode=OneWay}"/>
+                    </TextBlock>
+
+                </StackPanel>
+
+            </WrapPanel>
+            <!-- Tags -->
+
+            <!-- Start panel -->
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="5,15,5,10">
+                <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource InitializeDownload}" 
+                                 Padding="4,3,4,3"/>
+
+                <CheckBox Content="{StaticResource StartTheDownloadImmediately}" 
+                                      FontSize="10" VerticalAlignment="Center" Margin="15,0,0,0" VerticalContentAlignment="Center"
+                                      BorderBrush="{StaticResource MainBorderBrush}"/>
+            </StackPanel>
+
+            <!-- Checkmarks border -->
+            <Border Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" Style="{StaticResource BorderStyle}"
+                                Width="30" Margin="5"/>
+
+        </Grid>
+
+        <Controls:DownloadList Grid.Row="1" Margin="5" DataContext="{Binding DownloadList}"/>
+    </Grid>
+</UserControl>
