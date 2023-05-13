@@ -1,20 +1,19 @@
 ﻿using File_downloader.Command;
+using File_downloader.Mappers;
+using File_downloader.Resources.ResourceAccess;
 using File_downloader.ViewModels.DataViewModels;
-using FileDownloader.Services.Mappers;
 using FileDownloader.Services.Models.DownloaderModels;
-using FileDownloader.Services.Models.JournalModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace File_downloader.ViewModels
 {
     internal class DownloadList_VM
     {
         private readonly NotificationPanel_VM _notificationPanel;
+        private readonly DownloadMapper _mapper;
         private readonly IDownloader _downloader;
 
         private readonly AutoEventCommandBase _resumeCommand;
@@ -27,58 +26,15 @@ namespace File_downloader.ViewModels
         public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader)
         {
             _notificationPanel = notificationPanel;
+            _mapper = new DownloadMapper();
             _downloader = downloader;
 
-            //Downloads = new ObservableCollection<DownloadViewModel>();
-
-            Downloads = new ObservableCollection<Download_VM>
-            {
-                new Download_VM
-                {
-                     DownloadedMegaBytes = 40000,
-                      From = "Some site",
-                       Name = "Something",
-                        Size = 200000,
-                         To = "My computer",
-                          OnPause = true,
-                           Cancelling = false
-                },
-                new Download_VM
-                {
-                     DownloadedMegaBytes = 40000,
-                      From = "Some site",
-                       Name = "Something",
-                        Size = 40001,
-                         To = "My computer",
-                         OnPause = true,
-                           Cancelling = false
-                },
-                new Download_VM
-                {
-                     DownloadedMegaBytes = 1,
-                      From = "Some site",
-                       Name = "Something",
-                        Size = 2,
-                         To = "My computer",
-                         OnPause = true,
-                           Cancelling = false
-                },
-                new Download_VM
-                {
-                     DownloadedMegaBytes = 125346,
-                      From = "Some site",
-                       Name = "Something",
-                        Size = 1257543235,
-                         To = "My computer",
-                         OnPause = true,
-                           Cancelling = false
-                }
-            };
+            Downloads = new ObservableCollection<Download_VM>();
 
             downloader.DownloadFailed += OnDownloadFailed;
             downloader.DownloadCancelled += OnDownloadCancelled;
             downloader.DownloadCompleted += OnDownloadCompleted;
-            downloader.DownloadedBytesNumberChanged += OnDownloadProgress;
+            downloader.DownloadedProgressChanged += OnDownloadProgress;
             downloader.DownloadStarted += OnDownloadStarted;
 
             _resumeCommand = new AutoEventCommandBase(o => Resume(o), o => CanResume(o));
@@ -106,72 +62,105 @@ namespace File_downloader.ViewModels
 
         public void StartNewDownload(Download_VM download)
         {
-            //_downloader.StartNewDownload();
+            _downloader.StartNewDownload(_mapper.VmToModel(download));
         }
 
         private void OnDownloadStarted(DownloadModel obj)
         {
-            _notificationPanel.AddPositiveNotification("Download has atarted!");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Downloads.Add(_mapper.ModelToVm(obj));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} has started!");
+            });
         }
 
         private void OnDownloadProgress(DownloadModel obj)
         {
-
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var download = Downloads.First(d => d.DownloadGuid == obj.DownloadGuid);
+                download.DownloadedBytes = obj.DownloadedBytes;
+            });
         }
 
         private void OnDownloadCompleted(DownloadModel obj)
         {
-
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} completed!");
+            });
         }
 
         private void OnDownloadCancelled(DownloadModel obj)
         {
-
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} cancelled!");
+            });
         }
 
         private void OnDownloadFailed(DownloadModel arg1, Exception arg2)
         {
-
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == arg1.DownloadGuid));
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
+            });
         }
 
 
 
 
 
-        private bool CanResume(object o) => (o as DownloadModel).OnPause;
-        private void Resume(object o) => (o as DownloadModel).OnPause = false;
+        private bool CanResume(object o) => (o as Download_VM).OnPause;
+        private void Resume(object o)
+        {
+            var vm = (Download_VM)o;
+            vm.OnPause = false;
+            _downloader.Resume(vm.DownloadGuid);
+        }
 
-        private bool CanPause(object o) => !(o as DownloadModel).OnPause;
-        private void Pause(object o) => (o as DownloadModel).OnPause = true;
+        private bool CanPause(object o) => !(o as Download_VM).OnPause;
+        private void Pause(object o)
+        {
+            var vm = (Download_VM)o;
+            vm.OnPause = true;
+            _downloader.Pause(vm.DownloadGuid);
+        }
 
         private bool CanCancel(object o) => true;
-        private void Cancel(object o) => (o as DownloadModel).Cancelling = true;
+        private void Cancel(object o)
+        {
+            var vm = (Download_VM)o;
+            vm.Cancelling = true;
+            _downloader.Cancel(vm.DownloadGuid);
+        }
+
+
+
+
 
         private bool CanResumeAll() => Downloads.Any(d => d.OnPause);
         private void ResumeAll()
         {
-            foreach (var download in Downloads)
-            {
-                if (download.OnPause) download.OnPause = false;
-            }
+            foreach (var download in Downloads) if (download.OnPause) download.OnPause = false;
+            _downloader.ResumeAll();
         }
 
-        private bool CanPauseAll() => Downloads.Any(d => !d.OnPause);
+        private bool CanPauseAll() => Downloads.Any() && Downloads.Any(d => !d.OnPause);
         private void PauseAll()
         {
-            foreach (var download in Downloads)
-            {
-                if (!download.OnPause) download.OnPause = true;
-            }
+            foreach (var download in Downloads) if (!download.OnPause) download.OnPause = true;
+            _downloader.PauseAll();
         }
 
         private bool CanCancelAll() => Downloads.Any();
         private void CancelAll()
         {
-            foreach (var download in Downloads)
-            {
-                if (!download.Cancelling) download.Cancelling = true;
-            }
+            foreach (var download in Downloads) if (!download.Cancelling) download.Cancelling = true;
+            _downloader.CancelAll();
         }
     }
 }

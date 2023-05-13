@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 
 namespace File_downloader.ViewModels
@@ -45,9 +46,9 @@ namespace File_downloader.ViewModels
 
             downloader.DownloadCompleted += AddEntry;
             downloader.DownloadCancelled += AddEntry;
+            downloader.DownloadFailed += AddEntry;
 
             _journal.EntriesLoaded += OnEntriesLoaded;
-            _journal.EntryCreated += OnEntryCreated;
             _journal.EntryDeleted += OnEntryDeleted;
             _journal.AllEntriesDeleted += OnAllEntriesDeleted;
             _journal.ExceptionThrowned += OnExceptionThrowed;
@@ -80,15 +81,26 @@ namespace File_downloader.ViewModels
 
         private void AddEntry(DownloadModel obj)
         {
-            _journal.CreateEntry(_downloadToEntryMapper.DownloadToEntry(obj));
-            Reset();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _journal.CreateEntry(_downloadToEntryMapper.DownloadToEntry(obj));
+                Reset();
+            });
+        }
+        private void AddEntry(DownloadModel obj, Exception ex)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                obj.Cancelling = true;
+                _journal.CreateEntry(_downloadToEntryMapper.DownloadToEntry(obj));
+                Reset();
+            });
         }
 
         private void OnExceptionThrowed(Exception obj) { _notificationPanel.AddNegativeNotification(obj); }
         private void OnAllEntriesDeleted() { _notificationPanel.AddPositiveNotification("All entries deleted!"); }
         private void OnEntryDeleted() { _notificationPanel.AddPositiveNotification("Entry deleted!"); }
-        private void OnEntryCreated() { _notificationPanel.AddPositiveNotification("Download complete!"); }
-        private void OnEntriesLoaded() { _notificationPanel.AddPositiveNotification("Entries loaded!"); IsLoading = false; }
+        private void OnEntriesLoaded() { _notificationPanel.AddPositiveNotification("Entries loaded!"); }
 
 
 
@@ -114,12 +126,14 @@ namespace File_downloader.ViewModels
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 IsLoading = true;
+
+                var models = await _journal.GetEntries();
+                var viewModels = models.Select(m => _entriesMapper.ModelToVm(m));
                 Entry = null;
                 JournalEntries.Clear();
-                foreach (var entry in await _journal.GetEntries())
-                {
-                    JournalEntries.Add(_entriesMapper.ModelToVm(entry));
-                }
+                foreach(var vw in viewModels) JournalEntries.Add(vw);
+
+                IsLoading = false;
             });
         }
 

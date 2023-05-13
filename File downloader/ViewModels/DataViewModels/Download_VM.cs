@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -46,10 +47,14 @@ namespace File_downloader.ViewModels.DataViewModels
             set => SetProperty(ref _size, value, nameof(Size));
         }
 
-        public double DownloadedMegaBytes
+        public double DownloadedBytes
         {
             get => _downloadedMegaBytes;
-            set => SetProperty(ref _downloadedMegaBytes, value, nameof(DownloadedMegaBytes));
+            set
+            {
+                _downloadedMegaBytes = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Percent)));
+            }
         }
 
         public bool OnPause
@@ -64,25 +69,27 @@ namespace File_downloader.ViewModels.DataViewModels
             set => SetProperty(ref _cancelling, value, nameof(Cancelling));
         }
 
-        private bool UseCredentials
+        public bool UseCredentials
         {
             get => _useCreadentials;
             set => SetProperty(ref _useCreadentials, value, nameof(UseCredentials));
         }
 
-        private string Username
+        public string Username
         {
             get => _username;
             set => SetProperty(ref _username, value, nameof(Username));
         }
 
-        private string Password
+        public string Password
         {
             get => _password;
             set => SetProperty(ref _password, value, nameof(Password));
         }
 
-        public double Percent => DownloadedMegaBytes * 100.0 / Size;
+        public Guid DownloadGuid { get; set; } = Guid.NewGuid();
+
+        public double Percent => DownloadedBytes * 100.0 / Size;
 
         private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
         {

@@ -41,7 +41,7 @@ namespace File_downloader.ViewModels
 
         private void OnClosing()
         {
-            _notificationPanel.AddNeutralNotification("All unfinished downloads cancelled!");
+            //_notificationPanel.AddNeutralNotification("All unfinished downloads cancelled!");
         }
     }
 }

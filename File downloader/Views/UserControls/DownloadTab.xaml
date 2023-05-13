@@ -147,8 +147,8 @@
 
             <!-- Start panel -->
             <StackPanel Grid.Row="5" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="5,15,5,10">
-                <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource InitializeDownload}" 
-                                 Padding="4,3,4,3"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource InitializeDownload}" Padding="4,3,4,3"
+                        Command="{Binding StartDownloadCommand}"/>
 
                 <CheckBox Content="{StaticResource StartTheDownloadImmediately}" 
                                       FontSize="10" VerticalAlignment="Center" Margin="15,0,0,0" VerticalContentAlignment="Center"

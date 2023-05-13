@@ -1,5 +1,6 @@
 ﻿using File_downloader.Command;
 using File_downloader.Resources.ResourcesAccess;
+using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Models.DownloaderModels;
 using System;
 using System.Collections.ObjectModel;
@@ -27,6 +28,50 @@ namespace File_downloader.ViewModels
 
             _notificationPanel = notificationPanel;
             _downloadList = downloadList;
+
+            _startDownloadCommand = new AutoEventCommandBase(_ =>
+            {
+                downloadList.StartNewDownload(new Download_VM
+                {
+                    DownloadedBytes = 0,
+                    From = "Some site",
+                    Name = "Something",
+                    Size = 200000,
+                    To = "My computer",
+                    OnPause = true,
+                    Cancelling = false
+                });
+                downloadList.StartNewDownload(new Download_VM
+                {
+                    DownloadedBytes = 0,
+                    From = "Some site",
+                    Name = "Something",
+                    Size = 40001,
+                    To = "My computer",
+                    OnPause = true,
+                    Cancelling = false
+                });
+                downloadList.StartNewDownload(new Download_VM
+                {
+                    DownloadedBytes = 0,
+                    From = "Some site",
+                    Name = "Something",
+                    Size = 2,
+                    To = "My computer",
+                    OnPause = true,
+                    Cancelling = false
+                });
+                downloadList.StartNewDownload(new Download_VM
+                {
+                    DownloadedBytes = 0,
+                    From = "Some site",
+                    Name = "Something",
+                    Size = 1257543235,
+                    To = "My computer",
+                    OnPause = true,
+                    Cancelling = false
+                });
+            }, _ => true);
         }
 
         public int MaxTags => 5;

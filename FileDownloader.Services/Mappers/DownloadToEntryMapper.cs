@@ -23,7 +23,7 @@ namespace FileDownloader.Services.Mappers
             .ForMember(nameof(JournalEntryModel.RemotePath), opt => opt.MapFrom(d => d.From))
             .ForMember(nameof(JournalEntryModel.DownloadDate), opt => opt.MapFrom(d => d.DownloadDate))
             .ForMember(nameof(JournalEntryModel.FileSize), opt => opt.MapFrom(d => d.Size))
-            .ForMember(nameof(JournalEntryModel.WasSuccessful), opt => opt.MapFrom(d => d.Cancelling))
+            .ForMember(nameof(JournalEntryModel.WasSuccessful), opt => opt.MapFrom(d => !d.Cancelling))
             .ForMember(nameof(JournalEntryModel.Tags), opt => opt.MapFrom(d => d.Tags)));
 
             return new Mapper(config);

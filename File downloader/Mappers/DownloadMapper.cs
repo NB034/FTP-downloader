@@ -20,14 +20,15 @@ namespace File_downloader.Mappers
 
         private Mapper InitializeVmToModelMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, DownloadModel>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, DownloadModel>()
+            .ForMember(nameof(DownloadModel.DownloadGuid), opt => opt.MapFrom(vm => vm.DownloadGuid)));
 
             return new Mapper(config);
         }
 
         private Mapper InitializeModelToVmMapper()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, DownloadModel>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DownloadModel, Download_VM>());
 
             return new Mapper(config);
         }

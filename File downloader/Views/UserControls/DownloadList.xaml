@@ -19,7 +19,7 @@
         <Border Style="{StaticResource BorderStyle}" CornerRadius="3,3,0,0">
             <StackPanel Orientation="Horizontal">
 
-                <Button >
+                <Button Command="{Binding PauseAllCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="2,0,2,0"/>
@@ -28,7 +28,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button >
+                <Button Command="{Binding ResumeAllCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="2,0,2,0"/>
@@ -37,7 +37,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button >
+                <Button Command="{Binding CancelAllCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="2,0,2,0"/>
@@ -81,19 +81,22 @@
 
                                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="2,2,0,0">
 
-                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                        <Button Style="{StaticResource ButtonStyle}" Margin="2" CommandParameter="{Binding}"
+                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.PauseCommand}">
                                             <Button.Content>
                                                 <Border Background="{StaticResource Pause}" Width="10" Height="10" Margin="3"/>
                                             </Button.Content>
                                         </Button>
 
-                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                        <Button Style="{StaticResource ButtonStyle}" Margin="2" CommandParameter="{Binding}"
+                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.ResumeCommand}">
                                             <Button.Content>
                                                 <Border Background="{StaticResource Resume}" Width="10" Height="10" Margin="3"/>
                                             </Button.Content>
                                         </Button>
 
-                                        <Button Style="{StaticResource ButtonStyle}" Margin="2">
+                                        <Button Style="{StaticResource ButtonStyle}" Margin="2" CommandParameter="{Binding}"
+                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.CancelCommand}">
                                             <Button.Content>
                                                 <Border Background="{StaticResource Cancel}" Width="10" Height="10" Margin="3"/>
                                             </Button.Content>

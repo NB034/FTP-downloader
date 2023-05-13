@@ -13,6 +13,7 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public DateTime DownloadDate { get; set; }
+        public Guid DownloadGuid { get; set; }
 
         public List<string> Tags { get; set; }
     }

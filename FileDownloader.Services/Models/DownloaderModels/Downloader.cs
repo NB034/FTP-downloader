@@ -4,13 +4,15 @@ using System.Net;
 
 namespace FileDownloader.Services.Models.DownloaderModels
 {
-    public class Downloader : IDownloader
+    public class Downloader //: IDownloader
     {
         public event Action<DownloadModel> DownloadStarted;
         public event Action<DownloadModel> DownloadCompleted;
         public event Action<DownloadModel, Exception> DownloadFailed;
         public event Action<DownloadModel> DownloadCancelled;
         public event Action<DownloadModel> DownloadedBytesNumberChanged;
+
+        public List<DownloadModel> Downloads { get; }
 
         public bool CheckRemoteItem(DownloadModel downloadModel)
         {
