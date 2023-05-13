@@ -15,63 +15,10 @@ namespace File_downloader.ViewModels
 
         public DownloadTab_VM(NotificationPanel_VM notificationPanel, DownloadList_VM downloadList)
         {
-            //Tags = new ObservableCollection<string>();
-
-            Tags = new ObservableCollection<string>()
-            {
-                "game",
-                "office",
-                "music",
-                "picture",
-                "archive"
-            };
-
             _notificationPanel = notificationPanel;
             _downloadList = downloadList;
 
-            _startDownloadCommand = new AutoEventCommandBase(_ =>
-            {
-                downloadList.StartNewDownload(new Download_VM
-                {
-                    DownloadedBytes = 0,
-                    From = "Some site",
-                    Name = "Something",
-                    Size = 200000,
-                    To = "My computer",
-                    OnPause = true,
-                    Cancelling = false
-                });
-                downloadList.StartNewDownload(new Download_VM
-                {
-                    DownloadedBytes = 0,
-                    From = "Some site",
-                    Name = "Something",
-                    Size = 40001,
-                    To = "My computer",
-                    OnPause = true,
-                    Cancelling = false
-                });
-                downloadList.StartNewDownload(new Download_VM
-                {
-                    DownloadedBytes = 0,
-                    From = "Some site",
-                    Name = "Something",
-                    Size = 2,
-                    To = "My computer",
-                    OnPause = true,
-                    Cancelling = false
-                });
-                downloadList.StartNewDownload(new Download_VM
-                {
-                    DownloadedBytes = 0,
-                    From = "Some site",
-                    Name = "Something",
-                    Size = 1257543235,
-                    To = "My computer",
-                    OnPause = true,
-                    Cancelling = false
-                });
-            }, _ => true);
+            Tags = new ObservableCollection<string>();
         }
 
         public int MaxTags => 5;
@@ -79,9 +26,12 @@ namespace File_downloader.ViewModels
         public int MaxDownloads => 10;
         public int TagTextBoxWidth => MaxTagLength * 12;
 
+
+
+
         // Properties
-        private DownloadList_VM _downloadList;
-        private NotificationPanel_VM _notificationPanel;
+        private readonly DownloadList_VM _downloadList;
+        private readonly NotificationPanel_VM _notificationPanel;
 
         private bool _useCredentials = false;
         private bool _startImmediately = true;
@@ -106,6 +56,7 @@ namespace File_downloader.ViewModels
 
         public DownloadList_VM DownloadList => _downloadList;
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
+        public ObservableCollection<string> Tags { get; set; }
 
         public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
         public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }
@@ -126,8 +77,8 @@ namespace File_downloader.ViewModels
         public ImageBrush LocalDirectoryStatus { get => _localDirectoryStatus; set => SetProperty(ref _localDirectoryStatus, value, nameof(LocalDirectoryStatus)); }
         public ImageBrush FileNameStatus { get => _fileNameStatus; set => SetProperty(ref _fileNameStatus, value, nameof(FileNameStatus)); }
 
-        // Collections
-        public ObservableCollection<string> Tags { get; set; }
+
+
 
         // Commands
         private readonly AutoEventCommandBase _searchRemoteFileCommand;
@@ -141,6 +92,8 @@ namespace File_downloader.ViewModels
         public AutoEventCommandBase AddTagCommand => _addTagCommand;
         public AutoEventCommandBase RemoveTagCommand => _removeTagCommand;
         public AutoEventCommandBase StartDownloadCommand => _startDownloadCommand;
+
+
 
         private bool CanSearchRemoteFile() => _resourceUrl != String.Empty;
         private void SearchRemoteFile()

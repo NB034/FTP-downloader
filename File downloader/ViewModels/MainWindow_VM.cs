@@ -1,4 +1,6 @@
 ﻿using File_downloader.Command;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace File_downloader.ViewModels
 {
@@ -39,9 +41,15 @@ namespace File_downloader.ViewModels
             _notificationPanel.AddPositiveNotification("Program loaded!");
         }
 
-        private void OnClosing()
+        private async void OnClosing()
         {
-            //_notificationPanel.AddNeutralNotification("All unfinished downloads cancelled!");
+            _notificationPanel.AddNeutralNotification("Cancelling...");
+            var command = _downloadTab.DownloadList.CancelAllCommand;
+            if (command.CanExecute(new()))
+            {
+                command.Execute(new());
+                while (_downloadTab.DownloadList.Downloader.Downloads.Any()) { await Task.Delay(2000); }
+            }
         }
     }
 }

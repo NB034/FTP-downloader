@@ -75,7 +75,6 @@
                     </Grid>
                 </Border>
             </Grid>
-            <!-- Credential -->
 
             <!-- Resource URL -->
             <Label Grid.Row="1" Content="{StaticResource ResourceUrl}" Margin="5"/>
