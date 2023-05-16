@@ -10,6 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:DownloadTab_VM}">
 
+    <!-- 3 buttons, 5 TextBoxes-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -41,6 +42,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <CheckBox Grid.Column="0" BorderBrush="{StaticResource MainBorderBrush}" VerticalAlignment="Center"
@@ -56,24 +58,23 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0" Content="{StaticResource Username}" Margin="5,0,5,0"
-                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
-                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                               Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
                         <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
-                                         Background="Transparent" 
-                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
-                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
-                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                                 Background="{StaticResource MainBackgroundBrush}" 
+                                 IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                 BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
 
                         <Label Grid.Column="2" Content="{StaticResource Password}" Margin="5,0,5,0"
-                                           Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
-                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                               Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
                         <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
-                                         Background="Transparent"
-                                         IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
-                                         BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked,
-                                        Converter={StaticResource CredentialMultipurposeConverter}}"/>
+                                 Background="{StaticResource MainBackgroundBrush}"
+                                 IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                                 BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
                     </Grid>
                 </Border>
+                
+                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" Background="{Binding CredentialsStatus}"
+                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </Grid>
 
             <!-- Resource URL -->
@@ -84,16 +85,30 @@
 
             <!-- Local directory -->
             <Label Grid.Row="2" Content="{StaticResource DownloadTo}" Margin="5"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
+            <!--<TextBox Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>-->
+            <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource BorderStyle}" Margin="5" BorderThickness="1.3"
+                    Background="{StaticResource MainBackgroundBrush}">
+                <TextBlock TextAlignment="Left" VerticalAlignment="Center" Text="{Binding LocalDirectory}" Padding="5,0,5,0"/>
+            </Border>
             <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
-                            Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"/>
+                    Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding PickDirectoryCommand}"/>
 
             <!-- Save as -->
             <Label Grid.Row="3" Content="{StaticResource SaveAs}" Margin="5"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}"/>
-            <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5">
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}" 
+                     Text="{Binding FileName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5" 
+                    Background="{StaticResource MainBackgroundBrush}">
                 <TextBlock TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
+
+            <!-- Checkmarks borders -->
+            <!--<Border Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" Style="{StaticResource BorderStyle}"
+                                Width="30" Margin="5" Background="{StaticResource MainBackgroundBrush}"/>-->
+            <Border Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5" Background="{Binding ResourceUrlStatus}"/>
+            <Border Grid.Column="3" Grid.Row="2" Width="20" Height="20" Margin="5" Background="{Binding LocalDirectoryStatus}"/>
+            <Border Grid.Column="3" Grid.Row="3" Width="20" Height="20" Margin="5" Background="{Binding FileNameStatus}"/>
 
             <!-- Tags -->
             <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
@@ -108,7 +123,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="5,5,15,5">
+                            <!--<Border Margin="5,5,15,5">
                                 <TextBlock Text="{Binding}" TextAlignment="Center" Padding="5,4,5,4"/>
 
                                 <Border.Resources>
@@ -121,17 +136,25 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Resources>
-                            </Border>
+                            </Border>-->
+                            <Button Content="{Binding}" Padding="5,4,5,4" Margin="5,5,15,5" Background="{StaticResource TagBackGroundBrush}" 
+                                    Style="{StaticResource ButtonStyle}" CommandParameter="{Binding}"
+                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.RemoveTagCommand}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <!-- Add panel -->
                 <StackPanel Orientation="Horizontal" Margin="5"
-                                        Visibility="{Binding TagsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                            Visibility="{Binding TagsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
 
-                    <TextBox Style="{StaticResource TextBoxStyle}" Width="{Binding TagTextBoxWidth}"
-                                     MaxLength="{Binding MaxTagLength}" Padding="4"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}" Width="{Binding TagTextBoxWidth}" 
+                             MaxLength="{Binding MaxTagLength}" Padding="4">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding AddTagCommand}" 
+                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}, Path=Text}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
 
                     <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
                                     <Run Text="{Binding Tags.Count, Mode=OneWay}"/>
@@ -152,11 +175,9 @@
                 <CheckBox Content="{StaticResource StartTheDownloadImmediately}" 
                                       FontSize="10" VerticalAlignment="Center" Margin="15,0,0,0" VerticalContentAlignment="Center"
                                       BorderBrush="{StaticResource MainBorderBrush}"/>
+                <Label Margin="15,0,0,0" Content="{StaticResource DownloadLimitReached}" FontSize="10" Foreground="{StaticResource ErrorBrush}"
+                       VerticalContentAlignment="Center" Visibility="{Binding DownloadsLimitReached, Converter={StaticResource InvertedBoolToVisibilityConverter}}"/>
             </StackPanel>
-
-            <!-- Checkmarks border -->
-            <Border Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" Style="{StaticResource BorderStyle}"
-                                Width="30" Margin="5"/>
 
         </Grid>
 

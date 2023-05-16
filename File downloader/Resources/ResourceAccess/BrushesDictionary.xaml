@@ -7,5 +7,6 @@
     <SolidColorBrush x:Key="UnavaibleElementBrush" Color="LightGray"/>
     <SolidColorBrush x:Key="BlockBrush" Color="#CCD3D3D3"/>
     <SolidColorBrush x:Key="TagBackGroundBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="Red"/>
 
 </ResourceDictionary>

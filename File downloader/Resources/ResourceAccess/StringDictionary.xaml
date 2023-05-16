@@ -30,5 +30,6 @@
     <sys:String x:Key="RemoveEntry">Remove entry</sys:String>
     <sys:String x:Key="RemoveAllEntries">Remove all entries</sys:String>
     <sys:String x:Key="ResetFilter">Reset</sys:String>
+    <sys:String x:Key="DownloadLimitReached">Limit reached</sys:String>
 
 </ResourceDictionary>

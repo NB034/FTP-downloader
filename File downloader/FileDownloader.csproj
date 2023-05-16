@@ -6,6 +6,7 @@
     <RootNamespace>File_downloader</RootNamespace>
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
