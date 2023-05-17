@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace FileDownloader.Services.Models.InfoCollectorModels
 {
-    internal interface InfoModel
+    public class InfoModel
     {
+        public bool IsExist { get; set; }
+        public Int32 SizeInBytes { get; set; }
+        public string Exstention { get; set; }
     }
 }

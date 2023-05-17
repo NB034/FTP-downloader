@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentFTP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,13 @@ namespace FileDownloader.Services.Models.InfoCollectorModels
     {
         public event Action<InfoModel> SearchFinished;
 
-        public void BeginSearch(Uri uri)
+        public async void BeginSearch(string uri)
         {
-            throw new NotImplementedException();
+            await Task.Run(async () =>
+            {
+                await Task.Delay(1500);
+                SearchFinished?.Invoke(new InfoModel { IsExist = true, SizeInBytes = 10_000, Exstention = ".txt" });
+            });
         }
     }
 }

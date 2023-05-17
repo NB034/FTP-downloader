@@ -1,5 +1,5 @@
 ﻿using File_downloader.Command;
-using File_downloader.Resources.ResourcesAccess;
+using File_downloader.Resources.ResourceAccess;
 using File_downloader.ViewModels.DataViewModels;
 using FileDownloader.Services.Models.InfoCollectorModels;
 using System;
@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Windows.Media;
 
 namespace File_downloader.ViewModels
 {
@@ -20,22 +19,20 @@ namespace File_downloader.ViewModels
             _infoCollector = infoCollector;
 
             Tags = new ObservableCollection<string>();
-            Tags.CollectionChanged += OnTagsCollectionChanged;
 
             _addTagCommand = new AutoEventCommandBase(o => AddTag(o), _ => CanAddTag());
             _removeTagCommand = new AutoEventCommandBase(o => RemoveTag(o), _ => CanRemoveTag());
             _searchRemoteFileCommand = new AutoEventCommandBase(_ => SearchRemoteFile(), _ => CanSearchRemoteFile());
             _pickDirectoryCommand = new AutoEventCommandBase(_ => PickDirectory(), _ => CanPickDirectory());
             _startDownloadCommand = new AutoEventCommandBase(_ => StartDownload(), _ => CanStartDownload());
-        }
 
-        private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add && Tags.Count >= MaxTags
-                || e.Action == NotifyCollectionChangedAction.Remove && Tags.Count == MaxTags - 1)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TagsLimitReached)));
-            }
+            _infoCollector.SearchFinished += OnSearchFinished;
+            _downloadList.Downloads.CollectionChanged += OnDownloadsCollectionChanged;
+            Tags.CollectionChanged += OnTagsCollectionChanged;
+            PropertyChanged += OnUsernameChanged;
+            PropertyChanged += OnPasswordChanged;
+            PropertyChanged += OnFileNameChanged;
+            PropertyChanged += OnResourceUriChanged;
         }
 
         private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
@@ -49,63 +46,161 @@ namespace File_downloader.ViewModels
 
 
 
-        // Properties
-        private readonly DownloadList_VM _downloadList;
-        private readonly NotificationPanel_VM _notificationPanel;
-        private readonly IInfoCollector _infoCollector;
+        // On events
 
-        private bool _useCredentials = false;
-        private bool _startImmediately = true;
+        private void OnDownloadsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_downloadList.Downloads.Count >= MaxDownloads)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadsLimitReached)));
+            }
+        }
 
-        private string _userName = String.Empty;
-        private string _password = String.Empty;
-        private string _resourceUrl = String.Empty;
-        private string _localDirectory = String.Empty;
-        private string _fileName = String.Empty;
-        private string _fileExtension = String.Empty;
+        private void OnResourceUriChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ResourceUrl))
+            {
+                ResourceCheckmark.Reset();
+                FileExtension = String.Empty;
+                _infoModel = null;
+            }
+        }
 
-        private ImageBrush _credentialsStatus = IconsManager.NeutralIcon;
-        private ImageBrush _resourceUrlStatus = IconsManager.NeutralIcon;
-        private ImageBrush _localDirectoryStatus = IconsManager.NeutralIcon;
-        private ImageBrush _fileNameStatus = IconsManager.NeutralIcon;
+        private void OnFileNameChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FileName))
+            {
+                if (_fileName.Length == 0) FileNameCheckmark.Reject();
+                if (_fileName.Length == 1) FileNameCheckmark.Verify();
+            }
+        }
+
+        private void OnPasswordChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_useCredentials && e.PropertyName == nameof(Password))
+            {
+                if (_password.Length == 0 || _userName.Length == 0) CredentialsCheckmark.Reject();
+                if (_password.Length == 1 && _userName.Length != 0) CredentialsCheckmark.Verify();
+            }
+        }
+
+        private void OnUsernameChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_useCredentials && e.PropertyName == nameof(UserName))
+            {
+                if (_userName.Length == 0 || _password.Length == 0) CredentialsCheckmark.Reject();
+                if (_userName.Length == 1 && _password.Length != 0) CredentialsCheckmark.Verify();
+            }
+        }
+
+        private void OnSearchFinished(InfoModel obj)
+        {
+            if (obj.IsExist)
+            {
+                ResourceCheckmark.Verify();
+                FileExtension = obj.Exstention;
+                _infoModel = obj;
+
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                _notificationPanel.AddPositiveNotification("Resource was found!"));
+            }
+            else
+            {
+                ResourceCheckmark.Reject();
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, "Resource wasn't found!"));
+            }
+        }
+
+        private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add && Tags.Count >= MaxTags
+                || e.Action == NotifyCollectionChangedAction.Remove && Tags.Count == MaxTags - 1)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TagsLimitReached)));
+            }
+        }
 
 
 
-        public DownloadList_VM DownloadList => _downloadList;
-        public NotificationPanel_VM NotificationPanel => _notificationPanel;
-        public IInfoCollector InfoCollector => _infoCollector;
+        // Fields & properties
 
-        public ObservableCollection<string> Tags { get; set; }
-
+        private InfoModel _infoModel = null;
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public ObservableCollection<string> Tags { get; set; }
         public int MaxTags => 5;
         public int MaxTagLength => 8;
         public int MaxDownloads => 10;
         public int TagTextBoxWidth => MaxTagLength * 12;
         public bool TagsLimitReached => Tags.Count >= MaxTags;
-        public bool DownloadsLimitReached => _downloadList.Downloads.Count <= MaxDownloads;
+        public bool DownloadsLimitReached => _downloadList.Downloads.Count >= MaxDownloads;
+
+
+
+
+
+        public DownloadList_VM DownloadList => _downloadList;
+        private readonly DownloadList_VM _downloadList;
+
+        public NotificationPanel_VM NotificationPanel => _notificationPanel;
+        private readonly NotificationPanel_VM _notificationPanel;
+
+        public IInfoCollector InfoCollector => _infoCollector;
+        private readonly IInfoCollector _infoCollector;
+
+        public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }
+        private bool _startImmediately = true;
+
+
+
 
 
         public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
-        public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }
+        private bool _useCredentials = false;
 
         public string UserName { get => _userName; set => SetProperty(ref _userName, value, nameof(UserName)); }
-        public string Password { get => _password; set => SetProperty(ref _password, value, nameof(Password)); }
-        public string ResourceUrl { get => _resourceUrl; set => SetProperty(ref _resourceUrl, value, nameof(ResourceUrl)); }
-        public string LocalDirectory { get => _localDirectory; set => SetProperty(ref _localDirectory, value, nameof(LocalDirectory)); }
-        public string FileExtension { get => _fileExtension; set => SetProperty(ref _fileExtension, value, nameof(FileExtension)); }
-        public string FileName { get => _fileName; set => SetProperty(ref _fileName, value, nameof(FileName)); }
+        private string _userName = String.Empty;
 
-        public ImageBrush CredentialsStatus { get => _credentialsStatus; set => SetProperty(ref _credentialsStatus, value, nameof(CredentialsStatus)); }
-        public ImageBrush ResourceUrlStatus { get => _resourceUrlStatus; set => SetProperty(ref _resourceUrlStatus, value, nameof(ResourceUrlStatus)); }
-        public ImageBrush LocalDirectoryStatus { get => _localDirectoryStatus; set => SetProperty(ref _localDirectoryStatus, value, nameof(LocalDirectoryStatus)); }
-        public ImageBrush FileNameStatus { get => _fileNameStatus; set => SetProperty(ref _fileNameStatus, value, nameof(FileNameStatus)); }
+        public string Password { get => _password; set => SetProperty(ref _password, value, nameof(Password)); }
+        private string _password = String.Empty;
+
+        public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
+
+
+
+
+
+        public string ResourceUrl { get => _resourceUrl; set => SetProperty(ref _resourceUrl, value, nameof(ResourceUrl)); }
+        private string _resourceUrl = String.Empty;
+
+        public Checkmark_VM ResourceCheckmark { get; private set; } = new Checkmark_VM();
+
+
+
+
+
+        public string LocalDirectory { get => _localDirectory; set => SetProperty(ref _localDirectory, value, nameof(LocalDirectory)); }
+        private string _localDirectory = String.Empty;
+
+        public Checkmark_VM LocalDirectoryCheckmark { get; private set; } = new Checkmark_VM();
+
+
+
+
+
+        public string FileName { get => _fileName; set => SetProperty(ref _fileName, value, nameof(FileName)); }
+        private string _fileName = String.Empty;
+
+        public string FileExtension { get => _fileExtension; set => SetProperty(ref _fileExtension, value, nameof(FileExtension)); }
+        private string _fileExtension = String.Empty;
+
+        public Checkmark_VM FileNameCheckmark { get; private set; } = new Checkmark_VM();
 
 
 
 
         // Commands
+
         private readonly AutoEventCommandBase _searchRemoteFileCommand;
         private readonly AutoEventCommandBase _pickDirectoryCommand;
         private readonly AutoEventCommandBase _addTagCommand;
@@ -120,11 +215,17 @@ namespace File_downloader.ViewModels
 
 
 
+        // Command methods
+
         private bool CanSearchRemoteFile() => _resourceUrl != String.Empty;
         private void SearchRemoteFile()
         {
-
+            ResourceCheckmark.Reset();
+            _notificationPanel.AddNeutralNotification("Searching...");
+            _infoCollector.BeginSearch(_resourceUrl);
         }
+
+
 
         private bool CanPickDirectory() => true;
         private void PickDirectory()
@@ -133,9 +234,11 @@ namespace File_downloader.ViewModels
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 LocalDirectory = dialog.SelectedPath;
-                LocalDirectoryStatus = IconsManager.PositiveIcon;
+                LocalDirectoryCheckmark.Verify();
             }
         }
+
+
 
         private bool CanAddTag() => Tags.Count < MaxTags;
         private void AddTag(object o)
@@ -144,6 +247,8 @@ namespace File_downloader.ViewModels
             Tags.Add(tag);
         }
 
+
+
         private bool CanRemoveTag() => Tags.Count > 0;
         private void RemoveTag(object o)
         {
@@ -151,7 +256,15 @@ namespace File_downloader.ViewModels
             Tags.Remove(tag);
         }
 
-        private bool CanStartDownload() => true;
+
+
+        private bool CanStartDownload() =>
+            FileNameCheckmark.IsVerified
+            && LocalDirectoryCheckmark.IsVerified
+            && ResourceCheckmark.IsVerified
+            && (!UseCrdentials || CredentialsCheckmark.IsVerified)
+            && !DownloadsLimitReached;
+
         private void StartDownload()
         {
             var download = new Download_VM
@@ -162,7 +275,7 @@ namespace File_downloader.ViewModels
                 DownloadGuid = Guid.NewGuid(),
                 From = _resourceUrl,
                 OnPause = !_startImmediately,
-                Size = 0,
+                Size = _infoModel.SizeInBytes,
                 To = _localDirectory,
                 UseCredentials = _useCredentials
             };
