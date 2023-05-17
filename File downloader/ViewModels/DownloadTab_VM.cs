@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 
 namespace File_downloader.ViewModels
@@ -50,7 +51,7 @@ namespace File_downloader.ViewModels
 
         private void OnDownloadsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_downloadList.Downloads.Count >= MaxDownloads)
+            if (_downloadList.Downloads.Count >= MaxDownloads || _downloadList.Downloads.Count == MaxDownloads - 1)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadsLimitReached)));
             }
@@ -70,7 +71,7 @@ namespace File_downloader.ViewModels
         {
             if (e.PropertyName == nameof(FileName))
             {
-                if (_fileName.Length == 0) FileNameCheckmark.Reject();
+                if (_fileName.Length == 0 || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) FileNameCheckmark.Reject();
                 if (_fileName.Length == 1) FileNameCheckmark.Verify();
             }
         }
@@ -98,7 +99,8 @@ namespace File_downloader.ViewModels
             if (obj.IsExist)
             {
                 ResourceCheckmark.Verify();
-                FileExtension = obj.Exstention;
+                if (obj.Exstention == String.Empty) FileExtension = "dir";
+                else FileExtension = obj.Exstention;
                 _infoModel = obj;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -217,12 +219,14 @@ namespace File_downloader.ViewModels
 
         // Command methods
 
-        private bool CanSearchRemoteFile() => _resourceUrl != String.Empty;
+        private bool CanSearchRemoteFile() => _resourceUrl != String.Empty && (!_useCredentials || CredentialsCheckmark.IsVerified);
         private void SearchRemoteFile()
         {
             ResourceCheckmark.Reset();
             _notificationPanel.AddNeutralNotification("Searching...");
-            _infoCollector.BeginSearch(_resourceUrl);
+
+            if (_useCredentials) _infoCollector.BeginSearch(_resourceUrl, _userName, _password);
+            else _infoCollector.BeginSearch(_resourceUrl);
         }
 
 

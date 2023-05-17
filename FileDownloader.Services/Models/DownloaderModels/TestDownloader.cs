@@ -15,9 +15,9 @@
 
         public async void StartNewDownload(DownloadModel download)
         {
-            await Task.Run(() =>
+            Downloads.Add(download);
+            await Task.Run(async () =>
             {
-                Downloads.Add(download);
                 DownloadStarted?.Invoke(download);
 
                 var counter = 0;
@@ -30,10 +30,10 @@
                         return;
                     }
 
-                    if (download.OnPause) continue;
+                    if (download.OnPause) SpinWait.SpinUntil(() => !download.OnPause);
                     else counter++;
 
-                    Task.Delay(1000).Wait();
+                    await Task.Delay(1000);
                     download.DownloadedBytes += download.Size / 5;
                     DownloadedProgressChanged?.Invoke(download);
                 }
