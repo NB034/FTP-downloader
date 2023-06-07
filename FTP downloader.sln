@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2.FtpDownloader.Services.Interfaces", "2.FtpDownloader.Services.Interfaces\2.FtpDownloader.Services.Interfaces.csproj", "{80C52222-2C3B-43C9-B124-2466869FD984}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "0.Shared", "0.Shared\0.Shared.csproj", "{222991B6-086A-4D0F-ADF8-C061316590AD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1.FtpDownloader", "1.FtpDownloader\1.FtpDownloader.csproj", "{C81552B5-B3DD-4D1C-82C2-43B2F4DC4825}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2.FtpDownloader.Services", "2.FtpDownloader.Services\2.FtpDownloader.Services.csproj", "{19949B04-1501-43F6-9491-47CBA5D63F8F}"
@@ -25,10 +23,6 @@ Global
 		{80C52222-2C3B-43C9-B124-2466869FD984}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80C52222-2C3B-43C9-B124-2466869FD984}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80C52222-2C3B-43C9-B124-2466869FD984}.Release|Any CPU.Build.0 = Release|Any CPU
-		{222991B6-086A-4D0F-ADF8-C061316590AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{222991B6-086A-4D0F-ADF8-C061316590AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{222991B6-086A-4D0F-ADF8-C061316590AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{222991B6-086A-4D0F-ADF8-C061316590AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C81552B5-B3DD-4D1C-82C2-43B2F4DC4825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C81552B5-B3DD-4D1C-82C2-43B2F4DC4825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81552B5-B3DD-4D1C-82C2-43B2F4DC4825}.Release|Any CPU.ActiveCfg = Release|Any CPU

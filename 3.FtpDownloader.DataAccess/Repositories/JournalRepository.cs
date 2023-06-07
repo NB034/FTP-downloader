@@ -30,10 +30,10 @@ namespace FtpDownloader.DataAccess.Repositories
 
         }
 
-        public List<JournalEntryDto> GetEntries()
+        public List<JournalEntryEntityDto> GetEntries()
         {
             var entities = _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToList();
-            var dtos = new List<JournalEntryDto>();
+            var dtos = new List<JournalEntryEntityDto>();
             foreach(var entity in entities)
             {
                 //dtos.Add();

@@ -4,7 +4,7 @@ namespace FtpDownloader.DataAccess.Interfaces.Repositories
 {
     public interface IJournalRepository
     {
-        List<JournalEntryDto> GetEntries();
+        List<JournalEntryEntityDto> GetEntries();
         void CreateEntry();
         void DeleteEntry(int id);
         void DeleteAllEntries();
