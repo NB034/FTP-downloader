@@ -1,4 +1,4 @@
-# File downloader
+# FTP downloader
 
 *Создан: Март - ... 2023*
 
