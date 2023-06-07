@@ -8,7 +8,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 
 namespace FtpDownloader.ViewModels
@@ -23,7 +22,7 @@ namespace FtpDownloader.ViewModels
         private readonly IJournal _journal;
         private readonly NotificationPanel_VM _notificationPanel;
         private JournalEntry_VM _entry = null;
-        private JournalEntryMapper _entriesMapper;
+        private Mappers.JournalEntryMapper _entriesMapper;
         private DownloadToEntryMapper _downloadToEntryMapper;
 
         private string _searchLine = "";
@@ -32,7 +31,7 @@ namespace FtpDownloader.ViewModels
 
         public JournalTab_VM(IJournal journal, IDownloader downloader, NotificationPanel_VM notificationPanel)
         {
-            _entriesMapper = new JournalEntryMapper();
+            _entriesMapper = new Mappers.JournalEntryMapper();
             _downloadToEntryMapper = new DownloadToEntryMapper();
             _journal = journal;
             _notificationPanel = notificationPanel;

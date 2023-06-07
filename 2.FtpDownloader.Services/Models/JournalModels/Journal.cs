@@ -1,16 +1,13 @@
-﻿using FtpDownloader.DataAccess.Contexts;
-using FtpDownloader.DataAccess.Entities;
+﻿using FtpDownloader.DataAccess.Interfaces.Repositories;
 using FtpDownloader.Services.Mappers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace FtpDownloader.Services.Models.JournalModels
 {
     public class Journal : IJournal
     {
-        private string _pathToSettings = "..//Settings//appsettings.json";
-        private FtpDownloaderDbContext _context;
-        private JournalEntryMapper _mapper;
+        //private string _pathToSettings = "..//Settings//appsettings.json";
+        private readonly IJournalRepository _repository;
+        private readonly JournalEntryToDtoMapper _mapper;
 
         public event Action EntriesLoaded;
         public event Action EntryDeleted;
@@ -18,56 +15,58 @@ namespace FtpDownloader.Services.Models.JournalModels
         public event Action AllEntriesDeleted;
         public event Action<Exception> ExceptionThrowned;
 
-        public Journal()
+        public Journal(IJournalRepository repository, JournalEntryToDtoMapper mapper)
         {
-            try
-            {
-                var configBuilder = new ConfigurationBuilder();
-                configBuilder.SetBasePath(Directory.GetCurrentDirectory());
-                configBuilder.AddJsonFile(_pathToSettings);
+            _repository = repository;
+            _mapper = mapper;
 
-                var config = configBuilder.Build();
-                string connectionString = config.GetConnectionString("connectionString");
+            //try
+            //{
+            //    var configBuilder = new ConfigurationBuilder();
+            //    configBuilder.SetBasePath(Directory.GetCurrentDirectory());
+            //    configBuilder.AddJsonFile(_pathToSettings);
 
-                _context = FtpDownloaderDbContext.CreateSQLiteContext(connectionString);
+            //    var config = configBuilder.Build();
+            //    string connectionString = config.GetConnectionString("connectionString");
 
-                _mapper = new JournalEntryMapper(_context);
-            }
-            catch (Exception ex)
-            {
-                ExceptionThrowned?.Invoke(ex);
-            }
+            //    _context = FtpDownloaderDbContext.CreateSQLiteContext(connectionString);
+
+            //    _mapper = new JournalEntryMapper(_context);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionThrowned?.Invoke(ex);
+            //}
         }
 
         public async Task<JournalEntryModel[]> GetEntries()
         {
-            var entries = new List<JournalEntryModel>();
+            var enries = new List<JournalEntryModel>();
             try
             {
-                var entities = await _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToListAsync();
+                var dtos = await _repository.GetEntriesAsync();
 
-                foreach (var entity in entities)
+                foreach (var dto in dtos)
                 {
-                    entries.Add(_mapper.EntityToModel(entity));
+                    enries.Add(_mapper.DtoToEntry(dto));
                 }
                 EntriesLoaded?.Invoke();
-                return entries.ToArray();
+                return enries.ToArray();
             }
             catch (Exception ex)
             {
                 ExceptionThrowned?.Invoke(ex);
             }
-            return entries.ToArray();
+            return enries.ToArray();
         }
 
         public async Task CreateEntry(JournalEntryModel entry)
         {
             try
             {
-                var entity = _mapper.ModelToEntity(entry);
+                var dto = _mapper.EntryToDto(entry);
 
-                await _context.EntryEntities.AddAsync(entity);
-                await _context.SaveChangesAsync();
+                await _repository.CreateEntryAsync(dto);
 
                 EntryCreated?.Invoke();
             }
@@ -81,14 +80,10 @@ namespace FtpDownloader.Services.Models.JournalModels
         {
             try
             {
-                var entity = await _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities))
-                    .FirstOrDefaultAsync(e => e.Id == entry.Id);
-                if (entity == null) throw new ArgumentException("Entry does not exist");
-                var tags = entity.TagEntities.ToList();
+                var dto = (await _repository.GetEntriesAsync()).FirstOrDefault(e => e.Id == entry.Id);
+                if (dto == null) throw new ArgumentException("Entry does not exist");
 
-                _context.EntryEntities.Remove(entity);
-                tags.ForEach(t => DeleteTagIfNotUsed(t));
-                await _context.SaveChangesAsync();
+                _repository.DeleteEntry(dto.Id);
 
                 EntryDeleted?.Invoke();
             }
@@ -100,24 +95,8 @@ namespace FtpDownloader.Services.Models.JournalModels
 
         public async Task DeleteAllEntries()
         {
-            await _context.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE [{nameof(_context.EntryEntities)}]");
-            await _context.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE [{nameof(_context.TagEntities)}]");
+            await _repository.DeleteAllEntriesAsync();
             AllEntriesDeleted?.Invoke();
-        }
-
-        private void DeleteTagIfNotUsed(TagEntity tag)
-        {
-            try
-            {
-                if (tag.EntryEntities.Count == 0)
-                {
-                    _context.TagEntities.Remove(tag);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionThrowned?.Invoke(ex);
-            }
         }
     }
 }

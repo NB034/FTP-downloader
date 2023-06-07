@@ -15,26 +15,52 @@ namespace FtpDownloader.DataAccess.Repositories
             _context = context;
         }
 
-        public void CreateEntry()
+        public void CreateEntry(JournalEntryEntityDto dto)
         {
+            throw new NotImplementedException();
+        }
 
+        public async Task CreateEntryAsync(JournalEntryEntityDto dto)
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteAllEntries()
         {
+            throw new NotImplementedException();
+        }
 
+        public async Task DeleteAllEntriesAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteEntry(int id)
         {
+            throw new NotImplementedException();
+        }
 
+        public async Task DeleteEntryAsync(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public List<JournalEntryEntityDto> GetEntries()
         {
             var entities = _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToList();
             var dtos = new List<JournalEntryEntityDto>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
+            {
+                //dtos.Add();
+            }
+            return dtos;
+        }
+
+        public async Task<List<JournalEntryEntityDto>> GetEntriesAsync()
+        {
+            var entities = await _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToListAsync();
+            var dtos = new List<JournalEntryEntityDto>();
+            foreach (var entity in entities)
             {
                 //dtos.Add();
             }

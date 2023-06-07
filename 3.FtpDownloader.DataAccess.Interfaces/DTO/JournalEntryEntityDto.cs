@@ -9,7 +9,7 @@ namespace FtpDownloader.DataAccess.Interfaces.DTO
         public DateTime DownloadDate { get; set; }
         public int FileSize { get; set; }
         public bool WasSuccessful { get; set; }
-        public List<TagEntityDto> TagEntities { get; set; } = new();
+        public List<string> Tags { get; set; } = new();
 
 
 
