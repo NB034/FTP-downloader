@@ -1,7 +1,7 @@
 ﻿
 namespace FtpDownloader.DataAccess.Interfaces.DTO
 {
-    public class JournalEntryEntityDto
+    public class EntryEntityDto
     {
         public int Id { get; } = 0;
         public string RemotePath { get; set; } = string.Empty;
@@ -13,7 +13,7 @@ namespace FtpDownloader.DataAccess.Interfaces.DTO
 
 
 
-        public JournalEntryEntityDto(int id)
+        public EntryEntityDto(int id)
         {
             Id = id;
         }

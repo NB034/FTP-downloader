@@ -10,7 +10,7 @@ namespace FtpDownloader.DataAccess.Contexts
             Database.EnsureCreated();
         }
 
-        public virtual DbSet<JournalEntryEntity> EntryEntities { get; set; }
+        public virtual DbSet<EntryEntity> EntryEntities { get; set; }
         public virtual DbSet<TagEntity> TagEntities { get; set; }
 
 

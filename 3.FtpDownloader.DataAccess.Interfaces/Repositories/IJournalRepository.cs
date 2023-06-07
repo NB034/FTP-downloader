@@ -4,15 +4,15 @@ namespace FtpDownloader.DataAccess.Interfaces.Repositories
 {
     public interface IJournalRepository
     {
-        List<JournalEntryEntityDto> GetEntries();
-        void CreateEntry(JournalEntryEntityDto dto);
+        List<EntryEntityDto> GetEntries();
+        void CreateEntry(EntryEntityDto dto);
         void DeleteEntry(int id);
         void DeleteAllEntries();
 
 
 
-        Task<List<JournalEntryEntityDto>> GetEntriesAsync();
-        Task CreateEntryAsync(JournalEntryEntityDto dto);
+        Task<List<EntryEntityDto>> GetEntriesAsync();
+        Task CreateEntryAsync(EntryEntityDto dto);
         Task DeleteEntryAsync(int id);
         Task DeleteAllEntriesAsync();
     }

@@ -1,7 +1,7 @@
 ﻿
 namespace FtpDownloader.DataAccess.Entities
 {
-    public class JournalEntryEntity
+    public class EntryEntity
     {
         public int Id { get; set; }
         public string RemotePath { get; set; } = string.Empty;

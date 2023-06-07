@@ -7,7 +7,7 @@ namespace FtpDownloader.Services.Models.JournalModels
     {
         //private string _pathToSettings = "..//Settings//appsettings.json";
         private readonly IJournalRepository _repository;
-        private readonly JournalEntryToDtoMapper _mapper;
+        private readonly EntryToDtoMapper _mapper;
 
         public event Action EntriesLoaded;
         public event Action EntryDeleted;
@@ -15,7 +15,7 @@ namespace FtpDownloader.Services.Models.JournalModels
         public event Action AllEntriesDeleted;
         public event Action<Exception> ExceptionThrowned;
 
-        public Journal(IJournalRepository repository, JournalEntryToDtoMapper mapper)
+        public Journal(IJournalRepository repository, EntryToDtoMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

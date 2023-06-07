@@ -2,69 +2,146 @@
 using FtpDownloader.DataAccess.Entities;
 using FtpDownloader.DataAccess.Interfaces.DTO;
 using FtpDownloader.DataAccess.Interfaces.Repositories;
+using FtpDownloader.DataAccess.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace FtpDownloader.DataAccess.Repositories
 {
-    internal class JournalRepository : IJournalRepository
+    public partial class JournalRepository : IJournalRepository
     {
         private readonly FtpDownloaderDbContext _context;
+        private readonly EntityToDtoMapper _mapper;
 
-        public JournalRepository(FtpDownloaderDbContext context)
+        public JournalRepository(FtpDownloaderDbContext context, EntityToDtoMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
+    }
 
-        public void CreateEntry(JournalEntryEntityDto dto)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task CreateEntryAsync(JournalEntryEntityDto dto)
+    // Sync methods
+    public partial class JournalRepository
+    {
+        public void CreateEntry(EntryEntityDto dto)
         {
-            throw new NotImplementedException();
+            var entity = _mapper.DtoToEntity(dto);
+
+            foreach(var tag in dto.Tags)
+            {
+                entity.TagEntities.Add(GetOrCreate(tag));
+            }
+
+            _context.EntryEntities.Add(entity);
+            _context.SaveChanges();
         }
 
         public void DeleteAllEntries()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeleteAllEntriesAsync()
-        {
-            throw new NotImplementedException();
+            _context.EntryEntities.RemoveRange(_context.EntryEntities);
+            RemoveUnnecessaryTags();
+            _context.SaveChanges();
         }
 
         public void DeleteEntry(int id)
         {
-            throw new NotImplementedException();
+            _context.EntryEntities.Remove(_context.EntryEntities.Where(e => e.Id == id).FirstOrDefault());
+            RemoveUnnecessaryTags();
+            _context.SaveChanges();
+        }
+
+        public List<EntryEntityDto> GetEntries()
+        {
+            var entities = _context.EntryEntities.Include(nameof(EntryEntity.TagEntities)).ToList();
+            var dtos = new List<EntryEntityDto>();
+            foreach (var entity in entities)
+            {
+                dtos.Add(_mapper.EntityToDto(entity));
+            }
+            return dtos;
+        }
+
+        private TagEntity GetOrCreate(string tag)
+        {
+            var entity = _context.TagEntities.Where(t => t.Name == tag).FirstOrDefault();
+            if(entity != null) return entity;
+            
+            entity = _context.TagEntities.Add(new TagEntity() { Name = tag }).Entity;
+            _context.SaveChanges();
+            return entity;
+        }
+
+        private void RemoveUnnecessaryTags()
+        {
+            foreach(var tag in _context.TagEntities)
+            {
+                if(!tag.EntryEntities.Any()) _context.TagEntities.Remove(tag);
+            }
+            _context.SaveChanges();
+        }
+    }
+
+
+
+
+    // Async methods
+    public partial class JournalRepository
+    {
+        public async Task CreateEntryAsync(EntryEntityDto dto)
+        {
+            var entity = _mapper.DtoToEntity(dto);
+
+            foreach (var tag in dto.Tags)
+            {
+                entity.TagEntities.Add(await GetOrCreateAsync(tag));
+            }
+
+            await _context.EntryEntities.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAllEntriesAsync()
+        {
+            _context.EntryEntities.RemoveRange(await _context.EntryEntities.ToListAsync());
+            await RemoveUnnecessaryTagsAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteEntryAsync(int id)
         {
-            throw new NotImplementedException();
+            _context.EntryEntities.Remove(await _context.EntryEntities.Where(e => e.Id == id).FirstOrDefaultAsync());
+            await RemoveUnnecessaryTagsAsync();
+            await _context.SaveChangesAsync();
         }
 
-        public List<JournalEntryEntityDto> GetEntries()
+        public async Task<List<EntryEntityDto>> GetEntriesAsync()
         {
-            var entities = _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToList();
-            var dtos = new List<JournalEntryEntityDto>();
+            var entities = await _context.EntryEntities.Include(nameof(EntryEntity.TagEntities)).ToListAsync();
+            var dtos = new List<EntryEntityDto>();
             foreach (var entity in entities)
             {
-                //dtos.Add();
+                dtos.Add(_mapper.EntityToDto(entity));
             }
             return dtos;
         }
 
-        public async Task<List<JournalEntryEntityDto>> GetEntriesAsync()
+        private async Task<TagEntity> GetOrCreateAsync(string tag)
         {
-            var entities = await _context.EntryEntities.Include(nameof(JournalEntryEntity.TagEntities)).ToListAsync();
-            var dtos = new List<JournalEntryEntityDto>();
-            foreach (var entity in entities)
+            var entity = await _context.TagEntities.Where(t => t.Name == tag).FirstOrDefaultAsync();
+            if (entity != null) return entity;
+
+            entity = (await _context.TagEntities.AddAsync(new TagEntity() { Name = tag })).Entity;
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        private async Task RemoveUnnecessaryTagsAsync()
+        {
+            foreach (var tag in await _context.TagEntities.ToListAsync())
             {
-                //dtos.Add();
+                if (!tag.EntryEntities.Any()) _context.TagEntities.Remove(tag);
             }
-            return dtos;
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -6,6 +6,6 @@ namespace FtpDownloader.DataAccess.Entities
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
-        public virtual ICollection<JournalEntryEntity> EntryEntities { get; set; }
+        public virtual ICollection<EntryEntity> EntryEntities { get; set; }
     }
 }
