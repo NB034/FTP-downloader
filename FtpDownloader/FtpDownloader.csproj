@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileDownloader.Services\FileDownloader.Services.csproj" />
+    <ProjectReference Include="..\FtpDownloader.Services\FtpDownloader.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
