@@ -27,7 +27,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" Background="{Binding Image}" Width="30" Height="30" Margin="8,0,8,0"/>
+                        <Border Grid.Column="0" Background="{Binding Type, Converter={StaticResource EnumToIconConverter}}" Width="30" Height="30" Margin="8,0,8,0"/>
                         
                         <TextBlock Grid.Column="1" Text="{Binding Message}" VerticalAlignment="Center" Margin="5"/>
                         

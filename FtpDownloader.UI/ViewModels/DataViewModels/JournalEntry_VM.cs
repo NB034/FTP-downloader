@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media;
+﻿using FtpDownloader.Resources.ResourceAccess;
+using System.Collections.Generic;
 
 namespace FtpDownloader.ViewModels.DataViewModels
 {
@@ -11,7 +11,7 @@ namespace FtpDownloader.ViewModels.DataViewModels
         public string RemotePath { get; set; }
         public string DownloadDate { get; set; }
         public double FileSize { get; set; }
-        public ImageBrush Result { get; set; }
+        public NotificationTypesEnum Result { get; set; }
 
         public List<string> Tags { get; set; }
     }

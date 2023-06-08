@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2.FtpDownloader.Services.Interfaces.DTO
+namespace FtpDownloader.Services.Interfaces.DTO
 {
-    internal class DownloadModelDto
+    public class DownloadDto
     {
     }
 }

@@ -1,6 +1,5 @@
 ﻿using FtpDownloader.Command;
 using FtpDownloader.Resources.ResourceAccess;
-using FtpDownloader.Resources.ResourcesAccess;
 using FtpDownloader.ViewModels.DataViewModels;
 using System;
 using System.Collections.ObjectModel;
@@ -48,7 +47,7 @@ namespace FtpDownloader.ViewModels
         {
             Notifications.Add(new Notification_VM
             {
-                Image = IconsManager.PositiveIcon,
+                Type = NotificationTypesEnum.Positive,
                 Message = message,
             });
             CheckForOverflow();
@@ -58,7 +57,7 @@ namespace FtpDownloader.ViewModels
         {
             Notifications.Add(new Notification_VM
             {
-                Image = IconsManager.NeutralIcon,
+                Type = NotificationTypesEnum.Neutral,
                 Message = message,
             });
             CheckForOverflow();
@@ -68,7 +67,7 @@ namespace FtpDownloader.ViewModels
         {
             Notifications.Add(new Notification_VM
             {
-                Image = IconsManager.NegativeIcon,
+                Type = NotificationTypesEnum.Negative,
                 Message = exception.Message,
             });
             CheckForOverflow();
@@ -78,7 +77,7 @@ namespace FtpDownloader.ViewModels
         {
             Notifications.Add(new Notification_VM
             {
-                Image = IconsManager.GetIcon(type),
+                Type = type,
                 Message = message
             });
             CheckForOverflow();

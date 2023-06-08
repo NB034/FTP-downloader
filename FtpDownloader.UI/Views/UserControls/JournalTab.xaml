@@ -64,7 +64,7 @@
                     <DataGridTemplateColumn Header="Result" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Background="{Binding Result}" Width="20" Height="20"/>
+                                <Border Background="{Binding Result, Converter={StaticResource EnumToIconConverter}}" Width="20" Height="20"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

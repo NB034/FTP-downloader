@@ -73,7 +73,8 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" Background="{Binding CredentialsCheckmark.Icon}"
+                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
+                        Background="{Binding CredentialsCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"
                         Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </Grid>
             <!-- -->
@@ -85,7 +86,8 @@
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5" Text="{Binding ResourceUrl, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
                     Content="{StaticResource SearchRemoteFile}" Command="{Binding SearchRemoteFileCommand}"/>
-            <Border Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5" Background="{Binding ResourceCheckmark.Icon}"/>
+            <Border Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5" 
+                    Background="{Binding ResourceCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
 
@@ -98,7 +100,8 @@
             <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
                     Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"
                     Command="{Binding PickDirectoryCommand}"/>
-            <Border Grid.Column="3" Grid.Row="2" Width="20" Height="20" Margin="5" Background="{Binding LocalDirectoryCheckmark.Icon}"/>
+            <Border Grid.Column="3" Grid.Row="2" Width="20" Height="20" Margin="5" 
+                    Background="{Binding LocalDirectoryCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
 
@@ -110,7 +113,8 @@
             <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource MainBackgroundBrush}">
                 <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding FileExtension}"/>
             </Border>
-            <Border Grid.Column="3" Grid.Row="3" Width="20" Height="20" Margin="5" Background="{Binding FileNameCheckmark.Icon}"/>
+            <Border Grid.Column="3" Grid.Row="3" Width="20" Height="20" Margin="5" 
+                    Background="{Binding FileNameCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
 

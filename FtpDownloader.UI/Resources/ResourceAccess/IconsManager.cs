@@ -1,8 +1,7 @@
-﻿using FtpDownloader.Resources.ResourceAccess;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
-namespace FtpDownloader.Resources.ResourcesAccess
+namespace FtpDownloader.Resources.ResourceAccess
 
 {
     static class IconsManager

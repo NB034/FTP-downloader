@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using FtpDownloader.Resources.ResourcesAccess;
 using FtpDownloader.ViewModels.DataViewModels;
 using FtpDownloader.Services.Models.JournalModels;
 using System.IO;
+using FtpDownloader.Resources.ResourceAccess;
 
 namespace FtpDownloader.Mappers
 {
