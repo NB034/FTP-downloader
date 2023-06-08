@@ -1,4 +1,5 @@
-﻿namespace FtpDownloader.Services.DataTypes
+﻿
+namespace FtpDownloader.Services.DataTypes
 {
     public class Entry
     {

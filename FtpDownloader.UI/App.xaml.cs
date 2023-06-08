@@ -6,9 +6,9 @@ using System.IO;
 using System.Windows;
 using FtpDownloader.Services.TestModels;
 using FtpDownloader.Services.Models;
-using FtpDownloader.Services.Mappers;
 using FtpDownloader.UI.DataSources.ViewModels;
 using FtpDownloader.UI.Windows;
+using FtpDownloader.UI.DataSources.Mappers;
 
 namespace FtpDownloader.UI
 {
@@ -17,17 +17,19 @@ namespace FtpDownloader.UI
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
-            LogicLayerMapper logicLayerMapper = new LogicLayerMapper();
 
-            IInfoCollector infoCollector = new TestInfoCollector(logicLayerMapper); //ConstructInfoCollector();
-            IDownloader downloader = new TestDownloader(logicLayerMapper);
-            IJournal journal = new TestJournal(logicLayerMapper);
+            Services.Mappers.LogicLayerMapper servicesLogicLayerMapper = new Services.Mappers.LogicLayerMapper();
+            DataSources.Mappers.LogicLayerMapper dataSourcesLogicLayerMapper = new DataSources.Mappers.LogicLayerMapper();
+            DownloadDtoToEntryDtoMapper dtoMapper = new DownloadDtoToEntryDtoMapper();
+
+            IInfoCollector infoCollector = new TestInfoCollector(servicesLogicLayerMapper); //ConstructInfoCollector();
+            IDownloader downloader = new TestDownloader(servicesLogicLayerMapper);
+            IJournal journal = new TestJournal(servicesLogicLayerMapper);
 
             NotificationPanel_VM notificationPanel = new NotificationPanel_VM();
-            DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader);
+            DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader, dtoMapper);
             DownloadTab_VM downloadTab = new DownloadTab_VM(notificationPanel, downloadList, infoCollector);
-            JournalTab_VM journalTab = new JournalTab_VM(journal, downloader, notificationPanel);
+            JournalTab_VM journalTab = new JournalTab_VM(journal, downloader, notificationPanel, dataSourcesLogicLayerMapper);
 
             MainWindow_VM mainViewModel = new MainWindow_VM(notificationPanel, downloadTab, journalTab);
             MainWindow window = new MainWindow { DataContext = mainViewModel };

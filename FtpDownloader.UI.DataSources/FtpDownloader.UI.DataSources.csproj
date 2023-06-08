@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\FtpDownloader.Services.Interfaces\FtpDownloader.Services.Interfaces.csproj" />
-		<ProjectReference Include="..\FtpDownloader.Services\FtpDownloader.Services.csproj" />
 	</ItemGroup>
 
 </Project>

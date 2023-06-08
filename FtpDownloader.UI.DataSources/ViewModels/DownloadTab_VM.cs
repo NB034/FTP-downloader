@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using FtpDownloader.Services.Interfaces.DTO;
-using FtpDownloader.Services.DataTypes;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
 
@@ -126,7 +125,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         // Fields & properties
 
-        private Info _infoModel = null;
+        private LogicLayerInfoDto _infoModel = null;
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<string> Tags { get; set; }
         public int MaxTags => 5;

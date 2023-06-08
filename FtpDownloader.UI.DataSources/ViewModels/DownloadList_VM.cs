@@ -10,7 +10,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
     public class DownloadList_VM
     {
         private readonly NotificationPanel_VM _notificationPanel;
-        private readonly DownloadMapper _mapper;
+        private readonly DownloadDtoToEntryDtoMapper _mapper;
         private readonly IDownloader _downloader;
 
         private readonly AutoEventCommandBase _resumeCommand;
@@ -20,10 +20,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly AutoEventCommandBase _pauseAllCommand;
         private readonly AutoEventCommandBase _cancelAllCommand;
 
-        public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader)
+        public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader, DownloadDtoToEntryDtoMapper mapper)
         {
             _notificationPanel = notificationPanel;
-            _mapper = new DownloadMapper();
+            _mapper = mapper;
             _downloader = downloader;
 
             Downloads = new ObservableCollection<Download_VM>();

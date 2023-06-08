@@ -4,7 +4,7 @@ using System.ComponentModel;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
-using FtpDownloader.Services.Mappers;
+using FtpDownloader.UI.DataSources.Mappers;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
@@ -18,17 +18,15 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly IJournal _journal;
         private readonly NotificationPanel_VM _notificationPanel;
         private JournalEntry_VM _entry = null;
-        private Mappers.JournalEntryMapper _entriesMapper;
-        private DownloadToEntryMapper _downloadToEntryMapper;
+        private LogicLayerMapper _logicLayerMapper;
 
         private string _searchLine = "";
         private bool _isLoading = false;
 
 
-        public JournalTab_VM(IJournal journal, IDownloader downloader, NotificationPanel_VM notificationPanel)
+        public JournalTab_VM(IJournal journal, IDownloader downloader, NotificationPanel_VM notificationPanel, LogicLayerMapper mapper)
         {
-            _entriesMapper = new Mappers.JournalEntryMapper();
-            _downloadToEntryMapper = new DownloadToEntryMapper();
+            _logicLayerMapper = mapper;
             _journal = journal;
             _notificationPanel = notificationPanel;
 
