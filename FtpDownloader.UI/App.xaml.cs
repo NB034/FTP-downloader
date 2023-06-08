@@ -8,7 +8,7 @@ using FtpDownloader.Services.TestModels;
 using FtpDownloader.Services.Models;
 using FtpDownloader.Services.Mappers;
 using FtpDownloader.UI.DataSources.ViewModels;
-using FtpDownloader.UI.Views;
+using FtpDownloader.UI.Windows;
 
 namespace FtpDownloader.UI
 {

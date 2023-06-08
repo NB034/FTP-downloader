@@ -6,12 +6,15 @@
     <RootNamespace>File_downloader</RootNamespace>
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\Assets\AppIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\Ionicons-CheckmarkCircleOutlineiOS.png" />
     <None Remove="Assets\Ionicons-CloseCircleOutlineiOS.png" />
+    <None Remove="Assets\Ionicons-CloseiOS.png" />
+    <None Remove="Assets\Ionicons-PauseiOS.png" />
+    <None Remove="Assets\Ionicons-PlayiOS.png" />
     <None Remove="Assets\Ionicons-RadioButtonOffiOS.png" />
   </ItemGroup>
 
@@ -34,6 +37,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Ionicons-CloseCircleOutlineiOS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Ionicons-CloseiOS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Ionicons-PauseiOS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Ionicons-PlayiOS.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Ionicons-RadioButtonOffiOS.png">

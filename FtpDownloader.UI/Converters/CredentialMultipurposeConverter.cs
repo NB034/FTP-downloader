@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace FtpDownloader.Converters
+namespace FtpDownloader.UI.Converters
 {
     class CredentialMultipurposeConverter : IValueConverter
     {

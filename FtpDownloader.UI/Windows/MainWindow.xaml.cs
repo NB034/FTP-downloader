@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace FtpDownloader.UI.Views
+namespace FtpDownloader.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

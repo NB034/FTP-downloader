@@ -1,10 +1,10 @@
-﻿using FtpDownloader.Services.Mappers;
-using FtpDownloader.Services.Interfaces.Models;
+﻿using FtpDownloader.Services.Interfaces.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
+using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {

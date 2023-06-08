@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace FtpDownloader.Converters
+namespace FtpDownloader.UI.Converters
 {
     internal class InvertedBoolToVisibilityConverter : IValueConverter
     {
