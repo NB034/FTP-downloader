@@ -12,7 +12,7 @@
   </ItemGroup>
 
     <ItemGroup>
-		<ProjectReference Include="..\3.FtpDownloader.DataAccess.Interfaces\3.FtpDownloader.DataAccess.Interfaces.csproj" />
+		<ProjectReference Include="..\3.FtpDownloader.DataAccess.Interfaces\FtpDownloader.DataAccess.Interfaces.csproj" />
     </ItemGroup>
 
 </Project>
