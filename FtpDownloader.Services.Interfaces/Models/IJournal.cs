@@ -1,6 +1,6 @@
 ﻿using FtpDownloader.Services.Interfaces.DTO;
 
-namespace FtpDownloader.Services.Models.JournalModels
+namespace FtpDownloader.Services.Interfaces.Models
 {
     public interface IJournal
     {
@@ -10,9 +10,9 @@ namespace FtpDownloader.Services.Models.JournalModels
         event Action EntryDeleted;
         event Action<Exception> ExceptionThrowned;
 
-        Task CreateEntry(EntryDto entry);
+        Task CreateEntry(LogicLayerEntryDto dto);
         Task DeleteAllEntries();
-        Task DeleteEntry(EntryDto entry);
-        Task<EntryDto[]> GetEntries();
+        Task DeleteEntry(LogicLayerEntryDto dto);
+        Task<LogicLayerEntryDto[]> GetEntries();
     }
 }

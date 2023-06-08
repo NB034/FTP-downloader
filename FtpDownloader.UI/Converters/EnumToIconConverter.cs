@@ -1,9 +1,10 @@
-﻿using FtpDownloader.Resources.ResourceAccess;
+﻿using File_downloader.Accessories;
+using FtpDownloader.UI.DataSources.Accessories;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FtpDownloader.Converters
+namespace FtpDownloader.UI.Converters
 {
     public class EnumToIconConverter : IValueConverter
     {

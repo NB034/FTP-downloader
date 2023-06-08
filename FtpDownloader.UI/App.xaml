@@ -1,16 +1,16 @@
-﻿<Application x:Class="FtpDownloader.App"
+﻿<Application x:Class="FtpDownloader.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:FtpDownloader">
+             xmlns:local="clr-namespace:FtpDownloader.UI">
     
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/ResourceAccess/BrushesDictionary.xaml"/>
-                <ResourceDictionary Source="/Resources/ResourceAccess/AssetsDictionary.xaml"/>
-                <ResourceDictionary Source="/Resources/ResourceAccess/StringDictionary.xaml"/>
-                <ResourceDictionary Source="/Resources/ResourceAccess/StyleDictionary.xaml"/>
-                <ResourceDictionary Source="/Resources/ResourceAccess/ConvertersDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourceDictionaries/BrushesDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourceDictionaries/AssetsDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourceDictionaries/StringDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourceDictionaries/StyleDictionary.xaml"/>
+                <ResourceDictionary Source="/ResourceDictionaries/ConvertersDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,10 +1,10 @@
 ﻿using FtpDownloader.Services.Interfaces.DTO;
 
-namespace FtpDownloader.Services.Models.InfoCollectorModels
+namespace FtpDownloader.Services.Interfaces.Models
 {
     public interface IInfoCollector
     {
-        event Action<InfoDto> SearchFinished;
+        event Action<LogicLayerInfoDto> SearchFinished;
         void BeginSearch(string uri, string username = "", string password = "");
     }
 }

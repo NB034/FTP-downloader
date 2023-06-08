@@ -14,12 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FtpDownloader.DataAccess.Interfaces\FtpDownloader.DataAccess.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Settings\appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\FtpDownloader.Services.Interfaces\FtpDownloader.Services.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

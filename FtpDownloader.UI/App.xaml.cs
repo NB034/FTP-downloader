@@ -1,24 +1,28 @@
-﻿using FtpDownloader.ViewModels;
-using FtpDownloader.Services.Accessories;
-using FtpDownloader.Services.Models.DownloaderModels;
-using FtpDownloader.Services.Models.InfoCollectorModels;
-using FtpDownloader.Services.Models.JournalModels;
+﻿using FtpDownloader.Services.Accessories;
+using FtpDownloader.Services.Interfaces.Models;
 using FluentFTP;
 using System;
 using System.IO;
 using System.Windows;
+using FtpDownloader.Services.TestModels;
+using FtpDownloader.Services.Models;
+using FtpDownloader.Services.Mappers;
+using FtpDownloader.UI.DataSources.ViewModels;
+using FtpDownloader.UI.Views;
 
-namespace FtpDownloader
+namespace FtpDownloader.UI
 {
     public partial class App : Application
     {
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            
+            LogicLayerMapper logicLayerMapper = new LogicLayerMapper();
 
-            IInfoCollector infoCollector = ConstructInfoCollector();
-            IDownloader downloader = new TestDownloader();
-            IJournal journal = new TestJournal();
+            IInfoCollector infoCollector = new TestInfoCollector(logicLayerMapper); //ConstructInfoCollector();
+            IDownloader downloader = new TestDownloader(logicLayerMapper);
+            IJournal journal = new TestJournal(logicLayerMapper);
 
             NotificationPanel_VM notificationPanel = new NotificationPanel_VM();
             DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader);

@@ -10,9 +10,9 @@ namespace FtpDownloader.DataAccess.Repositories
     public partial class JournalRepository : IJournalRepository
     {
         private readonly FtpDownloaderDbContext _context;
-        private readonly EntityToDtoMapper _mapper;
+        private readonly DataLayerMapper _mapper;
 
-        public JournalRepository(FtpDownloaderDbContext context, EntityToDtoMapper mapper)
+        public JournalRepository(FtpDownloaderDbContext context, DataLayerMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -23,7 +23,7 @@ namespace FtpDownloader.DataAccess.Repositories
     // Sync methods
     public partial class JournalRepository
     {
-        public void CreateEntry(EntryEntityDto dto)
+        public void CreateEntry(DataLayerEntryDto dto)
         {
             var entity = _mapper.DtoToEntity(dto);
 
@@ -50,10 +50,10 @@ namespace FtpDownloader.DataAccess.Repositories
             _context.SaveChanges();
         }
 
-        public List<EntryEntityDto> GetEntries()
+        public List<DataLayerEntryDto> GetEntries()
         {
             var entities = _context.EntryEntities.Include(nameof(EntryEntity.TagEntities)).ToList();
-            var dtos = new List<EntryEntityDto>();
+            var dtos = new List<DataLayerEntryDto>();
             foreach (var entity in entities)
             {
                 dtos.Add(_mapper.EntityToDto(entity));
@@ -87,7 +87,7 @@ namespace FtpDownloader.DataAccess.Repositories
     // Async methods
     public partial class JournalRepository
     {
-        public async Task CreateEntryAsync(EntryEntityDto dto)
+        public async Task CreateEntryAsync(DataLayerEntryDto dto)
         {
             var entity = _mapper.DtoToEntity(dto);
 
@@ -114,10 +114,10 @@ namespace FtpDownloader.DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<EntryEntityDto>> GetEntriesAsync()
+        public async Task<List<DataLayerEntryDto>> GetEntriesAsync()
         {
             var entities = await _context.EntryEntities.Include(nameof(EntryEntity.TagEntities)).ToListAsync();
-            var dtos = new List<EntryEntityDto>();
+            var dtos = new List<DataLayerEntryDto>();
             foreach (var entity in entities)
             {
                 dtos.Add(_mapper.EntityToDto(entity));

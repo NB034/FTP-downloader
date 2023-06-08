@@ -6,21 +6,17 @@
     <RootNamespace>File_downloader</RootNamespace>
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
-	<UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Assets\Ionicons-CheckmarkCircleOutlineiOS.png" />
-    <None Remove="Resources\Assets\Ionicons-CloseCircleOutlineiOS.png" />
-    <None Remove="Resources\Assets\Ionicons-CloseiOS.png" />
-    <None Remove="Resources\Assets\Ionicons-PauseiOS.png" />
-    <None Remove="Resources\Assets\Ionicons-PlayiOS.png" />
-    <None Remove="Resources\Assets\Ionicons-RadioButtonOffiOS.png" />
+    <None Remove="Assets\Ionicons-CheckmarkCircleOutlineiOS.png" />
+    <None Remove="Assets\Ionicons-CloseCircleOutlineiOS.png" />
+    <None Remove="Assets\Ionicons-RadioButtonOffiOS.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Assets\AppIcon.ico" />
+    <Content Include="Assets\AppIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,27 +26,25 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FtpDownloader.Services\FtpDownloader.Services.csproj" />
+    <ProjectReference Include="..\FtpDownloader.UI.DataSources\FtpDownloader.UI.DataSources.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Assets\Ionicons-CheckmarkCircleOutlineiOS.png">
+    <Resource Include="Assets\Ionicons-CheckmarkCircleOutlineiOS.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Assets\Ionicons-CloseCircleOutlineiOS.png">
+    <Resource Include="Assets\Ionicons-CloseCircleOutlineiOS.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Assets\Ionicons-CloseiOS.png">
+    <Resource Include="Assets\Ionicons-RadioButtonOffiOS.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Assets\Ionicons-PauseiOS.png">
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings\appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Assets\Ionicons-PlayiOS.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Assets\Ionicons-RadioButtonOffiOS.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </None>
   </ItemGroup>
 
 </Project>
