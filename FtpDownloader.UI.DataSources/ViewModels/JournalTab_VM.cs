@@ -19,7 +19,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly NotificationPanel_VM _notificationPanel;
         private readonly LogicLayerMapper _logicLayerMapper;
         private readonly DownloadDtoToEntryDtoMapper _dtoMapper;
-        private  JournalEntry_VM _entry = null;
+        private  JournalEntry _entry = null;
 
         private string _searchLine = "";
         private bool _isLoading = false;
@@ -41,7 +41,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _removeEntryCommand = new AutoEventCommandBase(_ => RemoveEntry(), _ => CanRemoveEntry());
             _removeAllEntriesCommand = new AutoEventCommandBase(_ => RemoveAllEntries(), _ => CanRemoveAllEntries());
 
-            JournalEntries = new ObservableCollection<JournalEntry_VM>();
+            JournalEntries = new ObservableCollection<JournalEntry>();
 
             downloader.DownloadCompleted += AddEntry;
             downloader.DownloadCancelled += AddEntry;
@@ -61,7 +61,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<JournalEntry_VM> JournalEntries { get; set; }
+        public ObservableCollection<JournalEntry> JournalEntries { get; set; }
 
         public AutoEventCommandBase SearchCommand => _searchCommand;
         public AutoEventCommandBase ResetCommand => _resetCommand;
@@ -69,7 +69,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         public AutoEventCommandBase RemoveAllEntriesCommand => _removeAllEntriesCommand;
 
         public IJournal Journal => _journal;
-        public JournalEntry_VM Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }
+        public JournalEntry Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }
 
         public string SearchLine { get => _searchLine; set => SetProperty(ref _searchLine, value, nameof(SearchLine)); }
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value, nameof(IsLoading)); }

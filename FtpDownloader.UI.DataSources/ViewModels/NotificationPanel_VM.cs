@@ -12,7 +12,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public NotificationPanel_VM()
         {
-            Notifications = new ObservableCollection<Notification_VM>();
+            Notifications = new ObservableCollection<Notification>();
             _closeNotificationCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
             _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
         }
@@ -23,7 +23,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public AutoEventCommandBase CloseNotificationCommand => _closeNotificationCommand;
         public AutoEventCommandBase CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
-        public ObservableCollection<Notification_VM> Notifications { get; set; }
+        public ObservableCollection<Notification> Notifications { get; set; }
         public int MaxNotifications { get; set; } = 50;
 
 
@@ -32,7 +32,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         private void RemoveNotification(object o)
         {
-            var notification = (Notification_VM)o;
+            var notification = (Notification)o;
             Notifications.Remove(notification);
         }
 
@@ -43,7 +43,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public void AddPositiveNotification(string message)
         {
-            Notifications.Add(new Notification_VM
+            Notifications.Add(new Notification
             {
                 Type = NotificationTypesEnum.Positive,
                 Message = message,
@@ -53,7 +53,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public void AddNeutralNotification(string message)
         {
-            Notifications.Add(new Notification_VM
+            Notifications.Add(new Notification
             {
                 Type = NotificationTypesEnum.Neutral,
                 Message = message,
@@ -63,7 +63,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public void AddNegativeNotification(Exception exception)
         {
-            Notifications.Add(new Notification_VM
+            Notifications.Add(new Notification
             {
                 Type = NotificationTypesEnum.Negative,
                 Message = exception.Message,
@@ -73,7 +73,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public void AddNotification(NotificationTypesEnum type, string message)
         {
-            Notifications.Add(new Notification_VM
+            Notifications.Add(new Notification
             {
                 Type = type,
                 Message = message

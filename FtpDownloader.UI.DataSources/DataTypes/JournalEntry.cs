@@ -2,7 +2,7 @@
 
 namespace FtpDownloader.UI.DataSources.DataTypes
 {
-    public class JournalEntry_VM
+    public class JournalEntry
     {
         public int Id { get; set; }
         public string FileName { get; set; }

@@ -2,7 +2,7 @@
 
 namespace FtpDownloader.UI.DataSources.DataTypes
 {
-    public class Notification_VM
+    public class Notification
     {
         public NotificationTypesEnum Type { get; set; }
         public string Message { get; set; } = "";
