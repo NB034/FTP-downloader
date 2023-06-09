@@ -19,7 +19,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly NotificationPanel_VM _notificationPanel;
         private readonly LogicLayerMapper _logicLayerMapper;
         private readonly DownloadDtoToEntryDtoMapper _dtoMapper;
-        private  JournalEntry _entry = null;
+        private JournalEntry _entry = null;
 
         private string _searchLine = "";
         private bool _isLoading = false;
@@ -109,6 +109,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             System.Windows.Application.Current.Dispatcher.Invoke(async () =>
             {
                 IsLoading = true;
+
                 Entry = null;
                 JournalEntries.Clear();
                 var entries = (await _journal.GetEntries()).Where(e => e.Tags.Any(t => t.Contains(_searchLine))).ToList();
@@ -116,6 +117,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 {
                     JournalEntries.Add(_logicLayerMapper.DtoToEntry(entry));
                 }
+
+                IsLoading = false;
             });
         }
 
@@ -131,7 +134,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 Entry = null;
                 JournalEntries.Clear();
                 foreach (var vw in viewModels) JournalEntries.Add(vw);
-                
+
                 IsLoading = false;
             });
         }
@@ -139,9 +142,9 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         public bool CanRemoveEntry() => _entry != null;
         public async Task RemoveEntry()
         {
+            await _journal.DeleteEntry(_logicLayerMapper.EntryToDto(Entry));
             JournalEntries.Remove(_entry);
             Entry = null;
-            await _journal.DeleteEntry(_logicLayerMapper.EntryToDto(Entry));
         }
 
         public bool CanRemoveAllEntries() => JournalEntries.Any();

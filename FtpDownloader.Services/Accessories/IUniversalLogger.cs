@@ -2,7 +2,7 @@
 
 namespace FtpDownloader.Services.Accessories
 {
-    public interface IUniversalLogger : IFtpLogger
+    public interface IAdvancedFtpLogger : IFtpLogger
     {
         void Log(string message);
     }

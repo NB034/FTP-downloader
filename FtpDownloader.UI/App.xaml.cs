@@ -12,6 +12,9 @@ using System.IO;
 using FtpDownloader.Services.Accessories;
 using FluentFTP;
 using FtpDownloader.Services.Models;
+using FtpDownloader.DataAccess.Contexts;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace FtpDownloader.UI
 {
@@ -22,29 +25,38 @@ namespace FtpDownloader.UI
         public App()
         {
             _host = Host.CreateDefaultBuilder()
-            .ConfigureServices((services) =>
-            {
-                services.AddSingleton<MainWindow>();
+                .ConfigureAppConfiguration((context, configBuilder) =>
+                {
+                    configBuilder.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "Settings"));
+                    configBuilder.AddJsonFile("appsettings.json", false);
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddSingleton<MainWindow>();
 
-                services.AddSingleton<MainWindow_VM>();
-                services.AddSingleton<DownloadList_VM>();
-                services.AddSingleton<DownloadTab_VM>();
-                services.AddSingleton<JournalTab_VM>();
-                services.AddSingleton<NotificationPanel_VM>();
+                    services.AddSingleton<MainWindow_VM>();
+                    services.AddSingleton<DownloadList_VM>();
+                    services.AddSingleton<DownloadTab_VM>();
+                    services.AddSingleton<JournalTab_VM>();
+                    services.AddSingleton<NotificationPanel_VM>();
 
-                services.AddSingleton<IDownloader, TestDownloader>();
-                services.AddSingleton<IInfoCollector, TestInfoCollector>();
-                services.AddSingleton<IJournal, TestJournal>();
+                    services.AddSingleton<IDownloader, TestDownloader>();
+                    services.AddSingleton<IInfoCollector, TestInfoCollector>();
+                    services.AddSingleton<IJournal, Journal>();
 
-                services.AddSingleton<IJournalRepository, JournalRepository>();
+                    services.AddSingleton<IJournalRepository, JournalRepository>();
+                    services.AddDbContext<FtpDownloaderDbContext>();
+                    services.AddSingleton<DbContextOptions>(new DbContextOptionsBuilder()
+                        .UseSqlite(context.Configuration.GetConnectionString("sqliteConnectionString"))
+                        .Options);
 
-                services.AddSingleton<UI.DataSources.Mappers.DownloadDtoToEntryDtoMapper>();
-                services.AddSingleton<UI.DataSources.Mappers.LogicLayerMapper>();
-                services.AddSingleton<Services.Mappers.LogicLayerMapper>();
-                services.AddSingleton<Services.Mappers.DataLayerMapper>();
-                services.AddSingleton<DataAccess.Mappers.DataLayerMapper>();
-            })
-            .Build();
+                    services.AddSingleton<UI.DataSources.Mappers.DownloadDtoToEntryDtoMapper>();
+                    services.AddSingleton<UI.DataSources.Mappers.LogicLayerMapper>();
+                    services.AddSingleton<Services.Mappers.LogicLayerMapper>();
+                    services.AddSingleton<Services.Mappers.DataLayerMapper>();
+                    services.AddSingleton<DataAccess.Mappers.DataLayerMapper>();
+                })
+                .Build();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -64,36 +76,6 @@ namespace FtpDownloader.UI
 
             base.OnExit(e);
         }
-
-
-
-
-
-
-
-
-
-        //protected override void OnStartup(StartupEventArgs e)
-        //{
-        //    base.OnStartup(e);
-
-        //    Services.Mappers.LogicLayerMapper servicesLogicLayerMapper = new Services.Mappers.LogicLayerMapper();
-        //    DataSources.Mappers.LogicLayerMapper dataSourcesLogicLayerMapper = new DataSources.Mappers.LogicLayerMapper();
-        //    DownloadDtoToEntryDtoMapper dtoMapper = new DownloadDtoToEntryDtoMapper();
-
-        //    IInfoCollector infoCollector = new TestInfoCollector(servicesLogicLayerMapper); //ConstructInfoCollector();
-        //    IDownloader downloader = new TestDownloader(servicesLogicLayerMapper);
-        //    IJournal journal = new TestJournal(servicesLogicLayerMapper);
-
-        //    NotificationPanel_VM notificationPanel = new NotificationPanel_VM();
-        //    DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader, dataSourcesLogicLayerMapper);
-        //    DownloadTab_VM downloadTab = new DownloadTab_VM(notificationPanel, downloadList, infoCollector);
-        //    JournalTab_VM journalTab = new JournalTab_VM(journal, downloader, notificationPanel, dataSourcesLogicLayerMapper, dtoMapper);
-
-        //    MainWindow_VM mainViewModel = new MainWindow_VM(notificationPanel, downloadTab, journalTab);
-        //    MainWindow window = new MainWindow(mainViewModel);
-        //    window.Show();
-        //}
 
         //protected IInfoCollector ConstructInfoCollector()
         //{

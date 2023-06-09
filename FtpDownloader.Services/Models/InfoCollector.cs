@@ -8,11 +8,11 @@ namespace FtpDownloader.Services.Models
 {
     public class InfoCollector : IInfoCollector
     {
-        readonly IUniversalLogger _logger;
+        readonly IAdvancedFtpLogger _logger;
         readonly FtpConfig _config;
 
         public InfoCollector() : this(null, null) { }
-        public InfoCollector(IUniversalLogger ftpLogger, FtpConfig config)
+        public InfoCollector(IAdvancedFtpLogger ftpLogger, FtpConfig config)
         {
             _config = config;
             _logger = ftpLogger;

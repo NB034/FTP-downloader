@@ -89,14 +89,15 @@ namespace FtpDownloader.DataAccess.Repositories
     {
         public async Task CreateEntryAsync(DataLayerEntryDto dto)
         {
-            var entity = _mapper.DtoToEntity(dto);
+            var entryEntity = _mapper.DtoToEntity(dto);
+            entryEntity = (await _context.EntryEntities.AddAsync(entryEntity)).Entity;
 
             foreach (var tag in dto.Tags)
             {
-                entity.TagEntities.Add(await GetOrCreateAsync(tag));
+                var tagEntity = await GetOrCreateAsync(tag);
+                entryEntity.TagEntities.Add(tagEntity);
             }
 
-            await _context.EntryEntities.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 

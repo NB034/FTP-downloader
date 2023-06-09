@@ -1,5 +1,4 @@
 ﻿using FtpDownloader.DataAccess.Interfaces.Repositories;
-using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Mappers;
 using FtpDownloader.Services.Interfaces.Models;
@@ -8,9 +7,9 @@ namespace FtpDownloader.Services.Models
 {
     public class Journal : IJournal
     {
-        //private string _pathToSettings = "..//Settings//appsettings.json";
         private readonly IJournalRepository _repository;
-        private readonly DataLayerMapper _mapper;
+        private readonly DataLayerMapper _dataLayerMapper;
+        private readonly LogicLayerMapper _logicLayerMapper;
 
         public event Action EntriesLoaded;
         public event Action EntryDeleted;
@@ -18,59 +17,27 @@ namespace FtpDownloader.Services.Models
         public event Action AllEntriesDeleted;
         public event Action<Exception> ExceptionThrowned;
 
-        public Journal(IJournalRepository repository, DataLayerMapper mapper)
+        public Journal(IJournalRepository repository, DataLayerMapper dataLayerMapper, LogicLayerMapper logicLayerMapper)
         {
             _repository = repository;
-            _mapper = mapper;
-
-            //try
-            //{
-            //    var configBuilder = new ConfigurationBuilder();
-            //    configBuilder.SetBasePath(Directory.GetCurrentDirectory());
-            //    configBuilder.AddJsonFile(_pathToSettings);
-
-            //    var config = configBuilder.Build();
-            //    string connectionString = config.GetConnectionString("connectionString");
-
-            //    _context = FtpDownloaderDbContext.CreateSQLiteContext(connectionString);
-
-            //    _mapper = new JournalEntryMapper(_context);
-            //}
-            //catch (Exception ex)
-            //{
-            //    ExceptionThrowned?.Invoke(ex);
-            //}
+            _dataLayerMapper = dataLayerMapper;
+            _logicLayerMapper = logicLayerMapper;
         }
 
-        public async Task<Entry[]> GetEntries()
+        public async Task DeleteAllEntries()
         {
-            var enries = new List<Entry>();
-            try
-            {
-                var dtos = await _repository.GetEntriesAsync();
-
-                foreach (var dto in dtos)
-                {
-                    enries.Add(_mapper.DtoToEntry(dto));
-                }
-                EntriesLoaded?.Invoke();
-                return enries.ToArray();
-            }
-            catch (Exception ex)
-            {
-                ExceptionThrowned?.Invoke(ex);
-            }
-            return enries.ToArray();
+            await _repository.DeleteAllEntriesAsync();
+            AllEntriesDeleted?.Invoke();
         }
 
-        public async Task CreateEntry(Entry entry)
+        public async Task CreateEntry(LogicLayerEntryDto dto)
         {
             try
             {
-                var dto = _mapper.EntryToDto(entry);
+                var entry = _logicLayerMapper.DtoToEntry(dto);
+                var dataDto = _dataLayerMapper.EntryToDto(entry);
 
-                await _repository.CreateEntryAsync(dto);
-
+                await _repository.CreateEntryAsync(dataDto);
                 EntryCreated?.Invoke();
             }
             catch (Exception ex)
@@ -79,7 +46,7 @@ namespace FtpDownloader.Services.Models
             }
         }
 
-        public async Task DeleteEntry(Entry entry)
+        public async Task DeleteEntry(LogicLayerEntryDto entry)
         {
             try
             {
@@ -96,25 +63,27 @@ namespace FtpDownloader.Services.Models
             }
         }
 
-        public async Task DeleteAllEntries()
+        public async Task<LogicLayerEntryDto[]> GetEntries()
         {
-            await _repository.DeleteAllEntriesAsync();
-            AllEntriesDeleted?.Invoke();
-        }
+            var entries = new List<LogicLayerEntryDto>();
+            try
+            {
+                var dtos = await _repository.GetEntriesAsync();
 
-        public Task CreateEntry(LogicLayerEntryDto entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteEntry(LogicLayerEntryDto entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<LogicLayerEntryDto[]> IJournal.GetEntries()
-        {
-            throw new NotImplementedException();
+                foreach (var dto in dtos)
+                {
+                    var entry = _dataLayerMapper.DtoToEntry(dto);
+                    var logicDto = _logicLayerMapper.EntryToDto(entry);
+                    entries.Add(logicDto);
+                }
+                EntriesLoaded?.Invoke();
+                return entries.ToArray();
+            }
+            catch (Exception ex)
+            {
+                ExceptionThrowned?.Invoke(ex);
+            }
+            return entries.ToArray();
         }
     }
 }

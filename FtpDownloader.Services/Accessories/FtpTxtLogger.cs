@@ -2,7 +2,7 @@
 
 namespace FtpDownloader.Services.Accessories
 {
-    public class FtpTxtLogger : IUniversalLogger
+    public class FtpTxtLogger : IAdvancedFtpLogger
     {
         protected readonly string _path;
 
