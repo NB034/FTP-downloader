@@ -15,7 +15,7 @@ namespace FtpDownloader.Services.TestModels
             _mapper = mapper;
             _downloads = new List<Download>();
 
-            Seed();
+            _ = Seed();
         }
 
         public event Action<LogicLayerDownloadDto> DownloadStarted;
@@ -97,7 +97,6 @@ namespace FtpDownloader.Services.TestModels
                         return;
                     }
 
-                    //if (download.OnPause) SpinWait.SpinUntil(() => !download.OnPause);
                     if (download.OnPause) continue;
                     else counter++;
 
@@ -115,26 +114,24 @@ namespace FtpDownloader.Services.TestModels
 
 
 
-        private void Seed()
+        private async Task Seed()
         {
-            _downloads.AddRange(new[]
+
+            await StartNewDownload(new LogicLayerDownloadDto
             {
-                new Download
-                {
-                     Cancelling = false,
-                     DownloadDate= DateTime.Now,
-                     DownloadedBytes = 0,
-                     DownloadGuid = Guid.Empty,
-                     From = "Some/where",
-                     Name = "Test",
-                     OnPause= true,
-                     Password = string.Empty,
-                     Size = 1024,
-                     Tags = new List<string> {"test", "oneMoreTest"},
-                     To = "Here",
-                     UseCreadentials = false,
-                     Username = "Test",
-                }
+                Cancelling = false,
+                DownloadDate = DateTime.Now,
+                DownloadedBytes = 0,
+                DownloadGuid = Guid.NewGuid(),
+                From = "Some/where",
+                Name = "Test",
+                OnPause = true,
+                Password = string.Empty,
+                Size = 1024,
+                Tags = new List<string> { "test", "oneMoreTest" },
+                To = "Here",
+                UseCreadentials = false,
+                Username = "Test",
             });
         }
     }

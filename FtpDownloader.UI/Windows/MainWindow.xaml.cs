@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FtpDownloader.UI.DataSources.ViewModels;
+using System.Windows;
 
 namespace FtpDownloader.UI.Windows
 {
@@ -7,8 +8,10 @@ namespace FtpDownloader.UI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainWindow_VM viewModel)
         {
+            DataContext = viewModel;
+
             InitializeComponent();
         }
     }

@@ -41,6 +41,11 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _resumeAllCommand = new AutoEventCommandBase(_ => ResumeAll(), _ => CanResumeAll());
             _pauseAllCommand = new AutoEventCommandBase(_ => PauseAll(), _ => CanPauseAll());
             _cancelAllCommand = new AutoEventCommandBase(_ => CancelAll(), _ => CanCancelAll());
+
+            foreach(var download in _downloader.GetDownloads())
+            {
+                Downloads.Add(_mapper.DtoToDownload(download));
+            }
         }
 
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
