@@ -27,9 +27,9 @@ namespace FtpDownloader.UI
             IJournal journal = new TestJournal(servicesLogicLayerMapper);
 
             NotificationPanel_VM notificationPanel = new NotificationPanel_VM();
-            DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader, dtoMapper);
+            DownloadList_VM downloadList = new DownloadList_VM(notificationPanel, downloader, dataSourcesLogicLayerMapper);
             DownloadTab_VM downloadTab = new DownloadTab_VM(notificationPanel, downloadList, infoCollector);
-            JournalTab_VM journalTab = new JournalTab_VM(journal, downloader, notificationPanel, dataSourcesLogicLayerMapper);
+            JournalTab_VM journalTab = new JournalTab_VM(journal, downloader, notificationPanel, dataSourcesLogicLayerMapper, dtoMapper);
 
             MainWindow_VM mainViewModel = new MainWindow_VM(notificationPanel, downloadTab, journalTab);
             MainWindow window = new MainWindow { DataContext = mainViewModel };

@@ -6,6 +6,7 @@ using System.IO;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
+using FtpDownloader.UI.DataSources.Accessories;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
@@ -94,22 +95,23 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         private void OnSearchFinished(LogicLayerInfoDto obj)
         {
-            //if (obj.IsExist)
-            //{
-            //    ResourceCheckmark.Verify();
-            //    if (obj.Exstention == String.Empty) FileExtension = "dir";
-            //    else FileExtension = obj.Exstention;
-            //    _infoModel = obj;
+            if (obj.IsExist)
+            {
+                ResourceCheckmark.Verify();
+                FileName = Path.GetFileName(_resourceUrl);
+                if (obj.Exstention == String.Empty) FileExtension = "dir";
+                else FileExtension = obj.Exstention;
+                _infoModel = obj;
 
-            //    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            //    _notificationPanel.AddPositiveNotification("Resource was found!"));
-            //}
-            //else
-            //{
-            //    ResourceCheckmark.Reject();
-            //    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            //    _notificationPanel.AddNotification(NotificationTypesEnum.Negative, "Resource wasn't found!"));
-            //}
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                _notificationPanel.AddPositiveNotification("Resource was found!"));
+            }
+            else
+            {
+                ResourceCheckmark.Reject();
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, "Resource wasn't found!"));
+            }
         }
 
         private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -279,7 +281,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 OnPause = !_startImmediately,
                 Size = _infoModel.SizeInBytes,
                 To = _localDirectory,
-                UseCredentials = _useCredentials
+                UseCredentials = _useCredentials,
+                Tags = Tags.ToList()
             };
 
             if (_useCredentials)

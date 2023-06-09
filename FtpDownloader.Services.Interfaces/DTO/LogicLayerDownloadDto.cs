@@ -20,6 +20,6 @@ namespace FtpDownloader.Services.Interfaces.DTO
         public string Password { get; set; }
         public DateTime DownloadDate { get; set; }
         public Guid DownloadGuid { get; set; }
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new();
     }
 }

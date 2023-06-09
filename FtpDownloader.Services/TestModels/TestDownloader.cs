@@ -19,11 +19,11 @@ namespace FtpDownloader.Services.TestModels
         }
 
         public event Action<LogicLayerDownloadDto> DownloadStarted;
-        public event Action<LogicLayerDownloadDto> DownloadedProgressChanged;
+        public event Action<LogicLayerDownloadDto> DownloadProgressChanged;
         public event Action<LogicLayerDownloadDto> DownloadCancelled;
         public event Action<LogicLayerDownloadDto> DownloadCompleted;
         public event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
-  
+
 
 
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
@@ -84,28 +84,31 @@ namespace FtpDownloader.Services.TestModels
             _downloads.Add(download);
             await Task.Run(async () =>
             {
-                DownloadStarted?.Invoke(dto);
+                DownloadStarted?.Invoke(_mapper.DownloadToDto(download));
 
                 var counter = 0;
                 while (counter < 5)
                 {
                     if (download.Cancelling)
                     {
+                        download.DownloadDate = DateTime.Now;
                         _downloads.Remove(download);
-                        DownloadCancelled?.Invoke(dto);
+                        DownloadCancelled?.Invoke(_mapper.DownloadToDto(download));
                         return;
                     }
 
-                    if (download.OnPause) SpinWait.SpinUntil(() => !download.OnPause);
+                    //if (download.OnPause) SpinWait.SpinUntil(() => !download.OnPause);
+                    if (download.OnPause) continue;
                     else counter++;
 
                     await Task.Delay(1000);
                     download.DownloadedBytes += download.Size / 5;
-                    DownloadedProgressChanged?.Invoke(dto);
+                    DownloadProgressChanged?.Invoke(_mapper.DownloadToDto(download));
                 }
 
+                download.DownloadDate = DateTime.Now;
                 _downloads.Remove(download);
-                DownloadCompleted?.Invoke(dto);
+                DownloadCompleted?.Invoke(_mapper.DownloadToDto(download));
             });
         }
 

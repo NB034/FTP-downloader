@@ -10,8 +10,8 @@ namespace FtpDownloader.UI.DataSources.DataTypes
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Verify() { IsVerified = true; Icon = NotificationTypesEnum.Neutral; Notify(); }
-        public void Reject() { IsVerified = false; Icon = NotificationTypesEnum.Neutral; Notify(); }
+        public void Verify() { IsVerified = true; Icon = NotificationTypesEnum.Positive; Notify(); }
+        public void Reject() { IsVerified = false; Icon = NotificationTypesEnum.Negative; Notify(); }
         public void Reset() { IsVerified = false; Icon = NotificationTypesEnum.Neutral; Notify(); }
 
         private void Notify() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Icon)));

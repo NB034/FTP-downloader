@@ -11,7 +11,6 @@ namespace FtpDownloader.UI.DataSources.DataTypes
         public string DownloadDate { get; set; }
         public double FileSize { get; set; }
         public NotificationTypesEnum Result { get; set; }
-
         public List<string> Tags { get; set; }
     }
 }

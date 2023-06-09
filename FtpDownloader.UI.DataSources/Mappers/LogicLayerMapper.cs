@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FtpDownloader.Services.Interfaces.DTO;
+using FtpDownloader.UI.DataSources.Accessories;
 using FtpDownloader.UI.DataSources.DataTypes;
+using System.IO;
 
 namespace FtpDownloader.UI.DataSources.Mappers
 {
@@ -33,22 +35,31 @@ namespace FtpDownloader.UI.DataSources.Mappers
 
         private Mapper InitializeDownloadToDto()
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Download_VM, LogicLayerDownloadDto>());
+            return new Mapper(config);
         }
 
         private Mapper InitializeDtoToDownload()
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<LogicLayerDownloadDto, Download_VM>());
+            return new Mapper(config);
         }
 
         private Mapper InitializeEntryToDto()
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntry_VM, LogicLayerEntryDto>()
+            .ForMember(nameof(LogicLayerEntryDto.WasSuccessful), opt => opt.MapFrom(vm => vm.Result == NotificationTypesEnum.Positive))
+            .ForMember(nameof(LogicLayerEntryDto.LocalPath), opt => opt.MapFrom(vm => Path.Combine(vm.LocalPath, vm.FileName))));
+            return new Mapper(config);
         }
 
         private Mapper InitializeDtoToEntry()
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<LogicLayerEntryDto, JournalEntry_VM>()
+            .ForMember(nameof(JournalEntry_VM.Result), opt => opt.MapFrom(dto => dto.WasSuccessful ? NotificationTypesEnum.Positive : NotificationTypesEnum.Negative))
+            .ForMember(nameof(JournalEntry_VM.FileName), opt => opt.MapFrom(dto => Path.GetFileName(dto.LocalPath)))
+            .ForMember(nameof(JournalEntry_VM.LocalPath), opt => opt.MapFrom(dto => Path.GetDirectoryName(dto.LocalPath))));
+            return new Mapper(config);
         }
     }
 }

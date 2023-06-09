@@ -4,13 +4,14 @@ using FtpDownloader.Services.Interfaces.Models;
 using System.Collections.ObjectModel;
 using FtpDownloader.UI.DataSources.Mappers;
 using FtpDownloader.UI.DataSources.Command;
+using FtpDownloader.UI.DataSources.Accessories;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
     public class DownloadList_VM
     {
         private readonly NotificationPanel_VM _notificationPanel;
-        private readonly DownloadDtoToEntryDtoMapper _mapper;
+        private readonly LogicLayerMapper _mapper;
         private readonly IDownloader _downloader;
 
         private readonly AutoEventCommandBase _resumeCommand;
@@ -20,7 +21,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly AutoEventCommandBase _pauseAllCommand;
         private readonly AutoEventCommandBase _cancelAllCommand;
 
-        public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader, DownloadDtoToEntryDtoMapper mapper)
+        public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader, LogicLayerMapper mapper)
         {
             _notificationPanel = notificationPanel;
             _mapper = mapper;
@@ -31,7 +32,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             downloader.DownloadFailed += OnDownloadFailed;
             downloader.DownloadCancelled += OnDownloadCancelled;
             downloader.DownloadCompleted += OnDownloadCompleted;
-            downloader.DownloadedProgressChanged += OnDownloadProgress;
+            downloader.DownloadProgressChanged += OnDownloadProgress;
             downloader.DownloadStarted += OnDownloadStarted;
 
             _resumeCommand = new AutoEventCommandBase(o => Resume(o), o => CanResume(o));
@@ -59,15 +60,15 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public void StartNewDownload(Download_VM download)
         {
-            //_downloader.StartNewDownload(_mapper.VmToModel(download));
+            _downloader.StartNewDownload(_mapper.DownloadToDto(download));
         }
 
         private void OnDownloadStarted(LogicLayerDownloadDto obj)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                //Downloads.Add(_mapper.ModelToVm(obj));
-                //_notificationPanel.AddPositiveNotification($"Download of {obj.Name} has started!");
+                Downloads.Add(_mapper.DtoToDownload(obj));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} has started!");
             });
         }
 
@@ -75,8 +76,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                //var download = Downloads.First(d => d.DownloadGuid == obj.DownloadGuid);
-                //download.DownloadedBytes = obj.DownloadedBytes;
+                var download = Downloads.First(d => d.DownloadGuid == obj.DownloadGuid);
+                download.DownloadedBytes = obj.DownloadedBytes;
             });
         }
 
@@ -84,8 +85,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                //Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
-                //_notificationPanel.AddPositiveNotification($"Download of {obj.Name} completed!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} completed!");
             });
         }
 
@@ -93,8 +94,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                //Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
-                //_notificationPanel.AddPositiveNotification($"Download of {obj.Name} cancelled!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} cancelled!");
             });
         }
 
@@ -102,8 +103,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                //Downloads.Remove(Downloads.First(d => d.DownloadGuid == arg1.DownloadGuid));
-                //_notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == arg1.DownloadGuid));
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
             });
         }
 

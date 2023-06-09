@@ -85,6 +85,8 @@ namespace FtpDownloader.UI.DataSources.DataTypes
 
         public double Percent => DownloadedBytes * 100.0 / Size;
 
+        public List<string> Tags { get; set; }
+
         private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
         {
             if (!oldValue?.Equals(newValue) ?? newValue != null)

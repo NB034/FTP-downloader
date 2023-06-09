@@ -5,7 +5,7 @@ namespace FtpDownloader.Services.Interfaces.Models
     public interface IDownloader
     {
         event Action<LogicLayerDownloadDto> DownloadStarted;
-        event Action<LogicLayerDownloadDto> DownloadedProgressChanged;
+        event Action<LogicLayerDownloadDto> DownloadProgressChanged;
         event Action<LogicLayerDownloadDto> DownloadCancelled;
         event Action<LogicLayerDownloadDto> DownloadCompleted;
         event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
