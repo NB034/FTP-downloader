@@ -40,10 +40,11 @@ namespace FtpDownloader.UI
                     services.AddSingleton<JournalTab_VM>();
                     services.AddSingleton<NotificationPanel_VM>();
 
-                    services.AddSingleton<IDownloader, TestDownloader>();
-                    services.AddSingleton<IInfoCollector, TestInfoCollector>();
-                    services.AddSingleton<IJournal, Journal>();
+                    services.AddSingleton<IDownloader, Test_Downloader>();
 
+                    services.AddSingleton<IInfoCollector, InfoCollector>();
+
+                    services.AddSingleton<IJournal, Journal>();
                     services.AddSingleton<IJournalRepository, JournalRepository>();
                     services.AddDbContext<FtpDownloaderDbContext>();
                     services.AddSingleton<DbContextOptions>(new DbContextOptionsBuilder()
@@ -77,24 +78,20 @@ namespace FtpDownloader.UI
             base.OnExit(e);
         }
 
-        //protected IInfoCollector ConstructInfoCollector()
-        //{
-        //    string fileName = "Log.txt";
-        //    var folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        //    string path = Path.Combine(folder, fileName);
 
-        //    IUniversalLogger logger = new FtpTxtLogger(path);
 
-        //    var config = new FtpConfig
-        //    {
-        //        LogHost = true,
-        //        LogUserName = true,
-        //        LogPassword = true,
-        //    };
 
-        //    IInfoCollector infoCollector = new InfoCollector(logger, config);
-
-        //    return infoCollector;
-        //}
+        private void AddTestInfoCollectorWithLogger(IServiceCollection services)
+        {
+            services.AddSingleton<IInfoCollector, Test_InfoCollectorWithLogger>();
+            services.AddSingleton<IAdvancedFtpLogger, FtpTxtLogger>(_ => new FtpTxtLogger(Path
+                .Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "FtpLog.txt")));
+            services.AddSingleton<FtpConfig>(new FtpConfig
+            {
+                LogHost = true,
+                LogUserName = true,
+                LogPassword = true,
+            });
+        }
     }
 }

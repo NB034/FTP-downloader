@@ -116,8 +116,8 @@
                                         </TextBlock.Text>
                                     </TextBlock>
 
-                                    <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource ResourceUrl}" FontSize="10" Padding="5,2,5,2"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" FontSize="10" Text="{Binding From}" Padding="5,2,5,2"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource ResourceUri}" FontSize="10" Padding="5,2,5,2"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" FontSize="10" Text="{Binding Path}" Padding="5,2,5,2"/>
 
                                     <Label Grid.Row="2" Grid.Column="2" Content="{StaticResource DownloadTo}" FontSize="10" Padding="5,2,5,2"/>
                                     <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" FontSize="10" Text="{Binding To}" Padding="5,2,5,2"/>

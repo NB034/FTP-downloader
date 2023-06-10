@@ -35,11 +35,11 @@ namespace FtpDownloader.Services.Models
                 var fileStream = File.Create(Path.Combine(download.To, name));
 
                 AsyncFtpClient client = new AsyncFtpClient();
-                client.Host = new Uri(download.From).Host;
+                client.Host = download.Host;
                 if (download.UseCreadentials) client.Credentials = new NetworkCredential(download.Username, download.Password);
 
                 await client.Connect();
-                var ftpStream = await client.OpenRead(download.From);
+                var ftpStream = await client.OpenRead(download.Path);
                 var bytes = new byte[1024];
 
                 using var br = new BinaryReader(ftpStream);

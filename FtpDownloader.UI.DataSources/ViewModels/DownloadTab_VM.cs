@@ -27,10 +27,9 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _startDownloadCommand = new AutoEventCommandBase(_ => StartDownload(), _ => CanStartDownload());
 
             _infoCollector.SearchFinished += OnSearchFinished;
+            _infoCollector.SearchFailed += OnSearchFailed;
             _downloadList.Downloads.CollectionChanged += OnDownloadsCollectionChanged;
             Tags.CollectionChanged += OnTagsCollectionChanged;
-            PropertyChanged += OnUsernameChanged;
-            PropertyChanged += OnPasswordChanged;
             PropertyChanged += OnFileNameChanged;
             PropertyChanged += OnResourceUriChanged;
         }
@@ -58,7 +57,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         private void OnResourceUriChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ResourceUrl))
+            if (e.PropertyName == nameof(Host))
             {
                 ResourceCheckmark.Reset();
                 FileExtension = String.Empty;
@@ -71,25 +70,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             if (e.PropertyName == nameof(FileName))
             {
                 if (_fileName.Length == 0 || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) FileNameCheckmark.Reject();
-                if (_fileName.Length == 1) FileNameCheckmark.Verify();
-            }
-        }
-
-        private void OnPasswordChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (_useCredentials && e.PropertyName == nameof(Password))
-            {
-                if (_password.Length == 0 || _userName.Length == 0) CredentialsCheckmark.Reject();
-                if (_password.Length == 1 && _userName.Length != 0) CredentialsCheckmark.Verify();
-            }
-        }
-
-        private void OnUsernameChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (_useCredentials && e.PropertyName == nameof(UserName))
-            {
-                if (_userName.Length == 0 || _password.Length == 0) CredentialsCheckmark.Reject();
-                if (_userName.Length == 1 && _password.Length != 0) CredentialsCheckmark.Verify();
+                else FileNameCheckmark.Verify();
             }
         }
 
@@ -98,7 +79,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             if (obj.IsExist)
             {
                 ResourceCheckmark.Verify();
-                FileName = Path.GetFileName(_resourceUrl);
+                FileName = Path.GetFileNameWithoutExtension(_filePath);
                 if (obj.Exstention == String.Empty) FileExtension = "dir";
                 else FileExtension = obj.Exstention;
                 _infoModel = obj;
@@ -112,6 +93,13 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 _notificationPanel.AddNotification(NotificationTypesEnum.Negative, "Resource wasn't found!"));
             }
+        }
+
+        private void OnSearchFailed(Exception obj)
+        {
+            ResourceCheckmark.Reject();
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            _notificationPanel.AddNotification(NotificationTypesEnum.Negative, obj.Message));
         }
 
         private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -166,14 +154,17 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         public string Password { get => _password; set => SetProperty(ref _password, value, nameof(Password)); }
         private string _password = String.Empty;
 
-        public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
 
 
 
 
+        public string Host { get => _host; set { SetProperty(ref _host, value, nameof(Host)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHostEmpty))); } }
+        private string _host = String.Empty;
+        public bool IsHostEmpty => _host == String.Empty;
 
-        public string ResourceUrl { get => _resourceUrl; set => SetProperty(ref _resourceUrl, value, nameof(ResourceUrl)); }
-        private string _resourceUrl = String.Empty;
+        public string FilePath { get => _filePath; set { SetProperty(ref _filePath, value, nameof(FilePath)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFilePathEmpty))); } }
+        private string _filePath = String.Empty;
+        public bool IsFilePathEmpty => _filePath == String.Empty;
 
         public Checkmark_VM ResourceCheckmark { get; private set; } = new Checkmark_VM();
 
@@ -219,14 +210,14 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         // Command methods
 
-        private bool CanSearchRemoteFile() => _resourceUrl != String.Empty && (!_useCredentials || CredentialsCheckmark.IsVerified);
+        private bool CanSearchRemoteFile() => _host != String.Empty;
         private void SearchRemoteFile()
         {
             ResourceCheckmark.Reset();
             _notificationPanel.AddNeutralNotification("Searching...");
 
-            if (_useCredentials) _infoCollector.BeginSearch(_resourceUrl, _userName, _password);
-            else _infoCollector.BeginSearch(_resourceUrl);
+            if (_useCredentials) _infoCollector.BeginSearch("ftp://" + _host, _filePath, _userName, _password);
+            else _infoCollector.BeginSearch("ftp://" + _host, _filePath);
         }
 
 
@@ -266,7 +257,6 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             FileNameCheckmark.IsVerified
             && LocalDirectoryCheckmark.IsVerified
             && ResourceCheckmark.IsVerified
-            && (!UseCrdentials || CredentialsCheckmark.IsVerified)
             && !DownloadsLimitReached;
 
         private void StartDownload()
@@ -277,7 +267,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 Cancelling = false,
                 DownloadedBytes = 0,
                 DownloadGuid = Guid.NewGuid(),
-                From = _resourceUrl,
+                Host = "ftp://" + _host,
+                Path = _filePath,
                 OnPause = !_startImmediately,
                 Size = _infoModel.SizeInBytes,
                 To = _localDirectory,

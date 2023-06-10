@@ -1,17 +1,23 @@
-﻿using FluentFTP;
-using FtpDownloader.Services.DataTypes;
+﻿using FtpDownloader.Services.Accessories;
+using FluentFTP;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
+using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Mappers;
 
-namespace FtpDownloader.Services.Models
+namespace FtpDownloader.Services.TestModels
 {
-    public class InfoCollector : IInfoCollector
+    public class Test_InfoCollectorWithLogger : IInfoCollector
     {
+        readonly IAdvancedFtpLogger _logger;
+        readonly FtpConfig _config;
         readonly LogicLayerMapper _mapper;
 
-        public InfoCollector(LogicLayerMapper mapper)
+        public Test_InfoCollectorWithLogger(LogicLayerMapper mapper) : this(mapper, null, null) { }
+        public Test_InfoCollectorWithLogger(LogicLayerMapper mapper, IAdvancedFtpLogger ftpLogger, FtpConfig config)
         {
+            _config = config;
+            _logger = ftpLogger;
             _mapper = mapper;
         }
 
@@ -23,11 +29,16 @@ namespace FtpDownloader.Services.Models
             FtpClient client = new();
             try
             {
-                client = new FtpClient(host, username, password);
+                client = new FtpClient(host, username, password, logger: _logger, config: _config);
+
+                _logger?.Log($"# Host: {host}; Path: {path};");
+                _logger?.Log($"# Username: {client.Credentials.UserName}; Password: {client.Credentials.Password}");
             }
             catch (Exception ex)
             {
+                _logger?.Log("# Exception: " + ex.Message + ";");
                 client.Dispose();
+                _logger?.Log("------------------------------------");
                 SearchFailed?.Invoke(ex);
                 return;
             }
@@ -44,15 +55,16 @@ namespace FtpDownloader.Services.Models
                         info.Exstention = Path.GetExtension(path);
                         info.SizeInBytes = (int)client.GetFileSize(path);
                     }
+
                     SearchFinished?.Invoke(_mapper.InfoToDto(info));
+                    client.Dispose();
                 }
                 catch (Exception ex)
                 {
-                    SearchFailed?.Invoke(ex);
-                }
-                finally
-                {
+                    _logger?.Log("# Exception: " + ex.Message + ";");
                     client.Dispose();
+                    _logger?.Log("------------------------------------");
+                    SearchFailed?.Invoke(ex);
                 }
             });
         }

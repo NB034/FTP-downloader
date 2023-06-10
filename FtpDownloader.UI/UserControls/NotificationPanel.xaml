@@ -7,44 +7,55 @@
              xmlns:vm="clr-namespace:FtpDownloader.UI.DataSources.ViewModels;assembly=FtpDownloader.UI.DataSources"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:NotificationPanel_VM}">
-    
-    <ItemsControl ItemsSource="{Binding Notifications}">
-        <ItemsControl.ItemsPanel >
-            <ItemsPanelTemplate>
-                <Grid/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <ItemsControl ItemsSource="{Binding Notifications}">
+            <ItemsControl.ItemsPanel >
+                <ItemsPanelTemplate>
+                    <Grid/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
 
-                <Border Style="{StaticResource BorderStyle}" Background="{StaticResource MainBackgroundBrush}" Margin="5,0,5,5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource BorderStyle}" Background="{StaticResource MainBackgroundBrush}" Margin="5,0,5,5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" Background="{Binding Type, Converter={StaticResource EnumToIconConverter}}" Width="30" Height="30" Margin="8,0,8,0"/>
-                        
-                        <TextBlock Grid.Column="1" Text="{Binding Message}" VerticalAlignment="Center" Margin="5"/>
-                        
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                            
-                            <Button Content="{StaticResource CloseNotification}" Style="{StaticResource ButtonStyle}" 
+                            <Border Grid.Column="0" Background="{Binding Type, Converter={StaticResource EnumToIconConverter}}" Width="30" Height="30" Margin="8,0,8,0"/>
+
+                            <TextBlock Grid.Column="1" Text="{Binding Message}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="5"/>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+
+                                <Button Content="{StaticResource CloseNotification}" Style="{StaticResource ButtonStyle}" 
                                     Padding="2,1,2,1" FontSize="10" Margin="5,3,5,3"
                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.CloseNotificationCommand}"
                                     CommandParameter="{Binding}"/>
-                            
-                            <Button Content="{StaticResource CloseAllNotification}" Style="{StaticResource ButtonStyle}" 
+
+                                <Button Content="{StaticResource CloseAllNotification}" Style="{StaticResource ButtonStyle}" 
                                     Padding="2,1,2,1" FontSize="10" Margin="5,3,5,3"
                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.CloseAllNotificationsCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Column="1" VerticalAlignment="Top" BorderThickness="1" Margin="2,0,5,0"
+                Background="{StaticResource MainBackgroundBrush}" BorderBrush="{StaticResource MainBorderBrush}">
+            <TextBlock Text="{Binding Notifications.Count}" TextAlignment="Center" Padding="2" Width="18" FontSize="10"/>
+        </Border>
+    </Grid>
 </UserControl>

@@ -72,17 +72,43 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
+                <!--<Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
                         Background="{Binding CredentialsCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"
-                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
             </Grid>
             <!-- -->
 
 
 
-            <!-- Resource URL -->
-            <Label Grid.Row="1" Content="{StaticResource ResourceUrl}" Margin="5"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5" Text="{Binding ResourceUrl, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <!-- Resource URI -->
+            <Label Grid.Row="1" Content="{StaticResource ResourceUri}" Margin="5"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource BorderStyle}" Margin="5,5,2.5,5" Background="{StaticResource MainBackgroundBrush}">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="ftp://"/>
+                </Border>
+
+                <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="2.5,5,2.5,5"
+                         Text="{Binding Host, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Column="1" Margin="5,5,2.5,5" Content="Host" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                       Visibility="{Binding IsHostEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <Border Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="2.5,5,2.5,5" Background="{StaticResource MainBackgroundBrush}">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="/"/>
+                </Border>
+
+                <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="2.5,5,5,5"
+                         Text="{Binding FilePath, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Column="3" Margin="5,5,2.5,5" Content="Path" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                       Visibility="{Binding IsFilePathEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            </Grid>
             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
                     Content="{StaticResource SearchRemoteFile}" Command="{Binding SearchRemoteFileCommand}"/>
             <Border Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5" 

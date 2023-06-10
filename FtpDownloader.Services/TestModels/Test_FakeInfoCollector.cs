@@ -5,18 +5,19 @@ using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
 {
-    public class TestInfoCollector : IInfoCollector
+    public class Test_FakeInfoCollector : IInfoCollector
     {
         private readonly LogicLayerMapper _mapper;
 
-        public TestInfoCollector(LogicLayerMapper mapper)
+        public Test_FakeInfoCollector(LogicLayerMapper mapper)
         {
             _mapper = mapper;
         }
 
         public event Action<LogicLayerInfoDto> SearchFinished;
+        public event Action<Exception> SearchFailed;
 
-        public void BeginSearch(string uri, string username = "", string password = "")
+        public void BeginSearch(string host, string path, string username = "", string password = "")
         {
             Task.Run(async () =>
             {

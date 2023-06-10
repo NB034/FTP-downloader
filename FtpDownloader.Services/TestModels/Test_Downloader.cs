@@ -5,12 +5,12 @@ using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
 {
-    public class TestDownloader : IDownloader
+    public class Test_Downloader : IDownloader
     {
         private readonly LogicLayerMapper _mapper;
         private List<Download> _downloads;
 
-        public TestDownloader(LogicLayerMapper mapper)
+        public Test_Downloader(LogicLayerMapper mapper)
         {
             _mapper = mapper;
             _downloads = new List<Download>();
@@ -67,6 +67,7 @@ namespace FtpDownloader.Services.TestModels
         public LogicLayerDownloadDto[] GetDownloads()
         {
             var dtos = new List<LogicLayerDownloadDto>();
+            if (!_downloads.Any()) return dtos.ToArray();
             foreach (var download in _downloads)
             {
                 dtos.Add(_mapper.DownloadToDto(download));
@@ -123,7 +124,8 @@ namespace FtpDownloader.Services.TestModels
                 DownloadDate = DateTime.Now,
                 DownloadedBytes = 0,
                 DownloadGuid = Guid.NewGuid(),
-                From = "Some/where",
+                Host= "127.0.0.1",
+                Path = "Some/where",
                 Name = "Test",
                 OnPause = true,
                 Password = string.Empty,

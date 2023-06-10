@@ -5,12 +5,12 @@ using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
 {
-    public class TestJournal : IJournal
+    public class Test_Journal : IJournal
     {
         private List<Entry> _journalEntries;
         private readonly LogicLayerMapper _mapper;
 
-        public TestJournal(LogicLayerMapper mapper)
+        public Test_Journal(LogicLayerMapper mapper)
         {
             _journalEntries = new List<Entry>();
             _mapper = mapper;

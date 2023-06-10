@@ -9,7 +9,8 @@ namespace FtpDownloader.Services.Interfaces.DTO
     public class LogicLayerDownloadDto
     {
         public string Name { get; set; }
-        public string From { get; set; }
+        public string Host { get; set; }
+        public string Path { get; set; }
         public string To { get; set; }
         public double Size { get; set; }
         public double DownloadedBytes { get; set; }
