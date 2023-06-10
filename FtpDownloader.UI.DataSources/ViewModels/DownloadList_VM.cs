@@ -108,7 +108,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Remove(Downloads.First(d => d.DownloadGuid == arg1.DownloadGuid));
+                var download = Downloads.FirstOrDefault(d => d.DownloadGuid == arg1.DownloadGuid); 
+                if(download != null) Downloads.Remove(download);
                 _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
             });
         }
@@ -122,6 +123,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.OnPause = false;
+            ResumeCommand.RaiseCanExecuteChanged();
             _downloader.Resume(vm.DownloadGuid);
         }
 
@@ -130,6 +132,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.OnPause = true;
+            PauseCommand.RaiseCanExecuteChanged();
             _downloader.Pause(vm.DownloadGuid);
         }
 
@@ -138,6 +141,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.Cancelling = true;
+            CancelCommand.RaiseCanExecuteChanged();
             _downloader.Cancel(vm.DownloadGuid);
         }
 
@@ -149,6 +153,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void ResumeAll()
         {
             foreach (var download in Downloads) if (download.OnPause) download.OnPause = false;
+            ResumeAllCommand.RaiseCanExecuteChanged();
             _downloader.ResumeAll();
         }
 
@@ -156,6 +161,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void PauseAll()
         {
             foreach (var download in Downloads) if (!download.OnPause) download.OnPause = true;
+            PauseAllCommand.RaiseCanExecuteChanged();
             _downloader.PauseAll();
         }
 
@@ -163,6 +169,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void CancelAll()
         {
             foreach (var download in Downloads) if (!download.Cancelling) download.Cancelling = true;
+            CancelAllCommand.RaiseCanExecuteChanged();
             _downloader.CancelAll();
         }
     }

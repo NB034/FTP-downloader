@@ -23,7 +23,8 @@ namespace FtpDownloader.Services.Models
             FtpClient client = new();
             try
             {
-                client = new FtpClient(host, username, password);
+                if (username == "") client = new FtpClient(host);
+                else client = new FtpClient(host, username, password);
             }
             catch (Exception ex)
             {

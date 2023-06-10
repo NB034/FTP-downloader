@@ -47,7 +47,6 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             downloader.DownloadCancelled += AddEntry;
             downloader.DownloadFailed += AddEntry;
 
-            _journal.EntriesLoaded += OnEntriesLoaded;
             _journal.EntryDeleted += OnEntryDeleted;
             _journal.AllEntriesDeleted += OnAllEntriesDeleted;
             _journal.ExceptionThrowned += OnExceptionThrowed;
@@ -99,7 +98,6 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void OnExceptionThrowed(Exception obj) { _notificationPanel.AddNegativeNotification(obj); }
         private void OnAllEntriesDeleted() { _notificationPanel.AddPositiveNotification("All entries deleted!"); }
         private void OnEntryDeleted() { _notificationPanel.AddPositiveNotification("Entry deleted!"); }
-        private void OnEntriesLoaded() { _notificationPanel.AddPositiveNotification("Entries loaded!"); }
 
 
 

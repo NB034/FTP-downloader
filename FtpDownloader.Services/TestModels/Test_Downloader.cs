@@ -15,7 +15,7 @@ namespace FtpDownloader.Services.TestModels
             _mapper = mapper;
             _downloads = new List<Download>();
 
-            _ = Seed();
+            Seed();
         }
 
         public event Action<LogicLayerDownloadDto> DownloadStarted;
@@ -60,7 +60,6 @@ namespace FtpDownloader.Services.TestModels
         {
             var download = _downloads.Where(d => d.DownloadGuid == downloadGuid).FirstOrDefault()
                 ?? throw new ArgumentException("Request by invalid guid");
-
             return _mapper.DownloadToDto(download);
         }
 
@@ -78,12 +77,12 @@ namespace FtpDownloader.Services.TestModels
 
 
 
-        public async Task StartNewDownload(LogicLayerDownloadDto dto)
+        public void StartNewDownload(LogicLayerDownloadDto dto)
         {
             var download = _mapper.DtoToDownload(dto);
 
             _downloads.Add(download);
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 DownloadStarted?.Invoke(_mapper.DownloadToDto(download));
 
@@ -113,18 +112,23 @@ namespace FtpDownloader.Services.TestModels
         }
 
 
-
-
-        private async Task Seed()
+        public async Task FinalizeDownloads()
         {
+            _downloads.ForEach(d => d.Cancelling = true);
+        }
 
-            await StartNewDownload(new LogicLayerDownloadDto
+
+
+
+        private void Seed()
+        {
+            StartNewDownload(new LogicLayerDownloadDto
             {
                 Cancelling = false,
                 DownloadDate = DateTime.Now,
                 DownloadedBytes = 0,
                 DownloadGuid = Guid.NewGuid(),
-                Host= "127.0.0.1",
+                Host = "127.0.0.1",
                 Path = "Some/where",
                 Name = "Test",
                 OnPause = true,
@@ -132,7 +136,7 @@ namespace FtpDownloader.Services.TestModels
                 Size = 1024,
                 Tags = new List<string> { "test", "oneMoreTest" },
                 To = "Here",
-                UseCreadentials = false,
+                UseCredentials = false,
                 Username = "Test",
             });
         }

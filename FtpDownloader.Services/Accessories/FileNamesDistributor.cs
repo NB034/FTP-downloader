@@ -1,7 +1,7 @@
 ﻿
 namespace FtpDownloader.Services.Accessories
 {
-    internal class FileNamesDistributor
+    public class FileNamesDistributor
     {
         public string StringBeforeCounter { get; set; } = " (";
         public string StringAfterCounter { get; set; } = ")";
@@ -11,17 +11,18 @@ namespace FtpDownloader.Services.Accessories
         {
             int counter = StartCountWith;
             var files = new List<string>(Directory.GetFiles(directory)).Select(f => Path.GetFileName(f));
+            var validName = name;
 
             while (true)
             {
-                if (!files.Contains(name)) break;
-                name = Path.GetFileNameWithoutExtension(name) 
+                if (!files.Contains(validName)) break;
+                validName = Path.GetFileNameWithoutExtension(name) 
                     + StringBeforeCounter + counter + StringAfterCounter
                     + Path.GetExtension(name);
                 counter++;
             }
 
-            return name;
+            return validName;
         }
     }
 }

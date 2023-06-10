@@ -72,9 +72,9 @@
                     </Grid>
                 </Border>
 
-                <!--<Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
+                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
                         Background="{Binding CredentialsCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"
-                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
+                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </Grid>
             <!-- -->
 

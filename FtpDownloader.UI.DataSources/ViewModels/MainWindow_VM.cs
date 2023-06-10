@@ -42,12 +42,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private async void OnClosing()
         {
             _notificationPanel.AddNeutralNotification("Cancelling...");
-            var command = _downloadTab.DownloadList.CancelAllCommand;
-            if (command.CanExecute(new()))
-            {
-                command.Execute(new());
-                while (_downloadTab.DownloadList.Downloader.GetDownloads().Any()) { await Task.Delay(2000); }
-            }
+            await _downloadTab.DownloadList.Downloader.FinalizeDownloads();    
         }
     }
 }

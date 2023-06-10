@@ -13,14 +13,16 @@ namespace FtpDownloader.UI.DataSources.Command
             _predicate = predicate;
         }
 
-        public bool CanExecute(object parameter) => _predicate(parameter);
-
-        public void Execute(object parameter) => _action(parameter);
-
         public event EventHandler CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
+
+        public bool CanExecute(object parameter) => _predicate(parameter);
+
+        public void Execute(object parameter) => _action(parameter);
+
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

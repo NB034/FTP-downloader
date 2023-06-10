@@ -16,7 +16,7 @@ namespace FtpDownloader.Services.Interfaces.DTO
         public double DownloadedBytes { get; set; }
         public bool OnPause { get; set; }
         public bool Cancelling { get; set; }
-        public bool UseCreadentials { get; set; }
+        public bool UseCredentials { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public DateTime DownloadDate { get; set; }

@@ -10,7 +10,7 @@ namespace FtpDownloader.Services.Interfaces.Models
         event Action<LogicLayerDownloadDto> DownloadCompleted;
         event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
 
-        Task StartNewDownload(LogicLayerDownloadDto dto);
+        void StartNewDownload(LogicLayerDownloadDto dto);
         LogicLayerDownloadDto GetDownload(Guid downloadGuid);
         LogicLayerDownloadDto[] GetDownloads();
 
@@ -21,5 +21,7 @@ namespace FtpDownloader.Services.Interfaces.Models
         void Pause(Guid downloadGuid);
         void Resume(Guid downloadGuid);
         void Cancel(Guid downloadGuid);
+
+        Task FinalizeDownloads();
     }
 }

@@ -40,7 +40,8 @@ namespace FtpDownloader.UI
                     services.AddSingleton<JournalTab_VM>();
                     services.AddSingleton<NotificationPanel_VM>();
 
-                    services.AddSingleton<IDownloader, Test_Downloader>();
+                    services.AddSingleton<IDownloader, SmallFilesDownloader>();
+                    services.AddSingleton<FileNamesDistributor>();
 
                     services.AddSingleton<IInfoCollector, InfoCollector>();
 

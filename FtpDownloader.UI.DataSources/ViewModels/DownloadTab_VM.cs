@@ -30,8 +30,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _infoCollector.SearchFailed += OnSearchFailed;
             _downloadList.Downloads.CollectionChanged += OnDownloadsCollectionChanged;
             Tags.CollectionChanged += OnTagsCollectionChanged;
+
             PropertyChanged += OnFileNameChanged;
             PropertyChanged += OnResourceUriChanged;
+            PropertyChanged += OnCredentialsChanged;
         }
 
         private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
@@ -57,9 +59,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         private void OnResourceUriChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Host))
+            if (e.PropertyName == nameof(Host) || e.PropertyName == nameof(FilePath))
             {
                 ResourceCheckmark.Reset();
+                FileNameCheckmark.Reset();
                 FileExtension = String.Empty;
                 _infoModel = null;
             }
@@ -74,18 +77,29 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             }
         }
 
+        private void OnCredentialsChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_useCredentials && (e.PropertyName == nameof(UserName) || e.PropertyName == nameof(Password)))
+            {
+                if (_userName.Length == 0) CredentialsCheckmark.Reject();
+                else CredentialsCheckmark.Verify();
+            }
+        }
+
         private void OnSearchFinished(LogicLayerInfoDto obj)
         {
             if (obj.IsExist)
             {
                 ResourceCheckmark.Verify();
                 FileName = Path.GetFileNameWithoutExtension(_filePath);
-                if (obj.Exstention == String.Empty) FileExtension = "dir";
-                else FileExtension = obj.Exstention;
+                FileExtension = obj.Exstention;
                 _infoModel = obj;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                _notificationPanel.AddPositiveNotification("Resource was found!"));
+                {
+                    _notificationPanel.AddPositiveNotification("Resource was found!");
+                    StartDownloadCommand.RaiseCanExecuteChanged();
+                });
             }
             else
             {
@@ -154,6 +168,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         public string Password { get => _password; set => SetProperty(ref _password, value, nameof(Password)); }
         private string _password = String.Empty;
 
+        public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
+
 
 
 
@@ -210,7 +226,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         // Command methods
 
-        private bool CanSearchRemoteFile() => _host != String.Empty;
+        private bool CanSearchRemoteFile() => _host != String.Empty && (!_useCredentials || CredentialsCheckmark.IsVerified);
         private void SearchRemoteFile()
         {
             ResourceCheckmark.Reset();
@@ -263,7 +279,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var download = new Download_VM
             {
-                Name = _fileName,
+                Name = _fileName + _fileExtension,
                 Cancelling = false,
                 DownloadedBytes = 0,
                 DownloadGuid = Guid.NewGuid(),
