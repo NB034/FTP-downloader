@@ -141,6 +141,7 @@ namespace FtpDownloader.Services.Models
                     {
                         if (download.Cancelling)
                         {
+                            download.DownloadDate = DateTime.Now;
                             DownloadCancelled?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                             client.Dispose();
                             await GarbageCollector(download.ValidFullPath);
