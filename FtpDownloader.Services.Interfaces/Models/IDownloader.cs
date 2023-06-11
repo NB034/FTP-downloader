@@ -1,15 +1,16 @@
 ﻿using FtpDownloader.Services.Interfaces.DTO;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.Services.Interfaces.Models
 {
     public interface IDownloader
     {
-        event Action<LogicLayerDownloadDto> DownloadStarted;
-        event Action<LogicLayerDownloadDto> DownloadProgressChanged;
-        event Action<LogicLayerDownloadDto> DownloadCancelled;
-        event Action<LogicLayerDownloadDto> DownloadCompleted;
-        event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
-        event Action<Exception> ExceptionThrowned;
+        event EventHandler<DownloaderNotificationEventArgs> DownloadStarted;
+        event EventHandler<DownloaderNotificationEventArgs> DownloadProgressChanged;
+        event EventHandler<DownloaderNotificationEventArgs> DownloadCancelled;
+        event EventHandler<DownloaderNotificationEventArgs> DownloadCompleted;
+        event EventHandler<DownloadFailedEventArgs> DownloadFailed;
+        event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
         void StartNewDownload(LogicLayerDownloadDto dto);
         LogicLayerDownloadDto GetDownload(Guid downloadGuid);

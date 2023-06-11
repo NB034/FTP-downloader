@@ -5,6 +5,7 @@ using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
 using FtpDownloader.UI.DataSources.Mappers;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
@@ -77,27 +78,27 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-        private void AddEntry(LogicLayerDownloadDto obj)
+        private void AddEntry(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                _journal.CreateEntry(_dtoMapper.DownloadToEntry(obj));
+                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.Download));
                 Reset();
             });
         }
-        private void AddEntry(LogicLayerDownloadDto obj, Exception ex)
+        private void AddEntry(object sender, DownloadFailedEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                obj.Cancelling = true;
-                _journal.CreateEntry(_dtoMapper.DownloadToEntry(obj));
+                e.Download.Cancelling = true;
+                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.Download));
                 Reset();
             });
         }
 
-        private void OnExceptionThrowed(Exception obj) { _notificationPanel.AddNegativeNotification(obj); }
-        private void OnAllEntriesDeleted() { _notificationPanel.AddPositiveNotification("All entries deleted!"); }
-        private void OnEntryDeleted() { _notificationPanel.AddPositiveNotification("Entry deleted!"); }
+        private void OnExceptionThrowed(object sender, ExceptionThrownedEventArgs e) { _notificationPanel.AddNegativeNotification(e.Exception); }
+        private void OnAllEntriesDeleted(object sender, EventArgs e) { _notificationPanel.AddPositiveNotification("All entries deleted!"); }
+        private void OnEntryDeleted(object sender, EventArgs e) { _notificationPanel.AddPositiveNotification("Entry deleted!"); }
 
 
 

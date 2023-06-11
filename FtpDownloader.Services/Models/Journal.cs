@@ -2,6 +2,7 @@
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Mappers;
 using FtpDownloader.Services.Interfaces.Models;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.Services.Models
 {
@@ -11,11 +12,11 @@ namespace FtpDownloader.Services.Models
         private readonly DataLayerMapper _dataLayerMapper;
         private readonly LogicLayerMapper _logicLayerMapper;
 
-        public event Action EntriesLoaded;
-        public event Action EntryDeleted;
-        public event Action EntryCreated;
-        public event Action AllEntriesDeleted;
-        public event Action<Exception> ExceptionThrowned;
+        public event EventHandler EntriesLoaded;
+        public event EventHandler EntryDeleted;
+        public event EventHandler EntryCreated;
+        public event EventHandler AllEntriesDeleted;
+        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
         public Journal(IJournalRepository repository, DataLayerMapper dataLayerMapper, LogicLayerMapper logicLayerMapper)
         {
@@ -27,7 +28,7 @@ namespace FtpDownloader.Services.Models
         public async Task DeleteAllEntries()
         {
             await _repository.DeleteAllEntriesAsync();
-            AllEntriesDeleted?.Invoke();
+            AllEntriesDeleted?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task CreateEntry(LogicLayerEntryDto dto)
@@ -38,11 +39,11 @@ namespace FtpDownloader.Services.Models
                 var dataDto = _dataLayerMapper.EntryToDto(entry);
 
                 await _repository.CreateEntryAsync(dataDto);
-                EntryCreated?.Invoke();
+                EntryCreated?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                ExceptionThrowned?.Invoke(ex);
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(ex));
             }
         }
 
@@ -55,11 +56,11 @@ namespace FtpDownloader.Services.Models
 
                 _repository.DeleteEntry(dto.Id);
 
-                EntryDeleted?.Invoke();
+                EntryDeleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                ExceptionThrowned?.Invoke(ex);
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(ex));
             }
         }
 
@@ -76,12 +77,12 @@ namespace FtpDownloader.Services.Models
                     var logicDto = _logicLayerMapper.EntryToDto(entry);
                     entries.Add(logicDto);
                 }
-                EntriesLoaded?.Invoke();
+                EntriesLoaded?.Invoke(this, EventArgs.Empty);
                 return entries.ToArray();
             }
             catch (Exception ex)
             {
-                ExceptionThrowned?.Invoke(ex);
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(ex));
             }
             return entries.ToArray();
         }

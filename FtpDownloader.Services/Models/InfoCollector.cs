@@ -2,6 +2,7 @@
 using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.Models
@@ -15,8 +16,8 @@ namespace FtpDownloader.Services.Models
             _mapper = mapper;
         }
 
-        public event Action<LogicLayerInfoDto> SearchFinished;
-        public event Action<Exception> SearchFailed;
+        public event EventHandler<InfoCollectorNotificationEventArgs> SearchFinished;
+        public event EventHandler<ExceptionThrownedEventArgs> SearchFailed;
 
         public void BeginSearch(string host, string path, string username = "", string password = "")
         {
@@ -29,7 +30,7 @@ namespace FtpDownloader.Services.Models
             catch (Exception ex)
             {
                 client.Dispose();
-                SearchFailed?.Invoke(ex);
+                SearchFailed?.Invoke(this, new ExceptionThrownedEventArgs(ex));
                 return;
             }
 
@@ -45,11 +46,11 @@ namespace FtpDownloader.Services.Models
                         info.Exstention = Path.GetExtension(path);
                         info.SizeInBytes = (int)client.GetFileSize(path);
                     }
-                    SearchFinished?.Invoke(_mapper.InfoToDto(info));
+                    SearchFinished?.Invoke(this, new InfoCollectorNotificationEventArgs(_mapper.InfoToDto(info)));
                 }
                 catch (Exception ex)
                 {
-                    SearchFailed?.Invoke(ex);
+                    SearchFailed?.Invoke(this, new ExceptionThrownedEventArgs(ex));
                 }
                 finally
                 {

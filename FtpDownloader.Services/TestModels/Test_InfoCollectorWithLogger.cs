@@ -4,6 +4,7 @@ using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
 using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Mappers;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.Services.TestModels
 {
@@ -21,8 +22,8 @@ namespace FtpDownloader.Services.TestModels
             _mapper = mapper;
         }
 
-        public event Action<LogicLayerInfoDto> SearchFinished;
-        public event Action<Exception> SearchFailed;
+        public event EventHandler<InfoCollectorNotificationEventArgs> SearchFinished;
+        public event EventHandler<ExceptionThrownedEventArgs> SearchFailed;
 
         public void BeginSearch(string host, string path, string username = "", string password = "")
         {
@@ -39,7 +40,7 @@ namespace FtpDownloader.Services.TestModels
                 _logger?.Log("# Exception: " + ex.Message + ";");
                 client.Dispose();
                 _logger?.Log("------------------------------------");
-                SearchFailed?.Invoke(ex);
+                SearchFailed?.Invoke(this, new ExceptionThrownedEventArgs(ex));
                 return;
             }
 
@@ -56,7 +57,7 @@ namespace FtpDownloader.Services.TestModels
                         info.SizeInBytes = (int)client.GetFileSize(path);
                     }
 
-                    SearchFinished?.Invoke(_mapper.InfoToDto(info));
+                    SearchFinished?.Invoke(this, new InfoCollectorNotificationEventArgs(_mapper.InfoToDto(info)));
                     client.Dispose();
                 }
                 catch (Exception ex)
@@ -64,7 +65,7 @@ namespace FtpDownloader.Services.TestModels
                     _logger?.Log("# Exception: " + ex.Message + ";");
                     client.Dispose();
                     _logger?.Log("------------------------------------");
-                    SearchFailed?.Invoke(ex);
+                    SearchFailed?.Invoke(this, new ExceptionThrownedEventArgs(ex));
                 }
             });
         }

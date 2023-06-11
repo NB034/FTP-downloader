@@ -7,6 +7,7 @@ using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
 using FtpDownloader.UI.DataSources.Accessories;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
@@ -91,15 +92,15 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             }
         }
 
-        private void OnSearchFinished(LogicLayerInfoDto obj)
+        private void OnSearchFinished(object sender, InfoCollectorNotificationEventArgs e)
         {
-            if (obj.IsExist)
+            if (e.Info.IsExist)
             {
                 ResourceCheckmark.Verify();
                 FileName = Path.GetFileNameWithoutExtension(_filePath);
-                FileExtension = obj.Exstention;
+                FileExtension = e.Info.Exstention;
                 CheckFileName();
-                _infoModel = obj;
+                _infoModel = e.Info;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -115,11 +116,11 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             }
         }
 
-        private void OnSearchFailed(Exception obj)
+        private void OnSearchFailed(object sender, ExceptionThrownedEventArgs e)
         {
             ResourceCheckmark.Reject();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            _notificationPanel.AddNotification(NotificationTypesEnum.Negative, obj.Message));
+            _notificationPanel.AddNotification(NotificationTypesEnum.Negative, e.Exception.Message));
         }
 
         private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

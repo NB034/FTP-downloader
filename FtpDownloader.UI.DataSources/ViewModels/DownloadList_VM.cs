@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using FtpDownloader.UI.DataSources.Mappers;
 using FtpDownloader.UI.DataSources.Command;
 using FtpDownloader.UI.DataSources.Accessories;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.UI.DataSources.ViewModels
 {
@@ -64,58 +65,58 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _downloader.StartNewDownload(_mapper.DownloadToDto(download));
         }
 
-        private void OnDownloadStarted(LogicLayerDownloadDto obj)
+        private void OnDownloadStarted(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Add(_mapper.DtoToDownload(obj));
-                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} has started!");
+                Downloads.Add(_mapper.DtoToDownload(e.Download));
+                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} has started!");
                 CustomizableCommand.RaiseCanExecuteChanged();
             });
         }
 
-        private void OnDownloadProgress(LogicLayerDownloadDto obj)
+        private void OnDownloadProgress(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                var download = Downloads.First(d => d.DownloadGuid == obj.DownloadGuid);
-                download.DownloadedBytes = obj.DownloadedBytes;
+                var download = Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid);
+                download.DownloadedBytes = e.Download.DownloadedBytes;
             });
         }
 
-        private void OnDownloadCompleted(LogicLayerDownloadDto obj)
+        private void OnDownloadCompleted(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
-                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} completed!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} completed!");
             });
         }
 
-        private void OnDownloadCancelled(LogicLayerDownloadDto obj)
+        private void OnDownloadCancelled(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Remove(Downloads.First(d => d.DownloadGuid == obj.DownloadGuid));
-                _notificationPanel.AddPositiveNotification($"Download of {obj.Name} cancelled!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} cancelled!");
             });
         }
 
-        private void OnDownloadFailed(LogicLayerDownloadDto arg1, Exception arg2)
+        private void OnDownloadFailed(object sender, DownloadFailedEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                var download = Downloads.FirstOrDefault(d => d.DownloadGuid == arg1.DownloadGuid); 
+                var download = Downloads.FirstOrDefault(d => d.DownloadGuid == e.Download.DownloadGuid); 
                 if(download != null) Downloads.Remove(download);
-                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {e.Download.Name} failed: {e.Exception.Message}");
             });
         }
 
-        private void OnExceptionThrowned(Exception obj)
+        private void OnExceptionThrowned(object sender, ExceptionThrownedEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {   
-                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, obj.Message);
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, e.Exception.Message);
             });
         }
 

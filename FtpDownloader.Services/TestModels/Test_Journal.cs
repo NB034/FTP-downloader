@@ -1,6 +1,7 @@
 ﻿using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
@@ -18,11 +19,11 @@ namespace FtpDownloader.Services.TestModels
             Seed();
         }
 
-        public event Action AllEntriesDeleted;
-        public event Action EntriesLoaded;
-        public event Action EntryCreated;
-        public event Action EntryDeleted;
-        public event Action<Exception> ExceptionThrowned;
+        public event EventHandler AllEntriesDeleted;
+        public event EventHandler EntriesLoaded;
+        public event EventHandler EntryCreated;
+        public event EventHandler EntryDeleted;
+        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
 
 
@@ -31,21 +32,21 @@ namespace FtpDownloader.Services.TestModels
         {
             await Task.Delay(2000);
             _journalEntries.Clear();
-            AllEntriesDeleted?.Invoke();
+            AllEntriesDeleted?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task CreateEntry(LogicLayerEntryDto dto)
         {
             await Task.Delay(2000);
             _journalEntries.Add(_mapper.DtoToEntry(dto));
-            EntryCreated?.Invoke();
+            EntryCreated?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task DeleteEntry(LogicLayerEntryDto dto)
         {
             await Task.Delay(2000);
             _journalEntries.Remove(_mapper.DtoToEntry(dto));
-            EntryDeleted?.Invoke();
+            EntryDeleted?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task<LogicLayerEntryDto[]> GetEntries()
@@ -56,7 +57,7 @@ namespace FtpDownloader.Services.TestModels
             {
                 dtos.Add(_mapper.EntryToDto(entry));
             }
-            EntriesLoaded?.Invoke();
+            EntriesLoaded?.Invoke(this, EventArgs.Empty);
             return dtos.ToArray();
         }
 

@@ -1,6 +1,7 @@
 ﻿using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
@@ -18,12 +19,12 @@ namespace FtpDownloader.Services.TestModels
             Seed();
         }
 
-        public event Action<LogicLayerDownloadDto> DownloadStarted;
-        public event Action<LogicLayerDownloadDto> DownloadProgressChanged;
-        public event Action<LogicLayerDownloadDto> DownloadCancelled;
-        public event Action<LogicLayerDownloadDto> DownloadCompleted;
-        public event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
-        public event Action<Exception> ExceptionThrowned;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadStarted;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadProgressChanged;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadCancelled;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadCompleted;
+        public event EventHandler<DownloadFailedEventArgs> DownloadFailed;
+        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
         public void ResumeAll() => _downloads.ForEach(d => d.OnPause = false);
@@ -36,7 +37,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.OnPause = true;
@@ -47,7 +48,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.OnPause = false;
@@ -58,7 +59,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.Cancelling = true;
@@ -71,7 +72,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return new();
             }
             return _mapper.DownloadToDto(download);
@@ -98,7 +99,7 @@ namespace FtpDownloader.Services.TestModels
             _downloads.Add(download);
             Task.Run(async () =>
             {
-                DownloadStarted?.Invoke(_mapper.DownloadToDto(download));
+                DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
 
                 var counter = 0;
                 while (counter < 5)
@@ -107,7 +108,7 @@ namespace FtpDownloader.Services.TestModels
                     {
                         download.DownloadDate = DateTime.Now;
                         _downloads.Remove(download);
-                        DownloadCancelled?.Invoke(_mapper.DownloadToDto(download));
+                        DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                         return;
                     }
 
@@ -116,12 +117,12 @@ namespace FtpDownloader.Services.TestModels
 
                     await Task.Delay(1000);
                     download.DownloadedBytes += download.Size / 5;
-                    DownloadProgressChanged?.Invoke(_mapper.DownloadToDto(download));
+                    DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                 }
 
                 download.DownloadDate = DateTime.Now;
                 _downloads.Remove(download);
-                DownloadCompleted?.Invoke(_mapper.DownloadToDto(download));
+                DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
             });
         }
 

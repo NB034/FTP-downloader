@@ -4,6 +4,7 @@ using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.Models;
 using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Mappers;
+using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.Services.Models
 {
@@ -20,12 +21,12 @@ namespace FtpDownloader.Services.Models
             _downloads = new List<Download>();
         }
 
-        public event Action<LogicLayerDownloadDto> DownloadStarted;
-        public event Action<LogicLayerDownloadDto> DownloadProgressChanged;
-        public event Action<LogicLayerDownloadDto> DownloadCancelled;
-        public event Action<LogicLayerDownloadDto> DownloadCompleted;
-        public event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
-        public event Action<Exception> ExceptionThrowned;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadStarted;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadProgressChanged;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadCancelled;
+        public event EventHandler<DownloaderNotificationEventArgs> DownloadCompleted;
+        public event EventHandler<DownloadFailedEventArgs> DownloadFailed;
+        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
         public void ResumeAll() => _downloads.ForEach(d => d.OnPause = false);
@@ -38,7 +39,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.OnPause = true;
@@ -49,7 +50,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.OnPause = false;
@@ -60,7 +61,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return;
             }
             download.Cancelling = true;
@@ -73,7 +74,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
                 return new();
             }
             return _mapper.DownloadToDto(download);
@@ -96,7 +97,7 @@ namespace FtpDownloader.Services.Models
         {
             if (dto.Size >= 10_485_760) // = (10 MB)
             {
-                DownloadFailed?.Invoke(dto, new Exception("Files larger than 10 MB are not supported"));
+                DownloadFailed?.Invoke(this, new DownloadFailedEventArgs(dto, new Exception("Files larger than 10 MB are not supported")));
                 return;
             }
 
@@ -124,14 +125,14 @@ namespace FtpDownloader.Services.Models
                     using var br = new BinaryReader(ftpStream);
                     using var bw = new BinaryWriter(fileStream);
 
-                    DownloadStarted?.Invoke(_mapper.DownloadToDto(download));
+                    DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
 
                     while (bytes.Length > 0 || download.OnPause)
                     {
                         if (download.Cancelling)
                         {
                             if (File.Exists(Path.Combine(download.To, validName))) File.Delete(Path.Combine(download.To, validName));
-                            DownloadCancelled?.Invoke(_mapper.DownloadToDto(download));
+                            DownloadCancelled?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                             client.Dispose();
                             return;
                         }
@@ -142,16 +143,16 @@ namespace FtpDownloader.Services.Models
                         bw.Write(bytes, 0, bytes.Length);
                         download.DownloadedBytes += bytes.Length;
 
-                        DownloadProgressChanged?.Invoke(_mapper.DownloadToDto(download));
+                        DownloadProgressChanged?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                     }
 
                     download.DownloadDate = DateTime.Now;
-                    DownloadCompleted?.Invoke(_mapper.DownloadToDto(download));
+                    DownloadCompleted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                 }
                 catch (Exception ex)
                 {
                     download.DownloadDate = DateTime.Now;
-                    DownloadFailed?.Invoke(_mapper.DownloadToDto(download), ex);
+                    DownloadFailed?.Invoke(this, new DownloadFailedEventArgs(_mapper.DownloadToDto(download), ex));
                     await GarbageCollector(download.ValidFullPath);
                 }
                 finally
