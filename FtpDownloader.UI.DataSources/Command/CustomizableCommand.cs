@@ -2,12 +2,12 @@
 
 namespace FtpDownloader.UI.DataSources.Command
 {
-    public class AutoEventCommandBase : ICommand
+    public class CustomizableCommand : ICommand
     {
         private readonly Action<object> _action;
         private readonly Func<object, bool> _predicate;
 
-        public AutoEventCommandBase(Action<object> action, Func<object, bool> predicate)
+        public CustomizableCommand(Action<object> action, Func<object, bool> predicate)
         {
             _action = action;
             _predicate = predicate;
@@ -23,6 +23,6 @@ namespace FtpDownloader.UI.DataSources.Command
 
         public void Execute(object parameter) => _action(parameter);
 
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        public static void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

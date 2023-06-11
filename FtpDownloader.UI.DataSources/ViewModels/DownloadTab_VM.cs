@@ -20,11 +20,11 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
             Tags = new ObservableCollection<string>();
 
-            _addTagCommand = new AutoEventCommandBase(o => AddTag(o), _ => CanAddTag());
-            _removeTagCommand = new AutoEventCommandBase(o => RemoveTag(o), _ => CanRemoveTag());
-            _searchRemoteFileCommand = new AutoEventCommandBase(_ => SearchRemoteFile(), _ => CanSearchRemoteFile());
-            _pickDirectoryCommand = new AutoEventCommandBase(_ => PickDirectory(), _ => CanPickDirectory());
-            _startDownloadCommand = new AutoEventCommandBase(_ => StartDownload(), _ => CanStartDownload());
+            _addTagCommand = new CustomizableCommand(o => AddTag(o), _ => CanAddTag());
+            _removeTagCommand = new CustomizableCommand(o => RemoveTag(o), _ => CanRemoveTag());
+            _searchRemoteFileCommand = new CustomizableCommand(_ => SearchRemoteFile(), _ => CanSearchRemoteFile());
+            _pickDirectoryCommand = new CustomizableCommand(_ => PickDirectory(), _ => CanPickDirectory());
+            _startDownloadCommand = new CustomizableCommand(_ => StartDownload(), _ => CanStartDownload());
 
             _infoCollector.SearchFinished += OnSearchFinished;
             _infoCollector.SearchFailed += OnSearchFailed;
@@ -104,7 +104,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     _notificationPanel.AddPositiveNotification("Resource was found!");
-                    StartDownloadCommand.RaiseCanExecuteChanged();
+                    CustomizableCommand.RaiseCanExecuteChanged();
                 });
             }
             else
@@ -218,17 +218,17 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         // Commands
 
-        private readonly AutoEventCommandBase _searchRemoteFileCommand;
-        private readonly AutoEventCommandBase _pickDirectoryCommand;
-        private readonly AutoEventCommandBase _addTagCommand;
-        private readonly AutoEventCommandBase _removeTagCommand;
-        private readonly AutoEventCommandBase _startDownloadCommand;
+        private readonly CustomizableCommand _searchRemoteFileCommand;
+        private readonly CustomizableCommand _pickDirectoryCommand;
+        private readonly CustomizableCommand _addTagCommand;
+        private readonly CustomizableCommand _removeTagCommand;
+        private readonly CustomizableCommand _startDownloadCommand;
 
-        public AutoEventCommandBase SearchRemoteFileCommand => _searchRemoteFileCommand;
-        public AutoEventCommandBase PickDirectoryCommand => _pickDirectoryCommand;
-        public AutoEventCommandBase AddTagCommand => _addTagCommand;
-        public AutoEventCommandBase RemoveTagCommand => _removeTagCommand;
-        public AutoEventCommandBase StartDownloadCommand => _startDownloadCommand;
+        public CustomizableCommand SearchRemoteFileCommand => _searchRemoteFileCommand;
+        public CustomizableCommand PickDirectoryCommand => _pickDirectoryCommand;
+        public CustomizableCommand AddTagCommand => _addTagCommand;
+        public CustomizableCommand RemoveTagCommand => _removeTagCommand;
+        public CustomizableCommand StartDownloadCommand => _startDownloadCommand;
 
 
 

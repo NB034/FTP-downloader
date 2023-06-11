@@ -8,8 +8,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly DownloadTab_VM _downloadTab;
         private readonly JournalTab_VM _journalTab;
 
-        private readonly AutoEventCommandBase _onStartingCommand;
-        private readonly AutoEventCommandBase _onClosingCommand;
+        private readonly CustomizableCommand _onStartingCommand;
+        private readonly CustomizableCommand _onClosingCommand;
 
         public MainWindow_VM(NotificationPanel_VM notificationPanel, DownloadTab_VM downloadTab, JournalTab_VM journalTab)
         {
@@ -17,8 +17,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _downloadTab = downloadTab;
             _journalTab = journalTab;
 
-            _onStartingCommand = new AutoEventCommandBase(_ => OnStarting(), _ => true);
-            _onClosingCommand = new AutoEventCommandBase(_ => OnClosing(), _ => true);
+            _onStartingCommand = new CustomizableCommand(_ => OnStarting(), _ => true);
+            _onClosingCommand = new CustomizableCommand(_ => OnClosing(), _ => true);
         }
 
 
@@ -28,8 +28,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         public DownloadTab_VM DownloadTab => _downloadTab;
         public JournalTab_VM JournalTab => _journalTab;
 
-        public AutoEventCommandBase OnStartingCommand => _onStartingCommand;
-        public AutoEventCommandBase OnClosingCommand => _onClosingCommand;
+        public CustomizableCommand OnStartingCommand => _onStartingCommand;
+        public CustomizableCommand OnClosingCommand => _onClosingCommand;
 
 
 

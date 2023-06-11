@@ -10,10 +10,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 {
     public class JournalTab_VM : INotifyPropertyChanged
     {
-        private readonly AutoEventCommandBase _searchCommand;
-        private readonly AutoEventCommandBase _resetCommand;
-        private readonly AutoEventCommandBase _removeEntryCommand;
-        private readonly AutoEventCommandBase _removeAllEntriesCommand;
+        private readonly CustomizableCommand _searchCommand;
+        private readonly CustomizableCommand _resetCommand;
+        private readonly CustomizableCommand _removeEntryCommand;
+        private readonly CustomizableCommand _removeAllEntriesCommand;
 
         private readonly IJournal _journal;
         private readonly NotificationPanel_VM _notificationPanel;
@@ -36,10 +36,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _journal = journal;
             _notificationPanel = notificationPanel;
 
-            _searchCommand = new AutoEventCommandBase(_ => Search(), _ => CanSearch());
-            _resetCommand = new AutoEventCommandBase(_ => Reset(), _ => CanReset());
-            _removeEntryCommand = new AutoEventCommandBase(_ => RemoveEntry(), _ => CanRemoveEntry());
-            _removeAllEntriesCommand = new AutoEventCommandBase(_ => RemoveAllEntries(), _ => CanRemoveAllEntries());
+            _searchCommand = new CustomizableCommand(_ => Search(), _ => CanSearch());
+            _resetCommand = new CustomizableCommand(_ => Reset(), _ => CanReset());
+            _removeEntryCommand = new CustomizableCommand(_ => RemoveEntry(), _ => CanRemoveEntry());
+            _removeAllEntriesCommand = new CustomizableCommand(_ => RemoveAllEntries(), _ => CanRemoveAllEntries());
 
             JournalEntries = new ObservableCollection<JournalEntry>();
 
@@ -62,10 +62,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         public ObservableCollection<JournalEntry> JournalEntries { get; set; }
 
-        public AutoEventCommandBase SearchCommand => _searchCommand;
-        public AutoEventCommandBase ResetCommand => _resetCommand;
-        public AutoEventCommandBase RemoveEntryCommand => _removeEntryCommand;
-        public AutoEventCommandBase RemoveAllEntriesCommand => _removeAllEntriesCommand;
+        public CustomizableCommand SearchCommand => _searchCommand;
+        public CustomizableCommand ResetCommand => _resetCommand;
+        public CustomizableCommand RemoveEntryCommand => _removeEntryCommand;
+        public CustomizableCommand RemoveAllEntriesCommand => _removeAllEntriesCommand;
 
         public IJournal Journal => _journal;
         public JournalEntry Entry { get => _entry; set => SetProperty(ref _entry, value, nameof(Entry)); }

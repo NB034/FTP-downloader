@@ -36,7 +36,7 @@ namespace FtpDownloader.Services.Models
         public void Pause(Guid downloadGuid)
         {
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
-            if(download == null)
+            if (download == null)
             {
                 ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
                 return;
@@ -145,10 +145,12 @@ namespace FtpDownloader.Services.Models
                         DownloadProgressChanged?.Invoke(_mapper.DownloadToDto(download));
                     }
 
+                    download.DownloadDate = DateTime.Now;
                     DownloadCompleted?.Invoke(_mapper.DownloadToDto(download));
                 }
                 catch (Exception ex)
                 {
+                    download.DownloadDate = DateTime.Now;
                     DownloadFailed?.Invoke(_mapper.DownloadToDto(download), ex);
                     await GarbageCollector(download.ValidFullPath);
                 }
@@ -164,7 +166,7 @@ namespace FtpDownloader.Services.Models
         public async Task FinalizeDownloads()
         {
             _downloads.ForEach(d => d.Cancelling = true);
-            foreach(var download in _downloads.ToArray())
+            foreach (var download in _downloads.ToArray())
             {
                 await GarbageCollector(download.ValidFullPath);
                 _downloads.Remove(download);

@@ -14,12 +14,12 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly LogicLayerMapper _mapper;
         private readonly IDownloader _downloader;
 
-        private readonly AutoEventCommandBase _resumeCommand;
-        private readonly AutoEventCommandBase _pauseCommand;
-        private readonly AutoEventCommandBase _cancelCommand;
-        private readonly AutoEventCommandBase _resumeAllCommand;
-        private readonly AutoEventCommandBase _pauseAllCommand;
-        private readonly AutoEventCommandBase _cancelAllCommand;
+        private readonly CustomizableCommand _resumeCommand;
+        private readonly CustomizableCommand _pauseCommand;
+        private readonly CustomizableCommand _cancelCommand;
+        private readonly CustomizableCommand _resumeAllCommand;
+        private readonly CustomizableCommand _pauseAllCommand;
+        private readonly CustomizableCommand _cancelAllCommand;
 
         public DownloadList_VM(NotificationPanel_VM notificationPanel, IDownloader downloader, LogicLayerMapper mapper)
         {
@@ -36,29 +36,24 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             downloader.DownloadStarted += OnDownloadStarted;
             downloader.ExceptionThrowned += OnExceptionThrowned;
 
-            _resumeCommand = new AutoEventCommandBase(o => Resume(o), o => CanResume(o));
-            _pauseCommand = new AutoEventCommandBase(o => Pause(o), o => CanPause(o));
-            _cancelCommand = new AutoEventCommandBase(o => Cancel(o), o => CanCancel(o));
-            _resumeAllCommand = new AutoEventCommandBase(_ => ResumeAll(), _ => CanResumeAll());
-            _pauseAllCommand = new AutoEventCommandBase(_ => PauseAll(), _ => CanPauseAll());
-            _cancelAllCommand = new AutoEventCommandBase(_ => CancelAll(), _ => CanCancelAll());
-
-            foreach(var download in _downloader.GetDownloads())
-            {
-                Downloads.Add(_mapper.DtoToDownload(download));
-            }
+            _resumeCommand = new CustomizableCommand(o => Resume(o), o => CanResume(o));
+            _pauseCommand = new CustomizableCommand(o => Pause(o), o => CanPause(o));
+            _cancelCommand = new CustomizableCommand(o => Cancel(o), o => CanCancel(o));
+            _resumeAllCommand = new CustomizableCommand(_ => ResumeAll(), _ => CanResumeAll());
+            _pauseAllCommand = new CustomizableCommand(_ => PauseAll(), _ => CanPauseAll());
+            _cancelAllCommand = new CustomizableCommand(_ => CancelAll(), _ => CanCancelAll());
         }
 
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
         public IDownloader Downloader => _downloader;
 
         public ObservableCollection<Download_VM> Downloads { get; set; }
-        public AutoEventCommandBase ResumeCommand => _resumeCommand;
-        public AutoEventCommandBase PauseCommand => _pauseCommand;
-        public AutoEventCommandBase CancelCommand => _cancelCommand;
-        public AutoEventCommandBase ResumeAllCommand => _resumeAllCommand;
-        public AutoEventCommandBase PauseAllCommand => _pauseAllCommand;
-        public AutoEventCommandBase CancelAllCommand => _cancelAllCommand;
+        public CustomizableCommand ResumeCommand => _resumeCommand;
+        public CustomizableCommand PauseCommand => _pauseCommand;
+        public CustomizableCommand CancelCommand => _cancelCommand;
+        public CustomizableCommand ResumeAllCommand => _resumeAllCommand;
+        public CustomizableCommand PauseAllCommand => _pauseAllCommand;
+        public CustomizableCommand CancelAllCommand => _cancelAllCommand;
 
 
 
@@ -75,6 +70,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             {
                 Downloads.Add(_mapper.DtoToDownload(obj));
                 _notificationPanel.AddPositiveNotification($"Download of {obj.Name} has started!");
+                CustomizableCommand.RaiseCanExecuteChanged();
             });
         }
 
@@ -132,7 +128,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.OnPause = false;
-            ResumeCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.Resume(vm.DownloadGuid);
         }
 
@@ -141,7 +137,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.OnPause = true;
-            PauseCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.Pause(vm.DownloadGuid);
         }
 
@@ -150,7 +146,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             var vm = (Download_VM)o;
             vm.Cancelling = true;
-            CancelCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.Cancel(vm.DownloadGuid);
         }
 
@@ -162,7 +158,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void ResumeAll()
         {
             foreach (var download in Downloads) if (download.OnPause) download.OnPause = false;
-            ResumeAllCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.ResumeAll();
         }
 
@@ -170,7 +166,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void PauseAll()
         {
             foreach (var download in Downloads) if (!download.OnPause) download.OnPause = true;
-            PauseAllCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.PauseAll();
         }
 
@@ -178,7 +174,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private void CancelAll()
         {
             foreach (var download in Downloads) if (!download.Cancelling) download.Cancelling = true;
-            CancelAllCommand.RaiseCanExecuteChanged();
+            CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.CancelAll();
         }
     }

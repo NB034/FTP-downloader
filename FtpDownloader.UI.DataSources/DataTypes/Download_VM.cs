@@ -50,7 +50,7 @@ namespace FtpDownloader.UI.DataSources.DataTypes
 
         public Guid DownloadGuid { get; set; } = Guid.NewGuid();
 
-        public double Percent => DownloadedBytes / Size * 100.0;
+        public double Percent => DownloadedBytes / Size * 100;
 
         public List<string> Tags { get; set; }
 

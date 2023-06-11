@@ -7,22 +7,22 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 {
     public class NotificationPanel_VM
     {
-        private readonly AutoEventCommandBase _closeNotificationCommand;
-        private readonly AutoEventCommandBase _closeAllNotificatonsCommand;
+        private readonly CustomizableCommand _closeNotificationCommand;
+        private readonly CustomizableCommand _closeAllNotificatonsCommand;
 
         public NotificationPanel_VM()
         {
             Notifications = new ObservableCollection<Notification>();
-            _closeNotificationCommand = new AutoEventCommandBase(o => RemoveNotification(o), _ => true);
-            _closeAllNotificatonsCommand = new AutoEventCommandBase(_ => ClearNotifications(), _ => true);
+            _closeNotificationCommand = new CustomizableCommand(o => RemoveNotification(o), _ => true);
+            _closeAllNotificatonsCommand = new CustomizableCommand(_ => ClearNotifications(), _ => true);
         }
 
 
 
 
 
-        public AutoEventCommandBase CloseNotificationCommand => _closeNotificationCommand;
-        public AutoEventCommandBase CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
+        public CustomizableCommand CloseNotificationCommand => _closeNotificationCommand;
+        public CustomizableCommand CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
         public ObservableCollection<Notification> Notifications { get; set; }
         public int MaxNotifications { get; set; } = 50;
 
