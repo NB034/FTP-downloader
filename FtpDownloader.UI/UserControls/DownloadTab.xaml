@@ -27,6 +27,9 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -35,81 +38,57 @@
             <!-- Credential -->
             <Label Grid.Row="0" Content="{StaticResource Credential}" VerticalContentAlignment="Center" Margin="5"/>
 
-            <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="1" BorderBrush="{StaticResource MainBorderBrush}" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                      Margin="5,0,5,0" x:Name="CredentialCheckBox" IsChecked="{Binding UseCrdentials, Mode=TwoWay}"/>
 
-                <CheckBox Grid.Column="0" BorderBrush="{StaticResource MainBorderBrush}" VerticalAlignment="Center"
-                          Margin="5,0,5,0" x:Name="CredentialCheckBox" IsChecked="{Binding UseCrdentials, Mode=TwoWay}"/>
+            <TextBox Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource TextBoxStyle}" Margin="5"
+                     Background="{StaticResource MainBackgroundBrush}" 
+                     IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                     BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
+                     Text="{Binding UserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Column="2" Grid.ColumnSpan="2" Margin="8,5,5,5" Content="{StaticResource Username}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                   Visibility="{Binding IsUserNameEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                <Border Grid.Column="1">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource TextBoxStyle}" Margin="5"
+                     Background="{StaticResource MainBackgroundBrush}"
+                     IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
+                     BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
+                     Text="{Binding Password, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Column="4" Grid.ColumnSpan="2" Margin="8,5,5,5" Content="{StaticResource Password}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                   Visibility="{Binding IsPasswordEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <TextBox Grid.Column="0" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
-                                 Background="{StaticResource MainBackgroundBrush}" 
-                                 IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
-                                 BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
-                                 Text="{Binding UserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="0" Margin="8,0,0,0" Content="{StaticResource Username}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
-                               Visibility="{Binding IsUserNameEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
-                                 Background="{StaticResource MainBackgroundBrush}"
-                                 IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
-                                 BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
-                                 Text="{Binding Password, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="1" Margin="8,0,0,0" Content="{StaticResource Password}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
-                               Visibility="{Binding IsPasswordEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    </Grid>
-                </Border>
-
-                <Border Grid.Column="2" Width="20" Height="20" Margin="5,0,5,0" 
-                        Background="{Binding CredentialsCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"
-                        Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            </Grid>
+            <Border Grid.Column="6" Width="20" Height="20" Margin="5" 
+                    Background="{Binding CredentialsCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"
+                    Visibility="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <!-- -->
 
 
 
             <!-- Resource URI -->
             <Label Grid.Row="1" Content="{StaticResource ResourceUri}" Margin="5"/>
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource BorderStyle}" Margin="5,5,2.5,5" Background="{StaticResource MainBackgroundBrush}">
-                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="ftp://"/>
-                </Border>
+            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource MainBackgroundBrush}">
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="ftp://"/>
+            </Border>
 
-                <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="2.5,5,2.5,5"
-                         Text="{Binding Host, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Column="1" Margin="5,5,2.5,5" Content="Host" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
-                       Visibility="{Binding IsHostEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource TextBoxStyle}" Margin="5"
+                     Text="{Binding Host, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="1" Grid.Column="2" Margin="8,5,5,5" Content="Host" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                   Visibility="{Binding IsHostEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                <Border Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="2.5,5,2.5,5" Background="{StaticResource MainBackgroundBrush}">
-                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="/"/>
-                </Border>
+            <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource MainBackgroundBrush}">
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="4,0,4,0" Text="/"/>
+            </Border>
 
-                <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="2.5,5,5,5"
-                         Text="{Binding FilePath, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Column="3" Margin="5,5,2.5,5" Content="Path" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
-                       Visibility="{Binding IsFilePathEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TextBox Grid.Row="1" Grid.Column="4" Style="{StaticResource TextBoxStyle}" Margin="5"
+                     Text="{Binding FilePath, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="1" Grid.Column="4" Margin="8,5,5,5" Content="Path" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                   Visibility="{Binding IsFilePathEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            </Grid>
-            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
+            <Button Grid.Row="1" Grid.Column="5" Style="{StaticResource ButtonStyle}" Margin="5" Padding="5,0,5,0"
                     Content="{StaticResource SearchRemoteFile}" Command="{Binding SearchRemoteFileCommand}"/>
-            <Border Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5" 
+            <Border Grid.Row="1" Grid.Column="6" Width="20" Height="20" Margin="5" 
                     Background="{Binding ResourceCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
@@ -117,13 +96,13 @@
 
             <!-- Local directory -->
             <Label Grid.Row="2" Content="{StaticResource DownloadTo}" Margin="5"/>
-            <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource BorderStyle}" Margin="5" BorderThickness="1.3" Background="{StaticResource MainBackgroundBrush}">
+            <Border Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Style="{StaticResource BorderStyle}" Margin="5" BorderThickness="1.3" Background="{StaticResource MainBackgroundBrush}">
                 <TextBlock TextAlignment="Left" VerticalAlignment="Center" Text="{Binding LocalDirectory}" Padding="5,0,5,0"/>
             </Border>
-            <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
+            <Button Grid.Row="2" Grid.Column="5" Margin="5" Padding="3,0,3,0" VerticalContentAlignment="Center" 
                     Content="{StaticResource ChooseDrectory}" Style="{StaticResource ButtonStyle}"
                     Command="{Binding PickDirectoryCommand}"/>
-            <Border Grid.Column="3" Grid.Row="2" Width="20" Height="20" Margin="5" 
+            <Border Grid.Row="2" Grid.Column="6" Width="20" Height="20" Margin="5" 
                     Background="{Binding LocalDirectoryCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
@@ -131,12 +110,12 @@
 
             <!-- File name -->
             <Label Grid.Row="3" Content="{StaticResource SaveAs}" Margin="5"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource TextBoxStyle}" 
+            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Style="{StaticResource TextBoxStyle}" 
                      Text="{Binding FileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource MainBackgroundBrush}">
+            <Border Grid.Row="3" Grid.Column="5" Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource MainBackgroundBrush}">
                 <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding FileExtension}"/>
             </Border>
-            <Border Grid.Column="3" Grid.Row="3" Width="20" Height="20" Margin="5" 
+            <Border Grid.Row="3" Grid.Column="6" Width="20" Height="20" Margin="5" 
                     Background="{Binding FileNameCheckmark.Icon, Converter={StaticResource EnumToIconConverter}}"/>
             <!-- -->
 
@@ -144,7 +123,7 @@
 
             <!-- Tags -->
             <Label Grid.Row="4" Content="{StaticResource Tags}" Margin="5"/>
-            <WrapPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+            <WrapPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6" Orientation="Horizontal">
 
                 <ItemsControl BorderBrush="Transparent" ItemsSource="{Binding Tags}" VerticalContentAlignment="Center">
                     <ItemsControl.ItemsPanel>
@@ -187,7 +166,7 @@
 
 
             <!-- Start panel -->
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="5,15,5,10">
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="7" Orientation="Horizontal" Margin="5,15,5,10">
 
                 <Button Style="{StaticResource ButtonStyle}" Content="{StaticResource InitializeDownload}" Padding="4,3,4,3"
                         Command="{Binding StartDownloadCommand}"/>
