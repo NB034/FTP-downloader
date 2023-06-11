@@ -23,8 +23,7 @@ namespace FtpDownloader.Services.TestModels
         public event Action<LogicLayerDownloadDto> DownloadCancelled;
         public event Action<LogicLayerDownloadDto> DownloadCompleted;
         public event Action<LogicLayerDownloadDto, Exception> DownloadFailed;
-
-
+        public event Action<Exception> ExceptionThrowned;
 
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
         public void ResumeAll() => _downloads.ForEach(d => d.OnPause = false);
@@ -34,32 +33,47 @@ namespace FtpDownloader.Services.TestModels
 
         public void Pause(Guid downloadGuid)
         {
-            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid)
-                ?? throw new ArgumentException("Request by invalid guid");
+            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
+            if (download == null)
+            {
+                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                return;
+            }
             download.OnPause = true;
         }
 
         public void Resume(Guid downloadGuid)
         {
-            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid)
-                ?? throw new ArgumentException("Request by invalid guid");
+            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
+            if (download == null)
+            {
+                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                return;
+            }
             download.OnPause = false;
         }
 
         public void Cancel(Guid downloadGuid)
         {
-            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid)
-                ?? throw new ArgumentException("Request by invalid guid");
+            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
+            if (download == null)
+            {
+                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                return;
+            }
             download.Cancelling = true;
         }
 
 
 
-
         public LogicLayerDownloadDto GetDownload(Guid downloadGuid)
         {
-            var download = _downloads.Where(d => d.DownloadGuid == downloadGuid).FirstOrDefault()
-                ?? throw new ArgumentException("Request by invalid guid");
+            var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
+            if (download == null)
+            {
+                ExceptionThrowned?.Invoke(new ArgumentException("Request by invalid guid"));
+                return new();
+            }
             return _mapper.DownloadToDto(download);
         }
 

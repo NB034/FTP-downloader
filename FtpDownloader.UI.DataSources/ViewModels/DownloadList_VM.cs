@@ -34,6 +34,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             downloader.DownloadCompleted += OnDownloadCompleted;
             downloader.DownloadProgressChanged += OnDownloadProgress;
             downloader.DownloadStarted += OnDownloadStarted;
+            downloader.ExceptionThrowned += OnExceptionThrowned;
 
             _resumeCommand = new AutoEventCommandBase(o => Resume(o), o => CanResume(o));
             _pauseCommand = new AutoEventCommandBase(o => Pause(o), o => CanPause(o));
@@ -111,6 +112,14 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 var download = Downloads.FirstOrDefault(d => d.DownloadGuid == arg1.DownloadGuid); 
                 if(download != null) Downloads.Remove(download);
                 _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {arg1.Name} failed: {arg2.Message}");
+            });
+        }
+
+        private void OnExceptionThrowned(Exception obj)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {   
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, obj.Message);
             });
         }
 

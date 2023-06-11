@@ -123,7 +123,7 @@
                                     <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" FontSize="10" Text="{Binding To}" Padding="5,2,5,2"/>
 
                                     <Border Grid.Row="3" Grid.ColumnSpan="4" Height="10" Margin="5,2,5,5" Style="{StaticResource BorderStyle}">
-                                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Percent, Mode=OneWay}"/>
+                                        <ProgressBar Minimum="0" Maximum="110" Value="{Binding Percent, Mode=OneWay}"/>
                                     </Border>
 
                                 </Grid>

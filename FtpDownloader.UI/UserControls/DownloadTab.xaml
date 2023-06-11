@@ -43,32 +43,30 @@
                 </Grid.ColumnDefinitions>
 
                 <CheckBox Grid.Column="0" BorderBrush="{StaticResource MainBorderBrush}" VerticalAlignment="Center"
-                          Margin="5,0,5,0" x:Name="CredentialCheckBox" IsChecked="{Binding UseCrdentials, Mode=OneWayToSource}"/>
+                          Margin="5,0,5,0" x:Name="CredentialCheckBox" IsChecked="{Binding UseCrdentials, Mode=TwoWay}"/>
 
                 <Border Grid.Column="1">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Column="0" Content="{StaticResource Username}" Margin="5,0,5,0"
-                               Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
-                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                        <TextBox Grid.Column="0" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
                                  Background="{StaticResource MainBackgroundBrush}" 
                                  IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
                                  BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
                                  Text="{Binding UserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="0" Margin="8,0,0,0" Content="{StaticResource Username}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                               Visibility="{Binding IsUserNameEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <Label Grid.Column="2" Content="{StaticResource Password}" Margin="5,0,5,0"
-                               Foreground="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"/>
-                        <TextBox Grid.Column="3" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
+                        <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,0"
                                  Background="{StaticResource MainBackgroundBrush}"
                                  IsEnabled="{Binding ElementName=CredentialCheckBox, Path=IsChecked}"
                                  BorderBrush="{Binding ElementName=CredentialCheckBox, Path=IsChecked, Converter={StaticResource CredentialMultipurposeConverter}}"
                                  Text="{Binding Password, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="1" Margin="8,0,0,0" Content="{StaticResource Password}" Foreground="{StaticResource BlockBrush}" IsHitTestVisible="False"
+                               Visibility="{Binding IsPasswordEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     </Grid>
                 </Border>
 

@@ -16,8 +16,8 @@
     <sys:String x:Key="ResumeAll">Resume all</sys:String>
     <sys:String x:Key="CancelAll">Cancel all</sys:String>
     <sys:String x:Key="Credential">Credential:</sys:String>
-    <sys:String x:Key="Username">Username:</sys:String>
-    <sys:String x:Key="Password">Password:</sys:String>
+    <sys:String x:Key="Username">Username</sys:String>
+    <sys:String x:Key="Password">Password</sys:String>
     <sys:String x:Key="InitializeDownload">Initialize download</sys:String>
     <sys:String x:Key="SaveAs">Save as:</sys:String>
     <sys:String x:Key="CloseNotification">Close</sys:String>

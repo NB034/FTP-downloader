@@ -72,9 +72,14 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             if (e.PropertyName == nameof(FileName))
             {
-                if (_fileName.Length == 0 || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) FileNameCheckmark.Reject();
-                else FileNameCheckmark.Verify();
+                CheckFileName();
             }
+        }
+
+        private void CheckFileName()
+        {
+            if (_fileName.Length == 0 || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) FileNameCheckmark.Reject();
+            else FileNameCheckmark.Verify();
         }
 
         private void OnCredentialsChanged(object sender, PropertyChangedEventArgs e)
@@ -93,6 +98,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
                 ResourceCheckmark.Verify();
                 FileName = Path.GetFileNameWithoutExtension(_filePath);
                 FileExtension = obj.Exstention;
+                CheckFileName();
                 _infoModel = obj;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -160,13 +166,15 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
         public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
-        private bool _useCredentials = false;
+        private bool _useCredentials = true;
 
-        public string UserName { get => _userName; set => SetProperty(ref _userName, value, nameof(UserName)); }
         private string _userName = String.Empty;
+        public string UserName { get => _userName; set { SetProperty(ref _userName, value, nameof(UserName)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUserNameEmpty))); } }
+        public bool IsUserNameEmpty => _userName == String.Empty;
 
-        public string Password { get => _password; set => SetProperty(ref _password, value, nameof(Password)); }
         private string _password = String.Empty;
+        public string Password { get => _password; set { SetProperty(ref _password, value, nameof(Password)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPasswordEmpty))); } }
+        public bool IsPasswordEmpty => _password == String.Empty;
 
         public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
 
@@ -174,12 +182,12 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-        public string Host { get => _host; set { SetProperty(ref _host, value, nameof(Host)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHostEmpty))); } }
         private string _host = String.Empty;
+        public string Host { get => _host; set { SetProperty(ref _host, value, nameof(Host)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHostEmpty))); } }
         public bool IsHostEmpty => _host == String.Empty;
 
-        public string FilePath { get => _filePath; set { SetProperty(ref _filePath, value, nameof(FilePath)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFilePathEmpty))); } }
         private string _filePath = String.Empty;
+        public string FilePath { get => _filePath; set { SetProperty(ref _filePath, value, nameof(FilePath)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFilePathEmpty))); } }
         public bool IsFilePathEmpty => _filePath == String.Empty;
 
         public Checkmark_VM ResourceCheckmark { get; private set; } = new Checkmark_VM();
