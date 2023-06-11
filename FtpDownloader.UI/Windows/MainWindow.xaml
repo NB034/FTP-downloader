@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:FtpDownloader.UI.DataSources.ViewModels;assembly=FtpDownloader.UI.DataSources"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-        mc:Ignorable="d"
-        Title="File downloader" Height="735" Width="1000"
-        d:DataContext="{d:DesignInstance Type=vm:MainWindow_VM}"
         xmlns:Controls="clr-namespace:FtpDownloader.UI.UserControls"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindow_VM}"
+        
+        Title="{StaticResource Title}" 
+        Height="735" Width="1000"
         MinWidth="500" MinHeight="443"
         WindowStartupLocation="CenterScreen">
 

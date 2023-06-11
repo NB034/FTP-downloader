@@ -23,14 +23,12 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
         public DownloadTab_VM DownloadTab => _downloadTab;
         public JournalTab_VM JournalTab => _journalTab;
 
         public CustomizableCommand OnStartingCommand => _onStartingCommand;
         public CustomizableCommand OnClosingCommand => _onClosingCommand;
-
 
 
 

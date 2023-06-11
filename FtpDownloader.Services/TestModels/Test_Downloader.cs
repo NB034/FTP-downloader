@@ -9,14 +9,13 @@ namespace FtpDownloader.Services.TestModels
     public class Test_Downloader : IDownloader
     {
         private readonly LogicLayerMapper _mapper;
-        private List<Download> _downloads;
+        private readonly List<Download> _downloads;
 
         public Test_Downloader(LogicLayerMapper mapper)
         {
             _mapper = mapper;
             _downloads = new List<Download>();
-
-            Seed();
+            //Seed();
         }
 
         public event EventHandler<DownloaderNotificationEventArgs> DownloadStarted;
@@ -25,6 +24,8 @@ namespace FtpDownloader.Services.TestModels
         public event EventHandler<DownloaderNotificationEventArgs> DownloadCompleted;
         public event EventHandler<DownloadFailedEventArgs> DownloadFailed;
         public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
+
+
 
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
         public void ResumeAll() => _downloads.ForEach(d => d.OnPause = false);
@@ -37,7 +38,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return;
             }
             download.OnPause = true;
@@ -48,8 +49,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
-                return;
+                HandleException(new ArgumentException("Request by invalid guid")); return;
             }
             download.OnPause = false;
         }
@@ -59,7 +59,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return;
             }
             download.Cancelling = true;
@@ -72,7 +72,7 @@ namespace FtpDownloader.Services.TestModels
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return new();
             }
             return _mapper.DownloadToDto(download);
@@ -126,14 +126,18 @@ namespace FtpDownloader.Services.TestModels
             });
         }
 
-
         public async Task FinalizeDownloads()
         {
             _downloads.ForEach(d => d.Cancelling = true);
         }
 
+        
 
-
+        private void HandleException(Exception ex)
+        {
+            var args = new ExceptionThrownedEventArgs(ex);
+            ExceptionThrowned?.Invoke(this, args);
+        }
 
         private void Seed()
         {

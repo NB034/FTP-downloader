@@ -1,7 +1,6 @@
 ﻿using FtpDownloader.Services.Interfaces.Models;
 using System;
 using System.Windows;
-using FtpDownloader.Services.TestModels;
 using FtpDownloader.UI.DataSources.ViewModels;
 using FtpDownloader.UI.Windows;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +9,6 @@ using FtpDownloader.DataAccess.Interfaces.Repositories;
 using FtpDownloader.DataAccess.Repositories;
 using System.IO;
 using FtpDownloader.Services.Accessories;
-using FluentFTP;
 using FtpDownloader.Services.Models;
 using FtpDownloader.DataAccess.Contexts;
 using Microsoft.Extensions.Configuration;
@@ -51,7 +49,7 @@ namespace FtpDownloader.UI
                     services.AddSingleton<DbContextOptions>(new DbContextOptionsBuilder()
                         .UseSqlite(context.Configuration.GetConnectionString("sqliteConnectionString"))
                         .Options);
-
+                    
                     services.AddSingleton<UI.DataSources.Mappers.DownloadDtoToEntryDtoMapper>();
                     services.AddSingleton<UI.DataSources.Mappers.LogicLayerMapper>();
                     services.AddSingleton<Services.Mappers.LogicLayerMapper>();
@@ -60,6 +58,8 @@ namespace FtpDownloader.UI
                 })
                 .Build();
         }
+
+
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -77,22 +77,6 @@ namespace FtpDownloader.UI
             _host.Dispose();
 
             base.OnExit(e);
-        }
-
-
-
-
-        private void AddTestInfoCollectorWithLogger(IServiceCollection services)
-        {
-            services.AddSingleton<IInfoCollector, Test_InfoCollectorWithLogger>();
-            services.AddSingleton<IAdvancedFtpLogger, FtpTxtLogger>(_ => new FtpTxtLogger(Path
-                .Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "FtpLog.txt")));
-            services.AddSingleton<FtpConfig>(new FtpConfig
-            {
-                LogHost = true,
-                LogUserName = true,
-                LogPassword = true,
-            });
         }
     }
 }

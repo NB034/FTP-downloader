@@ -13,6 +13,31 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 {
     public class DownloadTab_VM : INotifyPropertyChanged
     {
+        private readonly CustomizableCommand _searchRemoteFileCommand;
+        private readonly CustomizableCommand _pickDirectoryCommand;
+        private readonly CustomizableCommand _addTagCommand;
+        private readonly CustomizableCommand _removeTagCommand;
+        private readonly CustomizableCommand _startDownloadCommand;
+
+        private readonly DownloadList_VM _downloadList;
+        private readonly NotificationPanel_VM _notificationPanel;
+        private readonly IInfoCollector _infoCollector;
+
+        private LogicLayerInfoDto _infoModel = null;
+
+        private bool _startImmediately = true;
+        private bool _useCredentials = true;
+
+        private string _username = String.Empty;
+        private string _password = String.Empty;
+        private string _host = String.Empty;
+        private string _filePath = String.Empty;
+        private string _localDirectory = String.Empty;
+        private string _fileName = String.Empty;
+        private string _fileExtension = String.Empty;
+
+
+
         public DownloadTab_VM(NotificationPanel_VM notificationPanel, DownloadList_VM downloadList, IInfoCollector infoCollector)
         {
             _notificationPanel = notificationPanel;
@@ -37,18 +62,60 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             PropertyChanged += OnCredentialsChanged;
         }
 
-        private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
-        {
-            if (!oldValue?.Equals(newValue) ?? newValue != null)
-            {
-                oldValue = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int MaxTags => 5;
+        public int MaxTagLength => 8;
+        public int MaxDownloads => 10;
+        public int TagTextBoxWidth => MaxTagLength * 12;
+        public bool TagsLimitReached => Tags.Count >= MaxTags;
+        public bool DownloadsLimitReached => _downloadList.Downloads.Count >= MaxDownloads;
+
+        public NotificationPanel_VM NotificationPanel => _notificationPanel;
+        public DownloadList_VM DownloadList => _downloadList;
+        public IInfoCollector InfoCollector => _infoCollector;
+
+        public ObservableCollection<string> Tags { get; set; }
 
 
 
-        // On events
+        public CustomizableCommand SearchRemoteFileCommand => _searchRemoteFileCommand;
+        public CustomizableCommand PickDirectoryCommand => _pickDirectoryCommand;
+        public CustomizableCommand AddTagCommand => _addTagCommand;
+        public CustomizableCommand RemoveTagCommand => _removeTagCommand;
+        public CustomizableCommand StartDownloadCommand => _startDownloadCommand;
+
+
+
+        public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }
+        public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
+        public string LocalDirectory { get => _localDirectory; set => SetProperty(ref _localDirectory, value, nameof(LocalDirectory)); }
+        public string FileName { get => _fileName; set => SetProperty(ref _fileName, value, nameof(FileName)); }
+        public string FileExtension { get => _fileExtension; set => SetProperty(ref _fileExtension, value, nameof(FileExtension)); }
+
+
+
+        public string Username { get => _username; set { SetProperty(ref _username, value, nameof(Username)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUsernameEmpty))); } }
+        public bool IsUsernameEmpty => _username == String.Empty;
+        public string Password { get => _password; set { SetProperty(ref _password, value, nameof(Password)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPasswordEmpty))); } }
+        public bool IsPasswordEmpty => _password == String.Empty;
+        public string Host { get => _host; set { SetProperty(ref _host, value, nameof(Host)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHostEmpty))); } }
+        public bool IsHostEmpty => _host == String.Empty;
+        public string FilePath { get => _filePath; set { SetProperty(ref _filePath, value, nameof(FilePath)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFilePathEmpty))); } }
+        public bool IsFilePathEmpty => _filePath == String.Empty;
+
+
+
+        public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
+        public Checkmark_VM ResourceCheckmark { get; private set; } = new Checkmark_VM();
+        public Checkmark_VM LocalDirectoryCheckmark { get; private set; } = new Checkmark_VM();
+        public Checkmark_VM FileNameCheckmark { get; private set; } = new Checkmark_VM();
+
+
+
+        // Events handle
 
         private void OnDownloadsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -79,28 +146,33 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
         private void CheckFileName()
         {
-            if (_fileName.Length == 0 || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) FileNameCheckmark.Reject();
+            if (_fileName.Length == 0 
+                || _fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1
+                || !ResourceCheckmark.IsVerified)
+            {
+                FileNameCheckmark.Reject();
+            }
             else FileNameCheckmark.Verify();
         }
 
         private void OnCredentialsChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_useCredentials && (e.PropertyName == nameof(UserName) || e.PropertyName == nameof(Password)))
+            if (_useCredentials && (e.PropertyName == nameof(Username) || e.PropertyName == nameof(Password)))
             {
-                if (_userName.Length == 0) CredentialsCheckmark.Reject();
+                if (_username.Length == 0) CredentialsCheckmark.Reject();
                 else CredentialsCheckmark.Verify();
             }
         }
 
         private void OnSearchFinished(object sender, InfoCollectorNotificationEventArgs e)
         {
-            if (e.Info.IsExist)
+            if (e.InfoDto.IsExist)
             {
                 ResourceCheckmark.Verify();
                 FileName = Path.GetFileNameWithoutExtension(_filePath);
-                FileExtension = e.Info.Exstention;
+                FileExtension = e.InfoDto.Exstention;
                 CheckFileName();
-                _infoModel = e.Info;
+                _infoModel = e.InfoDto;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -120,7 +192,7 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             ResourceCheckmark.Reject();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            _notificationPanel.AddNotification(NotificationTypesEnum.Negative, e.Exception.Message));
+            _notificationPanel.AddNegativeNotification(e.Exception));
         }
 
         private void OnTagsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -133,107 +205,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         }
 
 
-
-        // Fields & properties
-
-        private LogicLayerInfoDto _infoModel = null;
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<string> Tags { get; set; }
-        public int MaxTags => 5;
-        public int MaxTagLength => 8;
-        public int MaxDownloads => 10;
-        public int TagTextBoxWidth => MaxTagLength * 12;
-        public bool TagsLimitReached => Tags.Count >= MaxTags;
-        public bool DownloadsLimitReached => _downloadList.Downloads.Count >= MaxDownloads;
-
-
-
-
-
-        public DownloadList_VM DownloadList => _downloadList;
-        private readonly DownloadList_VM _downloadList;
-
-        public NotificationPanel_VM NotificationPanel => _notificationPanel;
-        private readonly NotificationPanel_VM _notificationPanel;
-
-        public IInfoCollector InfoCollector => _infoCollector;
-        private readonly IInfoCollector _infoCollector;
-
-        public bool StartImmediately { get => _startImmediately; set => SetProperty(ref _startImmediately, value, nameof(StartImmediately)); }
-        private bool _startImmediately = true;
-
-
-
-
-
-        public bool UseCrdentials { get => _useCredentials; set => SetProperty(ref _useCredentials, value, nameof(UseCrdentials)); }
-        private bool _useCredentials = true;
-
-        private string _userName = String.Empty;
-        public string UserName { get => _userName; set { SetProperty(ref _userName, value, nameof(UserName)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUserNameEmpty))); } }
-        public bool IsUserNameEmpty => _userName == String.Empty;
-
-        private string _password = String.Empty;
-        public string Password { get => _password; set { SetProperty(ref _password, value, nameof(Password)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPasswordEmpty))); } }
-        public bool IsPasswordEmpty => _password == String.Empty;
-
-        public Checkmark_VM CredentialsCheckmark { get; private set; } = new Checkmark_VM();
-
-
-
-
-
-        private string _host = String.Empty;
-        public string Host { get => _host; set { SetProperty(ref _host, value, nameof(Host)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHostEmpty))); } }
-        public bool IsHostEmpty => _host == String.Empty;
-
-        private string _filePath = String.Empty;
-        public string FilePath { get => _filePath; set { SetProperty(ref _filePath, value, nameof(FilePath)); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFilePathEmpty))); } }
-        public bool IsFilePathEmpty => _filePath == String.Empty;
-
-        public Checkmark_VM ResourceCheckmark { get; private set; } = new Checkmark_VM();
-
-
-
-
-
-        public string LocalDirectory { get => _localDirectory; set => SetProperty(ref _localDirectory, value, nameof(LocalDirectory)); }
-        private string _localDirectory = String.Empty;
-
-        public Checkmark_VM LocalDirectoryCheckmark { get; private set; } = new Checkmark_VM();
-
-
-
-
-
-        public string FileName { get => _fileName; set => SetProperty(ref _fileName, value, nameof(FileName)); }
-        private string _fileName = String.Empty;
-
-        public string FileExtension { get => _fileExtension; set => SetProperty(ref _fileExtension, value, nameof(FileExtension)); }
-        private string _fileExtension = String.Empty;
-
-        public Checkmark_VM FileNameCheckmark { get; private set; } = new Checkmark_VM();
-
-
-
-
-        // Commands
-
-        private readonly CustomizableCommand _searchRemoteFileCommand;
-        private readonly CustomizableCommand _pickDirectoryCommand;
-        private readonly CustomizableCommand _addTagCommand;
-        private readonly CustomizableCommand _removeTagCommand;
-        private readonly CustomizableCommand _startDownloadCommand;
-
-        public CustomizableCommand SearchRemoteFileCommand => _searchRemoteFileCommand;
-        public CustomizableCommand PickDirectoryCommand => _pickDirectoryCommand;
-        public CustomizableCommand AddTagCommand => _addTagCommand;
-        public CustomizableCommand RemoveTagCommand => _removeTagCommand;
-        public CustomizableCommand StartDownloadCommand => _startDownloadCommand;
-
-
-
-        // Command methods
+        
+        // Comman methods
 
         private bool CanSearchRemoteFile() => _host != String.Empty && (!_useCredentials || CredentialsCheckmark.IsVerified);
         private void SearchRemoteFile()
@@ -241,11 +214,9 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             ResourceCheckmark.Reset();
             _notificationPanel.AddNeutralNotification("Searching...");
 
-            if (_useCredentials) _infoCollector.BeginSearch("ftp://" + _host, _filePath, _userName, _password);
+            if (_useCredentials) _infoCollector.BeginSearch("ftp://" + _host, _filePath, _username, _password);
             else _infoCollector.BeginSearch("ftp://" + _host, _filePath);
         }
-
-
 
         private bool CanPickDirectory() => true;
         private void PickDirectory()
@@ -258,16 +229,12 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             }
         }
 
-
-
         private bool CanAddTag() => Tags.Count < MaxTags;
         private void AddTag(object o)
         {
             var tag = (string)o;
             Tags.Add(tag);
         }
-
-
 
         private bool CanRemoveTag() => Tags.Count > 0;
         private void RemoveTag(object o)
@@ -276,14 +243,11 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             Tags.Remove(tag);
         }
 
-
-
         private bool CanStartDownload() =>
             FileNameCheckmark.IsVerified
             && LocalDirectoryCheckmark.IsVerified
             && ResourceCheckmark.IsVerified
             && !DownloadsLimitReached;
-
         private void StartDownload()
         {
             var download = new Download_VM
@@ -303,11 +267,22 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
             if (_useCredentials)
             {
-                download.Username = _userName;
+                download.Username = _username;
                 download.Password = _password;
             }
 
             _downloadList.StartNewDownload(download);
+        }
+
+
+
+        private void SetProperty<T>(ref T oldValue, T newValue, string propertyName)
+        {
+            if (!oldValue?.Equals(newValue) ?? newValue != null)
+            {
+                oldValue = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

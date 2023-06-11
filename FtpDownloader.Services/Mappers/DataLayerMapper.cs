@@ -20,7 +20,6 @@ namespace FtpDownloader.Services.Mappers
 
 
 
-
         private Mapper InitializeDtoToEntryMapper()
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<DataLayerEntryDto, Entry>());

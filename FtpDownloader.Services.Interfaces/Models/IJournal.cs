@@ -12,8 +12,8 @@ namespace FtpDownloader.Services.Interfaces.Models
         event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
         Task CreateEntry(LogicLayerEntryDto dto);
-        Task DeleteAllEntries();
-        Task DeleteEntry(LogicLayerEntryDto dto);
         Task<LogicLayerEntryDto[]> GetEntries();
+        Task DeleteEntry(LogicLayerEntryDto dto);
+        Task DeleteAllEntries();
     }
 }

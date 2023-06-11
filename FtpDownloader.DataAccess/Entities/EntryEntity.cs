@@ -9,7 +9,6 @@ namespace FtpDownloader.DataAccess.Entities
         public DateTime DownloadDate { get; set; }
         public int FileSize { get; set; }
         public bool WasSuccessful { get; set; }  
-
         public virtual ICollection<TagEntity> TagEntities { get; set; } = new HashSet<TagEntity>();
     }
 }

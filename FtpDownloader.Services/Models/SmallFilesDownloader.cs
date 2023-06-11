@@ -28,6 +28,8 @@ namespace FtpDownloader.Services.Models
         public event EventHandler<DownloadFailedEventArgs> DownloadFailed;
         public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
 
+
+
         public void PauseAll() => _downloads.ForEach(d => d.OnPause = true);
         public void ResumeAll() => _downloads.ForEach(d => d.OnPause = false);
         public void CancelAll() => _downloads.ForEach(d => d.Cancelling = true);
@@ -39,7 +41,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return;
             }
             download.OnPause = true;
@@ -50,7 +52,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return;
             }
             download.OnPause = false;
@@ -61,7 +63,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return;
             }
             download.Cancelling = true;
@@ -74,7 +76,7 @@ namespace FtpDownloader.Services.Models
             var download = _downloads.FirstOrDefault(d => d.DownloadGuid == downloadGuid);
             if (download == null)
             {
-                ExceptionThrowned?.Invoke(this, new ExceptionThrownedEventArgs(new ArgumentException("Request by invalid guid")));
+                HandleException(new ArgumentException("Request by invalid guid"));
                 return new();
             }
             return _mapper.DownloadToDto(download);
@@ -93,11 +95,21 @@ namespace FtpDownloader.Services.Models
 
 
 
+        public async Task FinalizeDownloads()
+        {
+            _downloads.ForEach(d => d.Cancelling = true);
+            foreach (var download in _downloads.ToArray())
+            {
+                await GarbageCollector(download.ValidFullPath);
+                _downloads.Remove(download);
+            }
+        }
+
         public void StartNewDownload(LogicLayerDownloadDto dto)
         {
             if (dto.Size >= 10_485_760) // = (10 MB)
             {
-                DownloadFailed?.Invoke(this, new DownloadFailedEventArgs(dto, new Exception("Files larger than 10 MB are not supported")));
+                HandleFailureBeforeDownload(dto, new Exception("Files larger than 10 MB are not supported"));
                 return;
             }
 
@@ -105,24 +117,22 @@ namespace FtpDownloader.Services.Models
             _downloads.Add(download);
 
             AsyncFtpClient client = new();
-            string validName = "";
-
             Task.Run(async () =>
             {
                 try
                 {
-                    validName = _distributor.GetValidName(download.Name, download.To);
+                    string validName = _distributor.GetValidName(download.Name, download.To);
                     download.ValidFullPath = Path.Combine(download.To, validName);
-                    using var fileStream = File.Create(download.ValidFullPath);
 
                     if (download.UseCredentials) client = new AsyncFtpClient(download.Host, download.Username, download.Password);
                     else client = new AsyncFtpClient(download.Host);
-
                     await client.Connect();
+
                     var ftpStream = await client.OpenRead(download.Path);
+                    using var br = new BinaryReader(ftpStream);
                     var bytes = new byte[1024];
 
-                    using var br = new BinaryReader(ftpStream);
+                    using var fileStream = File.Create(download.ValidFullPath);
                     using var bw = new BinaryWriter(fileStream);
 
                     DownloadStarted?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
@@ -131,9 +141,9 @@ namespace FtpDownloader.Services.Models
                     {
                         if (download.Cancelling)
                         {
-                            if (File.Exists(Path.Combine(download.To, validName))) File.Delete(Path.Combine(download.To, validName));
                             DownloadCancelled?.Invoke(this, new DownloaderNotificationEventArgs(_mapper.DownloadToDto(download)));
                             client.Dispose();
+                            await GarbageCollector(download.ValidFullPath);
                             return;
                         }
 
@@ -151,9 +161,7 @@ namespace FtpDownloader.Services.Models
                 }
                 catch (Exception ex)
                 {
-                    download.DownloadDate = DateTime.Now;
-                    DownloadFailed?.Invoke(this, new DownloadFailedEventArgs(_mapper.DownloadToDto(download), ex));
-                    await GarbageCollector(download.ValidFullPath);
+                    await HandleDownloadFailure(download, ex);
                 }
                 finally
                 {
@@ -164,17 +172,27 @@ namespace FtpDownloader.Services.Models
 
 
 
-        public async Task FinalizeDownloads()
+        private void HandleFailureBeforeDownload(LogicLayerDownloadDto dto, Exception ex)
         {
-            _downloads.ForEach(d => d.Cancelling = true);
-            foreach (var download in _downloads.ToArray())
-            {
-                await GarbageCollector(download.ValidFullPath);
-                _downloads.Remove(download);
-            }
+            dto.DownloadDate = DateTime.Now;
+            var args = new DownloadFailedEventArgs(dto, ex);
+            DownloadFailed?.Invoke(this, args);
         }
 
+        private async Task HandleDownloadFailure(Download download, Exception ex)
+        {
+            download.DownloadDate = DateTime.Now;
+            var dto = _mapper.DownloadToDto(download);
+            var args = new DownloadFailedEventArgs(dto, ex);
+            DownloadFailed?.Invoke(this, args);
+            await GarbageCollector(download.ValidFullPath);
+        }
 
+        private void HandleException(Exception ex)
+        {
+            var args = new ExceptionThrownedEventArgs(ex);
+            ExceptionThrowned?.Invoke(this, args);
+        }
 
         private async Task GarbageCollector(string path)
         {

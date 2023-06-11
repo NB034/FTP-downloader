@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FtpDownloader.DataAccess.Interfaces.DTO;
 using FtpDownloader.Services.DataTypes;
 using FtpDownloader.Services.Interfaces.DTO;
 
@@ -28,6 +27,8 @@ namespace FtpDownloader.Services.Mappers
             _infoToDtoMapper = InitializeInfoToDto();
         }
 
+
+
         public LogicLayerEntryDto EntryToDto(Entry entry) => _entryToDtoMapper.Map<LogicLayerEntryDto>(entry);
         public Entry DtoToEntry(LogicLayerEntryDto dto) => _dtoToEntryMapper.Map<Entry>(dto);
 
@@ -36,7 +37,6 @@ namespace FtpDownloader.Services.Mappers
 
         public LogicLayerInfoDto InfoToDto(Info info) => _infoToDtoMapper.Map<LogicLayerInfoDto>(info);
         public Info DtoToInfo(LogicLayerInfoDto dto) => _dtoToInfoMapper.Map<Info>(dto);
-
 
 
 
@@ -51,7 +51,6 @@ namespace FtpDownloader.Services.Mappers
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Entry, LogicLayerEntryDto>());
             return new Mapper(config);
         }
-
 
 
         private Mapper InitializeDtoToDownload()

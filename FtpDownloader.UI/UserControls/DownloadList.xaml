@@ -16,7 +16,7 @@
 
         <!-- Panel above the list-->
         <Border Style="{StaticResource BorderStyle}" CornerRadius="3,3,0,0">
-            <StackPanel Orientation="Horizontal">
+            <DockPanel>
 
                 <Button Command="{Binding PauseAllCommand}">
                     <Button.Content>
@@ -45,25 +45,33 @@
                     </Button.Content>
                 </Button>
 
-                <StackPanel.Resources>
+                <Border VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" Margin="6,0,6,0" CornerRadius="3"
+                        Background="{StaticResource MainBackgroundBrush}" BorderBrush="{StaticResource MainBorderBrush}">
+                    <TextBlock Text="{Binding Downloads.Count}" TextAlignment="Center" Padding="2" Width="18" FontSize="10"/>
+                </Border>
+
+                <DockPanel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                         <Setter Property="Margin" Value="5"/>
                         <Setter Property="FontSize" Value="10"/>
                         <Setter Property="Padding" Value="2"/>
                     </Style>
-                </StackPanel.Resources>
-            </StackPanel>
+                </DockPanel.Resources>
+            </DockPanel>
         </Border>
+        <!-- -->
 
         <!-- Download list -->
         <Border Style="{StaticResource BorderStyle}" CornerRadius="0,0,3,3" Grid.Row="1" BorderThickness="1,0,1,1">
             <Grid>
                 <ListBox BorderBrush="Transparent" ItemsSource="{Binding Downloads}" HorizontalContentAlignment="Stretch"
-                                         VirtualizingPanel.ScrollUnit="Pixel">
+                         VirtualizingPanel.ScrollUnit="Pixel">
+                    
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource BorderStyle}" Margin="5" Background="{StaticResource TagBackGroundBrush}">
                                 <Grid>
+                                    
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -96,6 +104,7 @@
                                     </StackPanel>
 
                                     <Grid Grid.Row="1">
+                                        
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
@@ -132,12 +141,16 @@
                                     <Border Grid.Row="2" Height="10" Margin="5,2,5,5" Style="{StaticResource BorderStyle}">
                                         <ProgressBar Minimum="0" Maximum="100" Value="{Binding Percent, Mode=OneWay}"/>
                                     </Border>
+                                    
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    
                 </ListBox>
             </Grid>
         </Border>
+        <!-- -->
+        
     </Grid>
 </UserControl>

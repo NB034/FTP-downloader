@@ -1,5 +1,4 @@
-﻿using FtpDownloader.Services.Interfaces.DTO;
-using FtpDownloader.Services.Interfaces.ServicesEventArgs;
+﻿using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 
 namespace FtpDownloader.Services.Interfaces.Models
 {
@@ -7,6 +6,7 @@ namespace FtpDownloader.Services.Interfaces.Models
     {
         event EventHandler<InfoCollectorNotificationEventArgs> SearchFinished;
         event EventHandler<ExceptionThrownedEventArgs> SearchFailed;
+
         void BeginSearch(string host, string path, string username = "", string password = "");
     }
 }

@@ -19,10 +19,10 @@ namespace FtpDownloader.UI.DataSources.Command
             remove => CommandManager.RequerySuggested -= value;
         }
 
+
+
         public bool CanExecute(object parameter) => _predicate(parameter);
-
         public void Execute(object parameter) => _action(parameter);
-
         public static void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

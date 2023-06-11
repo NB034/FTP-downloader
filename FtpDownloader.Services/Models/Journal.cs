@@ -12,18 +12,21 @@ namespace FtpDownloader.Services.Models
         private readonly DataLayerMapper _dataLayerMapper;
         private readonly LogicLayerMapper _logicLayerMapper;
 
-        public event EventHandler EntriesLoaded;
-        public event EventHandler EntryDeleted;
-        public event EventHandler EntryCreated;
-        public event EventHandler AllEntriesDeleted;
-        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
-
         public Journal(IJournalRepository repository, DataLayerMapper dataLayerMapper, LogicLayerMapper logicLayerMapper)
         {
             _repository = repository;
             _dataLayerMapper = dataLayerMapper;
             _logicLayerMapper = logicLayerMapper;
         }
+
+        public event EventHandler EntriesLoaded;
+        public event EventHandler EntryDeleted;
+        public event EventHandler EntryCreated;
+        public event EventHandler AllEntriesDeleted;
+        public event EventHandler<ExceptionThrownedEventArgs> ExceptionThrowned;
+
+
+
 
         public async Task DeleteAllEntries()
         {
@@ -55,7 +58,6 @@ namespace FtpDownloader.Services.Models
                 if (dto == null) throw new ArgumentException("Entry does not exist");
 
                 _repository.DeleteEntry(dto.Id);
-
                 EntryDeleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
@@ -70,7 +72,6 @@ namespace FtpDownloader.Services.Models
             try
             {
                 var dtos = await _repository.GetEntriesAsync();
-
                 foreach (var dto in dtos)
                 {
                     var entry = _dataLayerMapper.DtoToEntry(dto);

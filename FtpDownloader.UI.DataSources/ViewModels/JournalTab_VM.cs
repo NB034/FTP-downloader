@@ -1,7 +1,6 @@
 ﻿using FtpDownloader.Services.Interfaces.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.UI.DataSources.DataTypes;
 using FtpDownloader.UI.DataSources.Command;
 using FtpDownloader.UI.DataSources.Mappers;
@@ -20,13 +19,14 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         private readonly NotificationPanel_VM _notificationPanel;
         private readonly LogicLayerMapper _logicLayerMapper;
         private readonly DownloadDtoToEntryDtoMapper _dtoMapper;
-        private JournalEntry _entry = null;
 
+        private JournalEntry _entry = null;
         private string _searchLine = "";
         private bool _isLoading = false;
 
 
-        public JournalTab_VM(IJournal journal,
+        public JournalTab_VM(
+            IJournal journal,
             IDownloader downloader,
             NotificationPanel_VM notificationPanel,
             LogicLayerMapper logicLayerMapper,
@@ -57,8 +57,6 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<JournalEntry> JournalEntries { get; set; }
@@ -76,29 +74,30 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-
-
         private void AddEntry(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.Download));
-                Reset();
-            });
-        }
-        private void AddEntry(object sender, DownloadFailedEventArgs e)
-        {
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                e.Download.Cancelling = true;
-                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.Download));
+                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.DownloadDto));
                 Reset();
             });
         }
 
-        private void OnExceptionThrowed(object sender, ExceptionThrownedEventArgs e) { _notificationPanel.AddNegativeNotification(e.Exception); }
-        private void OnAllEntriesDeleted(object sender, EventArgs e) { _notificationPanel.AddPositiveNotification("All entries deleted!"); }
-        private void OnEntryDeleted(object sender, EventArgs e) { _notificationPanel.AddPositiveNotification("Entry deleted!"); }
+        private void AddEntry(object sender, DownloadFailedEventArgs e)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                e.DownloadDto.Cancelling = true;
+                _journal.CreateEntry(_dtoMapper.DownloadToEntry(e.DownloadDto));
+                Reset();
+            });
+        }
+
+
+
+        private void OnExceptionThrowed(object sender, ExceptionThrownedEventArgs e) => _notificationPanel.AddNegativeNotification(e.Exception);
+        private void OnAllEntriesDeleted(object sender, EventArgs e) => _notificationPanel.AddPositiveNotification("All entries deleted!");
+        private void OnEntryDeleted(object sender, EventArgs e) => _notificationPanel.AddPositiveNotification("Entry deleted!");
 
 
 

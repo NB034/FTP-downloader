@@ -20,18 +20,17 @@ namespace FtpDownloader.DataAccess.Repositories
     }
 
 
+
     // Sync methods
     public partial class JournalRepository
     {
         public void CreateEntry(DataLayerEntryDto dto)
         {
             var entity = _mapper.DtoToEntity(dto);
-
             foreach(var tag in dto.Tags)
             {
                 entity.TagEntities.Add(GetOrCreate(tag));
             }
-
             _context.EntryEntities.Add(entity);
             _context.SaveChanges();
         }
@@ -83,7 +82,6 @@ namespace FtpDownloader.DataAccess.Repositories
 
 
 
-
     // Async methods
     public partial class JournalRepository
     {
@@ -91,13 +89,11 @@ namespace FtpDownloader.DataAccess.Repositories
         {
             var entryEntity = _mapper.DtoToEntity(dto);
             entryEntity = (await _context.EntryEntities.AddAsync(entryEntity)).Entity;
-
             foreach (var tag in dto.Tags)
             {
                 var tagEntity = await GetOrCreateAsync(tag);
                 entryEntity.TagEntities.Add(tagEntity);
             }
-
             await _context.SaveChangesAsync();
         }
 

@@ -48,17 +48,17 @@ namespace FtpDownloader.UI.DataSources.Mappers
         private Mapper InitializeEntryToDto()
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<JournalEntry, LogicLayerEntryDto>()
-            .ForMember(nameof(LogicLayerEntryDto.WasSuccessful), opt => opt.MapFrom(vm => vm.Result == NotificationTypesEnum.Positive))
-            .ForMember(nameof(LogicLayerEntryDto.LocalPath), opt => opt.MapFrom(vm => Path.Combine(vm.LocalPath, vm.FileName))));
+                .ForMember(nameof(LogicLayerEntryDto.WasSuccessful), opt => opt.MapFrom(vm => vm.Result == NotificationTypesEnum.Positive))
+                .ForMember(nameof(LogicLayerEntryDto.LocalPath), opt => opt.MapFrom(vm => Path.Combine(vm.LocalPath, vm.FileName))));
             return new Mapper(config);
         }
 
         private Mapper InitializeDtoToEntry()
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<LogicLayerEntryDto, JournalEntry>()
-            .ForMember(nameof(JournalEntry.Result), opt => opt.MapFrom(dto => dto.WasSuccessful ? NotificationTypesEnum.Positive : NotificationTypesEnum.Negative))
-            .ForMember(nameof(JournalEntry.FileName), opt => opt.MapFrom(dto => Path.GetFileName(dto.LocalPath)))
-            .ForMember(nameof(JournalEntry.LocalPath), opt => opt.MapFrom(dto => Path.GetDirectoryName(dto.LocalPath))));
+                .ForMember(nameof(JournalEntry.Result), opt => opt.MapFrom(dto => dto.WasSuccessful ? NotificationTypesEnum.Positive : NotificationTypesEnum.Negative))
+                .ForMember(nameof(JournalEntry.FileName), opt => opt.MapFrom(dto => Path.GetFileName(dto.LocalPath)))
+                .ForMember(nameof(JournalEntry.LocalPath), opt => opt.MapFrom(dto => Path.GetDirectoryName(dto.LocalPath))));
             return new Mapper(config);
         }
     }

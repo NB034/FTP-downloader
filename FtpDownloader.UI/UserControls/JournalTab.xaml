@@ -10,6 +10,7 @@
              d:DataContext="{d:DesignInstance vm:JournalTab_VM}">
 
     <Grid Margin="5">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -17,12 +18,16 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
+            
             <TextBox Width="200" Style="{StaticResource TextBoxStyle}" Margin="5"
                      Text="{Binding SearchLine, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Button Content="{StaticResource SearchLocalFile}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"
                     Command="{Binding SearchCommand}"/>
+            
             <Button Content="{StaticResource ResetFilter}" Style="{StaticResource ButtonStyle}" Margin="5" Padding="3,2,3,2"
                     Command="{Binding ResetCommand}"/>
+            
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -32,13 +37,13 @@
                 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="File name" Width="*" Binding="{Binding FileName}"/>
-                    <DataGridTextColumn Header="Local path" Width="*" Binding="{Binding LocalPath}"/>
-                    <DataGridTextColumn Header="Remote path" Width="*" Binding="{Binding RemotePath}"/>
-                    <DataGridTextColumn Header="Download date" Width="*" Binding="{Binding DownloadDate}"/>
-                    <DataGridTextColumn Header="File size" Width="*" Binding="{Binding FileSize}"/>
+                    <DataGridTextColumn Header="{StaticResource FileNameColumn}" Width="*" Binding="{Binding FileName}"/>
+                    <DataGridTextColumn Header="{StaticResource LocalPathColumn}" Width="*" Binding="{Binding LocalPath}"/>
+                    <DataGridTextColumn Header="{StaticResource RemotePathColumn}" Width="*" Binding="{Binding RemotePath}"/>
+                    <DataGridTextColumn Header="{StaticResource DownloadDateColumn}" Width="*" Binding="{Binding DownloadDate}"/>
+                    <DataGridTextColumn Header="{StaticResource FileSizeColumn}" Width="*" Binding="{Binding FileSize}"/>
 
-                    <DataGridTemplateColumn Header="Tags" Width="*">
+                    <DataGridTemplateColumn Header="{StaticResource TagsColumn}" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ItemsControl ItemsSource="{Binding Tags}" Margin="5">
@@ -60,19 +65,19 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Result" Width="Auto">
+                    <DataGridTemplateColumn Header="{StaticResource ResultColumn}" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="{Binding Result, Converter={StaticResource EnumToIconConverter}}" Width="20" Height="20"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    
                 </DataGrid.Columns>
             </DataGrid>
 
             <Border Margin="5,5,5,0" Background="{StaticResource BlockBrush}" 
                     Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            
             <fa:ImageAwesome Icon="Refresh" Height="48" Width="48" Spin="{Binding IsLoading}"
                              Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>

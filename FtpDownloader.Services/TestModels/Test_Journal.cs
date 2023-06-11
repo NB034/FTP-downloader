@@ -15,7 +15,6 @@ namespace FtpDownloader.Services.TestModels
         {
             _journalEntries = new List<Entry>();
             _mapper = mapper;
-
             Seed();
         }
 
@@ -63,7 +62,6 @@ namespace FtpDownloader.Services.TestModels
 
 
 
-
         private void Seed()
         {
             _journalEntries.AddRange(new[]
@@ -73,29 +71,29 @@ namespace FtpDownloader.Services.TestModels
                         DownloadDate = DateTime.Now,
                         FileSize = 10_000,
                         Id = 1,
-                        LocalPath = "Some/Directory/NiceGame",
-                        RemotePath = "Some/Remote/Directory/CoolGameOnServer",
-                        Tags = new List<string> { "anime", "girls", "18+", "UWU", "lol" },
+                        LocalPath = "SomeDirectory/SomeFile",
+                        RemotePath = "SomeRemoteDirectory/SomeFile",
+                        Tags = new List<string> { "test", "test", "test", "test", "test" },
                         WasSuccessful = true
                     },
                     new Entry
                     {
                         DownloadDate = DateTime.Now,
                         FileSize = 10_000,
-                        Id = 1,
-                        LocalPath = "Some/Directory/CoolGame",
-                        RemotePath = "Some/Remote/Directory/CoolGameOnServer",
-                        Tags = new List<string> { "shooter", "sci-fi", "18+", "bla", "random tag idk" },
+                        Id = 2,
+                        LocalPath = "SomeDirectory/SomeFile",
+                        RemotePath = "SomeRemoteDirectory/SomeFile",
+                        Tags = new List<string> { "test", "test", "test", "test", "test" },
                         WasSuccessful = false
                     },
                     new Entry
                     {
                         DownloadDate = DateTime.Now,
                         FileSize = 10_000,
-                        Id = 1,
-                        LocalPath = "Some/Directory/ScaryGame",
-                        RemotePath = "Some/Remote/Directory/CoolGameOnServer",
-                        Tags = new List<string> { "survival", "lot of blood", "hardcore", "DONT PLAY AT NIGHT", "would play anyway" },
+                        Id = 3,
+                        LocalPath = "SomeDirectory/SomeFile",
+                        RemotePath = "SomeRemoteDirectory/SomeFile",
+                        Tags = new List<string> { "test", "test", "test", "test", "test" },
                         WasSuccessful = true
                     }
                 }

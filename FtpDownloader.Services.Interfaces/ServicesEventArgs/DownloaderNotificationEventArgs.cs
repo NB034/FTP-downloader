@@ -4,13 +4,13 @@ namespace FtpDownloader.Services.Interfaces.ServicesEventArgs
 {
     public class DownloaderNotificationEventArgs : EventArgs
     {
-        private readonly LogicLayerDownloadDto _download;
+        private readonly LogicLayerDownloadDto _downloadDto;
 
-        public DownloaderNotificationEventArgs(LogicLayerDownloadDto download)
+        public DownloaderNotificationEventArgs(LogicLayerDownloadDto downloadDto)
         {
-            _download = download;
+            _downloadDto = downloadDto;
         }
 
-        public LogicLayerDownloadDto Download => _download;
+        public LogicLayerDownloadDto DownloadDto => _downloadDto;
     }
 }

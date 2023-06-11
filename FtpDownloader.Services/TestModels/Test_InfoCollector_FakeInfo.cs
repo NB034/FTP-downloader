@@ -1,22 +1,23 @@
 ﻿using FtpDownloader.Services.DataTypes;
-using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
 using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 using FtpDownloader.Services.Mappers;
 
 namespace FtpDownloader.Services.TestModels
 {
-    public class Test_FakeInfoCollector : IInfoCollector
+    public class Test_InfoCollector_FakeInfo : IInfoCollector
     {
         private readonly LogicLayerMapper _mapper;
 
-        public Test_FakeInfoCollector(LogicLayerMapper mapper)
+        public Test_InfoCollector_FakeInfo(LogicLayerMapper mapper)
         {
             _mapper = mapper;
         }
 
         public event EventHandler<InfoCollectorNotificationEventArgs> SearchFinished;
         public event EventHandler<ExceptionThrownedEventArgs> SearchFailed;
+
+
 
         public void BeginSearch(string host, string path, string username = "", string password = "")
         {

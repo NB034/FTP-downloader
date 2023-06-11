@@ -2,34 +2,56 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=Mscorlib">
 
+    <!-- Main window -->
+    <sys:String x:Key="Title">FTP downloader</sys:String>
     <sys:String x:Key="DownloadTabName">Download</sys:String>
     <sys:String x:Key="ViewTabName">Journal</sys:String>
+    
+    <!-- Notification panel -->
+    <sys:String x:Key="CloseNotification">Close</sys:String>
+    <sys:String x:Key="CloseAllNotifications">Close all</sys:String>
+
+    <!-- Journal tab -->
+    <sys:String x:Key="SearchLocalFile">Search</sys:String>
+    <sys:String x:Key="ResetFilter">Reset</sys:String>
+    <sys:String x:Key="FileNameColumn">File name</sys:String>
+    <sys:String x:Key="LocalPathColumn">Local path</sys:String>
+    <sys:String x:Key="RemotePathColumn">Remote path</sys:String>
+    <sys:String x:Key="DownloadDateColumn">Download date</sys:String>
+    <sys:String x:Key="FileSizeColumn">File size</sys:String>
+    <sys:String x:Key="TagsColumn">Tags</sys:String>
+    <sys:String x:Key="ResultColumn">Result</sys:String>
+    <sys:String x:Key="RemoveEntry">Remove entry</sys:String>
+    <sys:String x:Key="RemoveAllEntries">Remove all entries</sys:String>
+    
+    
+    <!-- Download list -->
+    <sys:String x:Key="PauseAll">Pause all</sys:String>
+    <sys:String x:Key="ResumeAll">Resume all</sys:String>
+    <sys:String x:Key="CancelAll">Cancel all</sys:String>
+    <sys:String x:Key="FileSize">Size:</sys:String>
+    <sys:String x:Key="FileSizeUnit">B</sys:String>
+    <sys:String x:Key="FileName">File name:</sys:String>
     <sys:String x:Key="ResourceUri">Resource URI:</sys:String>
     <sys:String x:Key="DownloadTo">Download to:</sys:String>
+    
+    <!-- Download tab -->
     <sys:String x:Key="ChooseDrectory">. . .</sys:String>
     <sys:String x:Key="Threads">Threads:</sys:String>
     <sys:String x:Key="AddTag">Add</sys:String>
     <sys:String x:Key="Tags">Tags:</sys:String>
     <sys:String x:Key="SearchRemoteFile">Check</sys:String>
-    <sys:String x:Key="SearchLocalFile">Search</sys:String>
-    <sys:String x:Key="PauseAll">Pause all</sys:String>
-    <sys:String x:Key="ResumeAll">Resume all</sys:String>
-    <sys:String x:Key="CancelAll">Cancel all</sys:String>
     <sys:String x:Key="Credential">Credential:</sys:String>
     <sys:String x:Key="Username">Username</sys:String>
     <sys:String x:Key="Password">Password</sys:String>
     <sys:String x:Key="InitializeDownload">Initialize download</sys:String>
     <sys:String x:Key="SaveAs">Save as:</sys:String>
-    <sys:String x:Key="CloseNotification">Close</sys:String>
-    <sys:String x:Key="CloseAllNotification">Close all</sys:String>
     <sys:String x:Key="MaxDownloadsReached">The maximum number of downloads has been reached</sys:String>
     <sys:String x:Key="StartTheDownloadImmediately">Start the download immediately</sys:String>
-    <sys:String x:Key="FileSize">Size:</sys:String>
-    <sys:String x:Key="FileSizeUnit">B</sys:String>
-    <sys:String x:Key="FileName">File name:</sys:String>
-    <sys:String x:Key="RemoveEntry">Remove entry</sys:String>
-    <sys:String x:Key="RemoveAllEntries">Remove all entries</sys:String>
-    <sys:String x:Key="ResetFilter">Reset</sys:String>
     <sys:String x:Key="DownloadLimitReached">Limit reached</sys:String>
+    <sys:String x:Key="Ftp">ftp://</sys:String>
+    <sys:String x:Key="Host">Host</sys:String>
+    <sys:String x:Key="Path">Path</sys:String>
+    <sys:String x:Key="Slash">/</sys:String>
 
 </ResourceDictionary>

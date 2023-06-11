@@ -10,14 +10,17 @@ namespace FtpDownloader.Services.Accessories
         public string GetValidName(string name, string directory)
         {
             int counter = StartCountWith;
-            var files = new List<string>(Directory.GetFiles(directory)).Select(f => Path.GetFileName(f));
+            var files = Directory.GetFiles(directory).Select(f => Path.GetFileName(f));
             var validName = name;
 
             while (true)
             {
                 if (!files.Contains(validName)) break;
-                validName = Path.GetFileNameWithoutExtension(name) 
-                    + StringBeforeCounter + counter + StringAfterCounter
+                validName = 
+                    Path.GetFileNameWithoutExtension(name) 
+                    + StringBeforeCounter 
+                    + counter 
+                    + StringAfterCounter
                     + Path.GetExtension(name);
                 counter++;
             }

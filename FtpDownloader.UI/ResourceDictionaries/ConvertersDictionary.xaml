@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:c="clr-namespace:FtpDownloader.UI.Converters">
 
-    <c:CredentialMultipurposeConverter x:Key="CredentialMultipurposeConverter"/>
     <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <c:BoolToBrushConverter x:Key="CredentialConverter"/>
     <c:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter"/>
     <c:EnumToIconConverter x:Key="EnumToIconConverter"/>
 

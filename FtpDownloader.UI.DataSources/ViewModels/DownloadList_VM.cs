@@ -1,5 +1,4 @@
 ﻿using FtpDownloader.UI.DataSources.DataTypes;
-using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
 using System.Collections.ObjectModel;
 using FtpDownloader.UI.DataSources.Mappers;
@@ -45,10 +44,13 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             _cancelAllCommand = new CustomizableCommand(_ => CancelAll(), _ => CanCancelAll());
         }
 
+
+
         public NotificationPanel_VM NotificationPanel => _notificationPanel;
         public IDownloader Downloader => _downloader;
 
         public ObservableCollection<Download_VM> Downloads { get; set; }
+
         public CustomizableCommand ResumeCommand => _resumeCommand;
         public CustomizableCommand PauseCommand => _pauseCommand;
         public CustomizableCommand CancelCommand => _cancelCommand;
@@ -58,19 +60,19 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-
-
         public void StartNewDownload(Download_VM download)
         {
             _downloader.StartNewDownload(_mapper.DownloadToDto(download));
         }
 
+
+
         private void OnDownloadStarted(object sender, DownloaderNotificationEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Add(_mapper.DtoToDownload(e.Download));
-                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} has started!");
+                Downloads.Add(_mapper.DtoToDownload(e.DownloadDto));
+                _notificationPanel.AddPositiveNotification($"Download of {e.DownloadDto.Name} has started!");
                 CustomizableCommand.RaiseCanExecuteChanged();
             });
         }
@@ -79,8 +81,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                var download = Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid);
-                download.DownloadedBytes = e.Download.DownloadedBytes;
+                var download = Downloads.First(d => d.DownloadGuid == e.DownloadDto.DownloadGuid);
+                download.DownloadedBytes = e.DownloadDto.DownloadedBytes;
             });
         }
 
@@ -88,8 +90,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid));
-                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} completed!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.DownloadDto.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {e.DownloadDto.Name} completed!");
             });
         }
 
@@ -97,8 +99,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.Download.DownloadGuid));
-                _notificationPanel.AddPositiveNotification($"Download of {e.Download.Name} cancelled!");
+                Downloads.Remove(Downloads.First(d => d.DownloadGuid == e.DownloadDto.DownloadGuid));
+                _notificationPanel.AddPositiveNotification($"Download of {e.DownloadDto.Name} cancelled!");
             });
         }
 
@@ -106,9 +108,9 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                var download = Downloads.FirstOrDefault(d => d.DownloadGuid == e.Download.DownloadGuid); 
+                var download = Downloads.FirstOrDefault(d => d.DownloadGuid == e.DownloadDto.DownloadGuid); 
                 if(download != null) Downloads.Remove(download);
-                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {e.Download.Name} failed: {e.Exception.Message}");
+                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, $"Download of {e.DownloadDto.Name} failed: {e.Exception.Message}");
             });
         }
 
@@ -116,11 +118,9 @@ namespace FtpDownloader.UI.DataSources.ViewModels
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {   
-                _notificationPanel.AddNotification(NotificationTypesEnum.Negative, e.Exception.Message);
+                _notificationPanel.AddNegativeNotification(e.Exception);
             });
         }
-
-
 
 
 
@@ -150,10 +150,6 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             CustomizableCommand.RaiseCanExecuteChanged();
             _downloader.Cancel(vm.DownloadGuid);
         }
-
-
-
-
 
         private bool CanResumeAll() => Downloads.Any(d => d.OnPause);
         private void ResumeAll()

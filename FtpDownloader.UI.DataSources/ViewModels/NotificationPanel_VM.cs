@@ -19,14 +19,10 @@ namespace FtpDownloader.UI.DataSources.ViewModels
 
 
 
-
-
         public CustomizableCommand CloseNotificationCommand => _closeNotificationCommand;
         public CustomizableCommand CloseAllNotificationsCommand => _closeAllNotificatonsCommand;
         public ObservableCollection<Notification> Notifications { get; set; }
         public int MaxNotifications { get; set; } = 50;
-
-
 
 
 
@@ -80,6 +76,8 @@ namespace FtpDownloader.UI.DataSources.ViewModels
             });
             CheckForOverflow();
         }
+
+
 
         private void CheckForOverflow()
         {

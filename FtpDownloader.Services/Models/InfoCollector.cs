@@ -1,6 +1,5 @@
 ﻿using FluentFTP;
 using FtpDownloader.Services.DataTypes;
-using FtpDownloader.Services.Interfaces.DTO;
 using FtpDownloader.Services.Interfaces.Models;
 using FtpDownloader.Services.Interfaces.ServicesEventArgs;
 using FtpDownloader.Services.Mappers;
@@ -19,6 +18,8 @@ namespace FtpDownloader.Services.Models
         public event EventHandler<InfoCollectorNotificationEventArgs> SearchFinished;
         public event EventHandler<ExceptionThrownedEventArgs> SearchFailed;
 
+
+
         public void BeginSearch(string host, string path, string username = "", string password = "")
         {
             FtpClient client = new();
@@ -33,7 +34,6 @@ namespace FtpDownloader.Services.Models
                 SearchFailed?.Invoke(this, new ExceptionThrownedEventArgs(ex));
                 return;
             }
-
 
             Task.Run(() =>
             {
