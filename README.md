@@ -26,9 +26,11 @@
   6. Нажать на кнопку "Initialize download" для начала скачивания. В процессе загрузку можно остановить, возобновить и отменить.
   
 <br/>
-  
-  
 
+https://github.com/NB034/FTP-downloader/assets/104451273/b9a6bf93-f6a1-4287-860d-b8c6e47cf0e2
+  
+  
+  
 
 <!-- Original size: 1233x910 -->
 <!-- Compressed size (3/4): 925x683 -->
